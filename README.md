@@ -67,7 +67,90 @@ graph TB
 
 ---
 
-## 2. Directory Layout
+## 2. System Logic & Module Interconnection Flow
+
+The flowchart below demonstrates the path of telemetry data ingestion, mapping resolution, unit normalization, rule validation, and database auditing, as well as developer/user API access:
+
+```mermaid
+flowchart TD
+    %% Telemetry Sources
+    subgraph Sources ["Telemetry Ingestion Streams"]
+        A1["AWS CloudWatch JSON"] 
+        A2["GCP Monitoring JSON"] 
+        A3["Prometheus Scraping"]
+        A4["File Upload (JSON/YAML/CSV/XML)"]
+    end
+
+    %% Ingestion Pipeline & Parsers
+    subgraph Ingestion ["Ingestion & Parsing Services"]
+        B1["realtime_ingestor.py / unified_ingestion.py"]
+        B2["structured_parser.py / unstructured_parser.py"]
+        B3["automated_mapper.py (process_metric_sample)"]
+    end
+
+    %% Mapping & Classification Engine
+    subgraph Classification ["Classification & Mapping Resolution"]
+        C1["ensemble_classifier.py (classify_metric)"]
+        C2["mapping_registry_service.py (resolve_mapping)"]
+        C3["Database Table: cim_mappings"]
+        C4["Fallback Classifiers (Fuzzy/Embedding matching)"]
+    end
+
+    %% Normalization & Rules
+    subgraph Governance ["Unit Normalization & Validation Rules"]
+        D1["unit_registry_service.py (convert_value)"]
+        D2["Database Tables: quantity_kinds & units"]
+        D3["rule_registry_service.py (validate_metric_sample)"]
+    end
+
+    %% Auditing & Lineage
+    subgraph Auditing ["Data Lineage & Provenance"]
+        E1["provenance_registry_service.py (record_activity)"]
+        E2["Database Table: provenance_records"]
+    end
+
+    %% Persistence
+    subgraph Storage ["Persistent Storage Stores"]
+        F1[("PostgreSQL DB (Metadata, Mappings, Lineage)")]
+        F2[("InfluxDB (Metric Samples Time-Series)")]
+    end
+
+    %% APIs and Dashboards
+    subgraph Interface ["Client APIs & User Interfaces"]
+        G1["registry_api.py (FastAPI Routes /api/v1/registry/*)"]
+        G2["admin_panel.py (Streamlit Admin Dashboard)"]
+        G3["streamlit_uploader.py (Streamlit Ingest UI)"]
+    end
+
+    %% Flow connections
+    A1 & A2 & A3 & A4 --> B1
+    B1 --> B2 --> B3
+    
+    B3 -->|1. Resolve key| C1
+    C1 -->|Query| C2
+    C2 -->|Fetch approved map| C3
+    C2 -->|No Map Found| C4
+    C4 -->|Propose auto-learned mapping| C2
+    
+    C1 -->|2. Normalize unit| D1
+    D1 -->|Fetch canonical unit & factor| D2
+    
+    D1 -->|3. Run checks| D3
+    
+    D3 -->|4. Log lineage| E1
+    E1 -->|Insert audit record| E2
+    
+    E2 & C3 & D2 -->|Persist Metadata| F1
+    B3 -->|Write normal value| F2
+    
+    F1 & F2 -->|Query Data| G1
+    G1 -->|REST API feeds| G2 & G3
+    G2 -->|Propose / Approve mappings| G1
+```
+
+---
+
+## 3. Directory Layout
 
 ```text
 ├── cloud_metrics/
@@ -107,14 +190,14 @@ graph TB
 
 ---
 
-## 3. Getting Started
+## 4. Getting Started
 
-### 3.1 Prerequisites
+### 4.1 Prerequisites
 * **Python**: `3.13`
 * **PostgreSQL**: Running instance (e.g. port `5433` for local development)
 * **InfluxDB**: Used for time-series sample persistence
 
-### 3.2 Configuration Setup
+### 4.2 Configuration Setup
 Copy `.env.sample` to `.env` in the root directory and configure environment connections:
 ```env
 DATABASE_URL=postgresql+psycopg2://postgres:admin123@localhost:5433/cloud_metrics
@@ -124,7 +207,7 @@ INFLUXDB_ORG=my-org
 INFLUXDB_BUCKET=cloud_metrics
 ```
 
-### 3.3 Dependency Installation
+### 4.3 Dependency Installation
 To install core libraries and development dependencies:
 ```bash
 poetry install
@@ -132,9 +215,9 @@ poetry install
 
 ---
 
-## 4. Database Schema Setup & Seed Data
+## 5. Database Schema Setup & Seed Data
 
-### 4.1 Apply Schema Migrations
+### 5.1 Apply Schema Migrations
 Database table generation is managed dynamically using Alembic:
 ```bash
 # Upgrade the database schema to the latest head
@@ -147,7 +230,7 @@ poetry run alembic upgrade head
 poetry run alembic downgrade -1
 ```
 
-### 4.2 Database Seeding & Data Porting
+### 5.2 Database Seeding & Data Porting
 Execute the seed script to load canonical units, quantity kinds (Energy, Power, DataSize), sources, and additional standards (SAREF, QUDT, PROV-O):
 ```bash
 poetry run python cloud_metrics/scripts/seed_registries.py
@@ -160,16 +243,16 @@ poetry run python cloud_metrics/scripts/migrate_existing_data.py
 
 ---
 
-## 5. Running the Application
+## 6. Running the Application
 
-### 5.1 FastAPI Backend REST Server
+### 6.1 FastAPI Backend REST Server
 To launch the API server with hot-reload enabled:
 ```bash
 poetry run uvicorn cloud_metrics.main:app --reload
 ```
 Once started, the interactive OpenAPI documentation is available at [http://localhost:8000/docs](http://localhost:8000/docs).
 
-### 5.2 Streamlit Admin Dashboard
+### 6.2 Streamlit Admin Dashboard
 To run the dashboard for editing mapping proposals, reviewing metadata, and browsing assets:
 ```bash
 poetry run streamlit run cloud_metrics/scripts/admin_panel.py
@@ -177,17 +260,17 @@ poetry run streamlit run cloud_metrics/scripts/admin_panel.py
 
 ---
 
-## 6. Testing
+## 7. Testing
 
 The project utilizes `pytest` for unit and integration testing. Database connections are mocked using an isolated, transient SQLite database.
 
-### Running Tests
+### 7.1 Running Tests
 To run the full test suite (verifying units, API endpoints, mappings, rules, and telemetry pipelines):
 ```bash
 poetry run pytest
 ```
 
-### Test Harness Isolation (SQLite Batch Mode)
+### 7.2 Test Harness Isolation (SQLite Batch Mode)
 During automated tests, standard database queries are mocked using SQLite:
 ```python
 engine = create_engine(
@@ -198,3 +281,4 @@ engine = create_engine(
 )
 ```
 This is configured to bypass multi-threaded connection locks and ensure migrations execute correctly across different SQL dialects.
+
