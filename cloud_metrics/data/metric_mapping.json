@@ -1,0 +1,126 @@
+{
+  "generated_at": "2025-09-08T12:56:12.461918+00:00",
+  "count": 30,
+  "mappings": {
+    "row0.cpu_usage": {
+      "unified_key": "gd.performance.cpu.utilization",
+      "last_seen": "2025-09-01T17:12:14.088768+00:00"
+    },
+    "elec.power": {
+      "unified_key": "gd.energy.power.total",
+      "last_seen": "2025-09-08T12:14:05.017949+00:00"
+    },
+    "env.internalTemp": {
+      "unified_key": "gd.environment.temperature.ambient",
+      "last_seen": "2025-09-08T12:14:05.245796+00:00"
+    },
+    "row0.net_out": {
+      "unified_key": "gd.network.traffic.outgoing",
+      "last_seen": "2025-09-01T17:12:14.153358+00:00"
+    },
+    "alpha.temp.ext": {
+      "unified_key": "gd.environment.temperature.exterior",
+      "last_seen": "2025-09-08T13:32:04.485628+00:00"
+    },
+    "disk.readIO": {
+      "unified_key": "gd.storage.disk.read_io",
+      "last_seen": "2025-09-08T12:14:05.189650+00:00"
+    },
+    "lambda.wue": {
+      "unified_key": "gd.environment.water.wue",
+      "last_seen": "2025-09-08T13:32:04.529241+00:00"
+    },
+    "alpha.energy.renewable": {
+      "unified_key": "gd.energy.renewable.solar",
+      "last_seen": "2025-09-08T13:32:04.353382+00:00"
+    },
+    "alpha.mem": {
+      "unified_key": "gd.performance.memory.usage",
+      "last_seen": "2025-09-08T13:32:04.306575+00:00"
+    },
+    "alpha.temp.int": {
+      "unified_key": "gd.environment.temperature.interior",
+      "last_seen": "2025-09-08T13:32:04.461761+00:00"
+    },
+    "alpha.cpu": {
+      "unified_key": "gd.performance.cpu.utilization",
+      "last_seen": "2025-09-08T13:32:04.282701+00:00"
+    },
+    "alpha.energy.kwh": {
+      "unified_key": "gd.energy.consumption.total",
+      "last_seen": "2025-09-08T13:32:04.332224+00:00"
+    },
+    "lambda.cfp": {
+      "unified_key": "gd.environment.emissions.cfp",
+      "last_seen": "2025-09-08T13:32:04.551404+00:00"
+    },
+    "power.solar": {
+      "unified_key": "gd.energy.renewable.solar",
+      "last_seen": "2025-09-08T12:14:05.070720+00:00"
+    },
+    "lambda.wush": {
+      "unified_key": "gd.uncategorized.unknown.unknown",
+      "last_seen": "2025-09-08T13:32:04.628847+00:00"
+    },
+    "disk.writeIO": {
+      "unified_key": "gd.storage.disk.write_io",
+      "last_seen": "2025-09-08T12:14:05.222171+00:00"
+    },
+    "row0.net_in": {
+      "unified_key": "gd.network.traffic.incoming",
+      "last_seen": "2025-09-01T17:12:14.136657+00:00"
+    },
+    "lambda.power": {
+      "unified_key": "gd.energy.power.total",
+      "last_seen": "2025-09-08T13:32:04.571617+00:00"
+    },
+    "hardware.memory.used": {
+      "unified_key": "gd.performance.memory.usage",
+      "last_seen": "2025-09-08T12:14:04.985788+00:00"
+    },
+    "alpha.net.out": {
+      "unified_key": "gd.network.traffic.outgoing",
+      "last_seen": "2025-09-08T13:32:04.388769+00:00"
+    },
+    "alpha.storage.read": {
+      "unified_key": "gd.storage.disk.read_io",
+      "last_seen": "2025-09-08T13:32:04.408479+00:00"
+    },
+    "alpha.net.in": {
+      "unified_key": "gd.network.traffic.incoming",
+      "last_seen": "2025-09-08T13:32:04.370375+00:00"
+    },
+    "row0.memory_usage": {
+      "unified_key": "gd.performance.memory.usage",
+      "last_seen": "2025-09-01T17:12:14.118701+00:00"
+    },
+    "network.incoming": {
+      "unified_key": "gd.network.traffic.incoming",
+      "last_seen": "2025-09-08T12:14:05.106920+00:00"
+    },
+    "lambda.pue": {
+      "unified_key": "gd.energy.efficiency.pue",
+      "last_seen": "2025-09-08T13:32:04.507031+00:00"
+    },
+    "network.outgoing": {
+      "unified_key": "gd.network.traffic.incoming",
+      "last_seen": "2025-09-08T12:14:05.146320+00:00"
+    },
+    "lambda.tim": {
+      "unified_key": "gd.uncategorized.unknown.unknown",
+      "last_seen": "2025-09-08T12:15:05.206021+00:00"
+    },
+    "compute.cpu": {
+      "unified_key": "gd.performance.cpu.utilization",
+      "last_seen": "2025-09-08T12:14:04.939203+00:00"
+    },
+    "alpha.storage.write": {
+      "unified_key": "gd.storage.disk.write_io",
+      "last_seen": "2025-09-08T13:32:04.435466+00:00"
+    },
+    "env.externalTemp": {
+      "unified_key": "gd.environment.temperature.ambient",
+      "last_seen": "2025-09-08T12:14:05.272902+00:00"
+    }
+  }
+}

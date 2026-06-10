@@ -1,0 +1,166 @@
+{
+  "gd.energy.consumption.total": [
+    "1-grid-site",
+    "30",
+    "alpha.energy.kwh",
+    "datacenter_A",
+    "doc0.EnergyWh",
+    "energy_wh",
+    "eu-central-1-cloud-site",
+    "ifca",
+    "q"
+  ],
+  "gd.energy.efficiency.pue": [
+    "30",
+    "datacenter_A",
+    "lambda.pue",
+    "q"
+  ],
+  "gd.energy.power.total": [
+    "1-grid-site",
+    "30",
+    "CFP_g",
+    "CI_g",
+    "datacenter_A",
+    "eu-central-1-cloud-site",
+    "lambda.power",
+    "q"
+  ],
+  "gd.energy.renewable.solar": [
+    "30",
+    "alpha.energy.renewable",
+    "datacenter_A",
+    "q"
+  ],
+  "gd.environment.emissions.cfp": [
+    "30",
+    "datacenter_A",
+    "lambda.cfp",
+    "q"
+  ],
+  "gd.environment.temperature.exterior": [
+    "30",
+    "alpha.temp.ext",
+    "datacenter_A",
+    "q"
+  ],
+  "gd.environment.temperature.interior": [
+    "30",
+    "alpha.temp.int",
+    "datacenter_A",
+    "q"
+  ],
+  "gd.environment.water.wue": [
+    "30",
+    "datacenter_A",
+    "lambda.wue",
+    "q"
+  ],
+  "gd.network.traffic.incoming": [
+    "30",
+    "alpha.net.in",
+    "datacenter_A",
+    "q"
+  ],
+  "gd.network.traffic.outgoing": [
+    "30",
+    "alpha.net.out",
+    "datacenter_A",
+    "q"
+  ],
+  "gd.performance.cpu.count": [
+    "1-grid-site",
+    "ncores"
+  ],
+  "gd.performance.cpu.normalization_factor": [
+    "1-grid-site",
+    "cpunormalizationfactor",
+    "doc0.CPUNormalizationFactor",
+    "eu-central-1-cloud-site",
+    "ifca"
+  ],
+  "gd.performance.cpu.tdp": [
+    "1-grid-site",
+    "tdp_w"
+  ],
+  "gd.performance.cpu.time": [
+    "1-grid-site",
+    "cpuduration_s",
+    "eu-central-1-cloud-site",
+    "totalcputime_s"
+  ],
+  "gd.performance.cpu.time_normalized": [
+    "1-grid-site",
+    "normcputime_s"
+  ],
+  "gd.performance.cpu.time_scaled": [
+    "1-grid-site",
+    "scaledcputime_s"
+  ],
+  "gd.performance.cpu.utilization": [
+    "30",
+    "alpha.cpu",
+    "datacenter_A",
+    "doc0.CpuDuration_s",
+    "ifca",
+    "q"
+  ],
+  "gd.performance.efficiency.compute": [
+    "1-grid-site",
+    "doc0.Efficiency",
+    "efficiency",
+    "eu-central-1-cloud-site",
+    "ifca"
+  ],
+  "gd.performance.memory.usage": [
+    "30",
+    "alpha.mem",
+    "datacenter_A",
+    "q"
+  ],
+  "gd.performance.time.suspend": [
+    "doc0.SuspendDuration_s",
+    "eu-central-1-cloud-site",
+    "ifca",
+    "suspendduration_s"
+  ],
+  "gd.performance.time.wallclock": [
+    "1-grid-site",
+    "doc0.WallClockTime_s",
+    "eu-central-1-cloud-site",
+    "ifca",
+    "wallclocktime_s"
+  ],
+  "gd.performance.work.total": [
+    "1-grid-site",
+    "doc0.Work",
+    "eu-central-1-cloud-site",
+    "ifca",
+    "work"
+  ],
+  "gd.storage.disk.read_io": [
+    "30",
+    "alpha.storage.read",
+    "datacenter_A",
+    "q"
+  ],
+  "gd.storage.disk.write_io": [
+    "30",
+    "alpha.storage.write",
+    "datacenter_A",
+    "q"
+  ],
+  "gd.uncategorized.unknown.unknown": [
+    "1-grid-site",
+    "30",
+    "PUE",
+    "datacenter_A",
+    "doc0.ExecUnitFinished",
+    "eu-central-1-cloud-site",
+    "execunitfinished",
+    "ifca",
+    "job_finished",
+    "lambda.wush",
+    "q"
+  ]
+}

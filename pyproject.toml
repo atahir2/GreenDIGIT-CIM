@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cloud_metrics"
+version = "0.1.0"
+description = "CIM Metrics Submission System"
+authors = [
+  { name="Adnan Tahir", email="a.tahir2@uva.nl" }
+]
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.10"
+
+
+[project.urls]
+Homepage = "https://github.com/your-org/cloud_metrics"
+Repository = "https://github.com/your-org/cloud_metrics.git"
+
+[project.dependencies]
+fastapi = "^0.95.0"
+uvicorn = { extras = ["standard"], version = "^0.23.0" }
+influxdb-client = "^1.35.0"
+sqlalchemy = "^2.0.0"
+python-dotenv = "^1.0.0"
+pydantic = "^2.0.0"
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.0",
+  "pytest-cov",
+  "alembic",
+  "mypy",
+  "black",
+  "flake8",
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]

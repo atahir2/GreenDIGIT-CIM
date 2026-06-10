@@ -6,7 +6,6 @@ CREATE TABLE IF NOT EXISTS metric_keywords (
     category TEXT,
     subcategory TEXT,
     short_key TEXT,
-    confidence FLOAT DEFAULT 0.5,
     source_key TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -1,0 +1,18 @@
+{
+  SiteName: 'IFCA-LCG2',
+  EnergyWh: 45.45,
+  Work: 145.46,
+  StartExecTime: '2025-09-15T18:00:01Z',
+  EndExecTime: '2025-09-16T00:00:01Z',
+  Status: 'running',
+  Owner: 'vo.latitudo40.com.eu',
+  ExecUnitID: '3c0e85a2-8410-4a60-b2b2-0ca116575561',
+  ExecUnitFinished: 0,
+  WallClockTime_s: 20562,
+  SuspendDuration_s: 0,
+  CpuDuration_s: 6611,
+  CPUNormalizationFactor: 1.5,
+  Efficiency: 0.31,
+  CloudType: 'openstack',
+  CloudComputeService: 'ifca'
+}

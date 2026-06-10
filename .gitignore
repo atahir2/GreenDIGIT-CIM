@@ -1,2 +1,25 @@
-.DS_Store
-__pycache__
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment variables and secrets
+.env
+.env*
+cloud_metrics/utils/.env
+
+# IDE and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Large binary files
+*.zip
+*.tar.gz
+*.tgz
+
+# Output / generated folders
+output/
+cloud_metrics/data/exports/

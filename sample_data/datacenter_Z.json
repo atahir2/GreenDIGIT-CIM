@@ -1,0 +1,14 @@
+{
+  "metadata": {
+      "datacenter": "IFCA",
+      "node_id": "node01",
+      "datacenter_id": "dc01",
+      "ri_id": "ri01",
+      "cpu": 67.2,
+      "mem": 14.8,
+      "energy": {
+        "kwh": 162.5,
+        "renewable": 62.1
+      }
+    }
+}
