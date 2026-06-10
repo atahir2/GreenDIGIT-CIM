@@ -31,7 +31,7 @@ def test_ingest_gcp(monkeypatch, client):
 def test_query_endpoint(monkeypatch, client):
     sample = [{"_time": "2025-08-01T00:00:00Z", "_value": 1.23, "region":"us"}]
     monkeypatch.setattr(
-        "cloud_metrics.services.influx_service.query_metrics",
+        "cloud_metrics.api.query.query_metrics",
         lambda **kw: sample,
     )
     res = client.get("/query?measurement=cpu_usage")
@@ -42,7 +42,7 @@ def test_query_bad(monkeypatch, client):
     def boom(**kw):
         raise RuntimeError("fail")
     monkeypatch.setattr(
-        "cloud_metrics.services.influx_service.query_metrics", boom
+        "cloud_metrics.api.query.query_metrics", boom
     )
     res = client.get("/query?measurement=cpu_usage")
     assert res.status_code == 500

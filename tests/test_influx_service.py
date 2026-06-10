@@ -10,15 +10,16 @@ def test_write_metrics_batches(monkeypatch):
             captured["bucket"] = bucket
             captured["record"] = record
 
-    monkeypatch.setattr(influx_service, "_write_api", DummyWriteAPI())
-    from cloud_metrics.utils.config import settings
+    dummy_write_api = DummyWriteAPI()
+    monkeypatch.setattr(influx_service, "_ensure_client", lambda: (None, dummy_write_api))
+    from cloud_metrics.utils.config import get_influx_settings
 
     now = datetime.utcnow()
     influx_service.write_metrics([
         ("cpu_usage", 5.5, {"region":"us-east"}, now),
     ])
 
-    assert captured["bucket"] == settings.INFLUX_BUCKET
+    assert captured["bucket"] == get_influx_settings().INFLUX_BUCKET
     pts = captured["record"]
     assert len(pts) == 1
     line = pts[0].to_line_protocol()

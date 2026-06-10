@@ -7,7 +7,7 @@ from cloud_metrics.mapping.namespace_mapper_core import parse_and_extract_file_m
 from cloud_metrics.services.influx_service import write_mapped_metrics
 from cloud_metrics.services.insert_file_upload_log import insert_file_upload_log
 from cloud_metrics.services.insert_metric_definition import insert_metric_definition
-from cloud_metrics.services.insert_datacenter import insert_datacenter
+from cloud_metrics.services.insert_datacenter import insert_datacenter, get_or_create_datacenter_id
 from cloud_metrics.ingestion.automated_mapper import process_metric_sample
 from cloud_metrics.exporters.external_json import build_metadata, write_external_metrics_json
 
@@ -69,9 +69,10 @@ def ingest_from_file(
     write_mapped_metrics(new_mapped_metrics, timestamp)
 
     # Record the file upload in your SQL logs
+    dc_id = get_or_create_datacenter_id(datacenter_name)
     insert_file_upload_log(
         filename=os.path.basename(file_path),
-        datacenter_id=1,  # replace with actual lookup logic if needed
+        datacenter_id=dc_id,
         uploaded_by=uploaded_by
     )
 

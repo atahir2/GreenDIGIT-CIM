@@ -10,3 +10,4 @@ streamlit~=1.48.1
 influxdb-client~=1.49.0
 RapidFuzz~=3.13.0
 sentence-transformers~=5.1.0
+alembic~=1.18.4

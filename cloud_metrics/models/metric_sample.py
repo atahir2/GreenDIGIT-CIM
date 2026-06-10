@@ -1,7 +1,6 @@
 # cloud_metrics/models/metric_sample.py
 
 from sqlalchemy import Column, Numeric, Text, Integer, String, Float, DateTime, ForeignKey, JSON, func
-from sqlalchemy.dialects.postgresql import JSONB
 from cloud_metrics.models.db_models import Base
 
 class MetricSample(Base):
@@ -32,4 +31,4 @@ class MetricSample(Base):
     clf_rationale = Column(Text, nullable=True)
 
     domain = Column(Text, nullable=True)  # 'cloud' | 'grid' | 'network' | ...
-    extra_meta = Column(JSONB, nullable=False, server_default='{}')
+    extra_meta = Column(JSON, nullable=False, server_default='{}')

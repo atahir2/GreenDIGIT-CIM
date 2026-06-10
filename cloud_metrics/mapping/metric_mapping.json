@@ -2,6 +2,7 @@
   "gd.energy.consumption.total": [
     "1-grid-site",
     "30",
+    "EnergyWh",
     "alpha.energy.kwh",
     "datacenter_A",
     "doc0.EnergyWh",

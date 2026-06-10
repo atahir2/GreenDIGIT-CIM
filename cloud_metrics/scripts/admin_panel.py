@@ -14,8 +14,8 @@ from sqlalchemy import func, or_, and_
 
 from cloud_metrics.utils.config import SessionLocal
 from cloud_metrics.models.metric_sample import MetricSample
+from cloud_metrics.models.asset import Asset
 from cloud_metrics.models.namespace_models import Category, Subcategory
-from cloud_metrics.models.datacenter import Datacenter
 # from cloud_metrics.models.metric_keyword import MetricKeyword
 
 from cloud_metrics.classifiers.ensemble_classifier import classify_metric
@@ -32,7 +32,7 @@ st.title("CIM Admin Portal for Unknown Metrics Review")
 with st.sidebar:
     st.header("Filters")
     with SessionLocal() as s:
-        dcs = s.query(Datacenter).order_by(Datacenter.name.asc()).all()
+        dcs = s.query(Asset).filter_by(type="datacenter").order_by(Asset.name.asc()).all()
     dc_options = ["(all)"] + [d.name for d in dcs]
     dc_pick = st.selectbox("Datacenter", dc_options, index=0)
 
@@ -61,7 +61,7 @@ def load_unknowns(s):
     )
     if dc_pick != "(all)":
         # find selected dc id
-        dc = s.query(Datacenter).filter(func.lower(Datacenter.name) == dc_pick.lower()).first()
+        dc = s.query(Asset).filter(func.lower(Asset.name) == dc_pick.lower(), Asset.type == "datacenter").first()
         if dc:
             q = q.filter(MetricSample.datacenter_id == dc.id)
         else:
@@ -131,6 +131,37 @@ for r in rows:
                 # 1) ensure taxonomy rows (auto-create) + normalize unified
                 unified_key = ensure_gd_namespace(cat, sub, short, auto_create=True)
                 unified_key = to_gd(unified_key)
+
+                # 1.5) Store in the Mapping Registry (cim_mappings table)
+                from cloud_metrics.services.mapping_registry_service import create_mapping, approve_mapping
+                from cloud_metrics.models.cim_mapping import CimMapping
+                from cloud_metrics.models.metric_definition import MetricDefinition
+                
+                with SessionLocal() as s_map:
+                    metric_def = s_map.query(MetricDefinition).filter_by(unified_key=unified_key).first()
+                    if not metric_def:
+                        # Create metric definition in registry
+                        metric_def = MetricDefinition(unified_key=unified_key, status="active")
+                        s_map.add(metric_def)
+                        s_map.commit()
+                        s_map.refresh(metric_def)
+                    
+                    existing_map = s_map.query(CimMapping).filter_by(source_key=raw_key).first()
+                    if existing_map:
+                        existing_map.cim_metric_id = metric_def.id
+                        existing_map.status = "approved"
+                        existing_map.confidence = max(0.95, float(d.confidence or 0))
+                        existing_map.rationale = f"Approved via Admin Panel: {d.rationale}"
+                        s_map.commit()
+                    else:
+                        map_record = create_mapping(
+                            source_key=raw_key,
+                            unified_key=unified_key,
+                            relation_type="exactMatch",
+                            confidence=max(0.95, float(d.confidence or 0)),
+                            rationale=f"Approved via Admin Panel: {d.rationale}"
+                        )
+                        approve_mapping(map_record.id, approved_by="admin")
 
                 with SessionLocal() as s2:
                     # find a datacenter_id to register mapping (any of the recent samples for this raw_key)

@@ -100,6 +100,18 @@ def classify_metric(raw_key: str) -> Decision:
     key = (raw_key or "").strip()
     toks = set(_tokens(key))
 
+    # 0) check Mapping Registry first
+    from cloud_metrics.services.mapping_registry_service import resolve_mapping
+    try:
+        mapping = resolve_mapping(key)
+        if mapping:
+            parts = mapping.cim_metric.unified_key.split(".")
+            if len(parts) >= 4:
+                return Decision(parts[1], parts[2], parts[3], mapping.confidence, mapping.rationale or "Mapping Registry resolution")
+    except Exception as e:
+        # Avoid crashing if database is not available (e.g. during standalone tests)
+        pass
+
     # 0) exact semantic map (your existing function)
     sem = classify_by_semantics(raw_key)
     if sem:

@@ -4,8 +4,8 @@ from cloud_metrics.mapping.namespace_mapper import map_raw_to_unified, UnifiedMe
 @pytest.mark.parametrize(
     "raw_key, expected_name",
     [
-        ("CPUUtilization", "cpu_usage"),
-        ("MemoryAvailableMB",   "mem_free"),
+        ("alpha.cpu", "gd.performance.cpu.utilization"),
+        ("alpha.mem", "gd.performance.memory.usage"),
     ],
 )
 def test_map_known_keys(raw_key, expected_name):

@@ -3,9 +3,9 @@
 import re
 from datetime import datetime
 from typing import Tuple, Optional
+from sqlalchemy import func
 
 from cloud_metrics.ingestion.semantic_classifier import classify_by_semantics
-from cloud_metrics.models.metric_keyword import MetricKeyword
 from cloud_metrics.utils.config import SessionLocal
 
 from cloud_metrics.registry.namespace_registry import ensure_gd_namespace
@@ -20,6 +20,10 @@ from cloud_metrics.classifiers.ensemble_classifier import classify_metric
 from cloud_metrics.services.keyword_learning import learn_keyword
 from cloud_metrics.utils.partner_payload import parse_partner_payload_generic
 from cloud_metrics.classifiers.fallbacks import fallback_namespace_from_raw
+from cloud_metrics.models.asset import Asset
+from cloud_metrics.models.source import Source
+from cloud_metrics.models.metric_definition import MetricDefinition
+from cloud_metrics.models.unit import Unit
 
 
 _WORD = re.compile(r"[A-Z]?[a-z]+|[0-9]+")
@@ -36,7 +40,9 @@ def _infer_unit_from_key(k: str) -> Optional[str]:
     k = k.lower()
     if "kwh" in k or "kilowatthour" in k or k.endswith("_kwh"):
         return "kwh"
-    if ("kw" in k or k.endswith("_kw")) and "kwh" not in k:
+    if ("wh" in k or "watthour" in k or k.endswith("_wh")) and "kwh" not in k:
+        return "wh"
+    if ("kw" in k or k.endswith("_kw")) and "kwh" not in k and "wh" not in k:
         return "kw"
     if ("watt" in k or "watts" in k or (k.endswith("_w") or k.endswith("tdp_w"))) and not k.endswith("kw"):
         return "w"
@@ -62,16 +68,21 @@ def _classify_to_parts(raw_key: str) -> tuple[str, str, str]:
         _, domain, category, metric = sem
         return domain, category, metric
 
-    # 2) DB keywords
+    # 2) DB keywords (from Mapping Registry / CimMapping)
     session = SessionLocal()
     try:
-        mk = (
-            session.query(MetricKeyword)
-            .filter((MetricKeyword.keyword == key.lower()) | (MetricKeyword.source_key == key.lower()))
+        from cloud_metrics.models.cim_mapping import CimMapping
+        mapping = (
+            session.query(CimMapping)
+            .filter(func.lower(CimMapping.source_key) == key.lower())
             .first()
         )
-        if mk and mk.category and mk.subcategory and mk.short_key:
-            return mk.category, mk.subcategory, mk.short_key
+        if mapping and mapping.cim_metric:
+            parts = mapping.cim_metric.unified_key.split(".")
+            if len(parts) >= 4:
+                return parts[1], parts[2], parts[3]
+    except Exception:
+        pass
     finally:
         session.close()
 
@@ -143,86 +154,157 @@ def process_metric_sample(
         site_id: Optional[str] = None,
         extra_meta: Optional[dict] = None,
         domain: Optional[str] = None,
-
 ) -> str:
     """
     Ingest a single metric (raw_key + value) from a given origin (filename/datacenter).
-    1) classify -> (category, subcategory, short_key)
-    2) generate_namespace -> standard.category.subcategory.short_key (DB-driven)
-    3) persist MetricDefinition (sources = [origin or filename], tags)
-    4) sync metric_mapping.json with raw_key (not origin)
+    1) Classify using Ensemble & Mapping Registry.
+    2) Normalize unit and value using Unit Registry conversion rules.
+    3) Run validation rules from Rule Registry.
+    4) Persist metric sample.
+    5) Log activity provenance in Provenance Registry.
     """
-    # 1) Normalizing
     raw_key_norm = (raw_key or "").strip()
     origin_label = (origin or "unknown").strip()
+    original_value = value
 
+    # 1) Get/Create Datacenter and Asset
     try:
         dc_id = get_or_create_datacenter_id(origin_label)
     except Exception:
         origin_label = origin_label or "unknown"
         dc_id = get_or_create_datacenter_id(origin_label)
 
-    # 3) Classify with Ensemble
-    d = classify_metric(raw_key)    #Decision (cat, subcat, key, conf., rationale)
+    # Asset Registry link
+    with SessionLocal() as session:
+        asset = session.query(Asset).filter_by(name=origin_label, type="datacenter").first()
+        if not asset:
+            asset = Asset(name=origin_label, type="datacenter", status="active")
+            session.add(asset)
+            session.commit()
+            
+        # Source Registry lookup
+        source_name = "file_upload"
+        if "aws" in origin_label.lower():
+            source_name = "aws_cloudwatch"
+        elif "gcp" in origin_label.lower():
+            source_name = "gcp_monitoring"
+            
+        source = session.query(Source).filter_by(name=source_name).first()
+        source_id = source.id if source else None
+
+    # 2) Classify with Ensemble (which checks Mapping Registry first)
+    d = classify_metric(raw_key_norm)
     category, subcategory, short_key = d.category, d.subcategory, d.short_key
+    raw_unit = _infer_unit_from_key(_norm(raw_key_norm))
 
-    # 2) storing units before classification
-    unit = _infer_unit_from_key(_norm(raw_key))
-    tags = [category, subcategory, short_key]
-
-    # 4) Checking for unknown
+    # 3) Check for fallback/unknown taxonomy
     if category == "uncategorized" or subcategory == "unknown":
         try:
             from cloud_metrics.classifiers.fallbacks import fallback_namespace_from_raw
-            category, subcategory, short_key = fallback_namespace_from_raw(raw_key_norm, unit_hint=unit)
+            category, subcategory, short_key = fallback_namespace_from_raw(raw_key_norm, unit_hint=raw_unit)
         except Exception:
             category, subcategory, short_key = ("custom", "unknown", "".join(_tokens(raw_key_norm)) or "unknown")
 
-    # 5) Prefix gd.* Taxonomy
+    # 4) Prefix taxonomy
     try:
-        unified_key = ensure_gd_namespace(d.category, d.subcategory, d.short_key, auto_create=True)
+        unified_key = ensure_gd_namespace(category, subcategory, short_key, auto_create=True)
     except Exception as e:
-        print(f" Namespace missing: cat='{category}', subcat='{subcategory}' → {e}")
         unified_key = f"gd.{category.lower()}.{subcategory.lower()}.{short_key.lower()}"
-        unified_key = to_gd(unified_key) # Hard-normalizing to gd.* in case anything upstream was odd
+        unified_key = to_gd(unified_key)
 
-    # 6) Auto-learn if confident enough
-    try:
-        if (d.confidence or 0) >= 0.85 and category != "uncategorized" and subcategory != "unknown":
-            learn_keyword(raw_key, d.category, d.subcategory, d.short_key, d.confidence)
-            from cloud_metrics.classifiers import ensemble_classifier as EC
-            if hasattr(EC.classify_metric, "cache_clear"):
-                EC.classify_metric.cache_clear()
-    except Exception as _e:
-        pass
+    # 5) Auto-learn mapping if confident and not already in Mapping Registry
+    from cloud_metrics.services.mapping_registry_service import resolve_mapping, auto_learn_mapping
+    existing_mapping = resolve_mapping(raw_key_norm)
+    if not existing_mapping and (d.confidence or 0) >= 0.85 and category != "uncategorized" and subcategory != "unknown":
+        try:
+            auto_learn_mapping(raw_key_norm, unified_key, d.confidence, d.rationale)
+        except Exception:
+            pass
 
-    # 7) Persist registry state (definitions, source map, json mapping)
+    # 6) Unit Normalization and Conversion
+    final_value = value
+    final_unit = raw_unit
+    
+    with SessionLocal() as session:
+        metric_def = session.query(MetricDefinition).filter_by(unified_key=unified_key).first()
+        if metric_def and metric_def.canonical_unit_id:
+            canonical_unit = session.query(Unit).get(metric_def.canonical_unit_id)
+            if canonical_unit and raw_unit and canonical_unit.symbol.lower() != raw_unit.lower():
+                # Map raw unit to standard symbol casing
+                raw_unit_standardized = session.query(Unit).filter(func.lower(Unit.symbol) == raw_unit.lower()).first()
+                if raw_unit_standardized:
+                    try:
+                        from cloud_metrics.services.unit_registry_service import convert_value
+                        converted_value = convert_value(value, raw_unit_standardized.symbol, canonical_unit.symbol)
+                        
+                        # Log provenance for unit conversion
+                        from cloud_metrics.services.provenance_registry_service import record_activity
+                        record_activity(
+                            entity_type="metric_sample",
+                            activity="unit_conversion",
+                            agent="pipeline_unit_normalizer",
+                            inputs={"value": value, "unit": raw_unit_standardized.symbol},
+                            outputs={"value": converted_value, "unit": canonical_unit.symbol},
+                            method="convert_value",
+                            confidence=1.0
+                        )
+                        
+                        final_value = converted_value
+                        final_unit = canonical_unit.symbol
+                    except Exception as e:
+                        print(f"Unit conversion failed from {raw_unit} to {canonical_unit.symbol}: {e}")
+
+    # 7) Validation Rules check
+    from cloud_metrics.services.rule_registry_service import validate_metric_sample
+    violations = validate_metric_sample(
+        unified_key=unified_key,
+        value=final_value,
+        unit=final_unit,
+        tags={"region": site_id or "unknown"}
+    )
+    if violations:
+        print(f"Validation warnings/errors for {unified_key}: {violations}")
+        try:
+            from cloud_metrics.services.provenance_registry_service import record_activity
+            record_activity(
+                entity_type="metric_sample",
+                activity="validation",
+                agent="rule_registry_service",
+                inputs={"unified_key": unified_key, "value": final_value, "unit": final_unit},
+                outputs={"violations": violations},
+                method="validate_metric_sample",
+                confidence=1.0
+            )
+        except Exception:
+            pass
+
+    # 8) Persist registry state (definitions, source map, json mapping)
     try:
         register_mapping(
             datacenter_id=dc_id,
-            raw_key=raw_key,
+            raw_key=raw_key_norm,
             unified_key=unified_key,
             origin=origin,
-            value=value,
-            unit=unit,
-            tags=[d.category, d.subcategory, d.short_key],
+            value=final_value,
+            unit=final_unit,
+            tags=[category, subcategory, short_key],
         )
-    except Exception as _e:
+    except Exception:
         try:
             sync_metric_mapping(unified_key=unified_key, source_key=raw_key_norm)
         except Exception:
             pass
 
-    # 8) Persisting sources to be the file/datacenter name (origin), not the raw metric key
-    insert_mapped_metric(unified_key=unified_key, source_keys=[origin], tags=tags)
+    # Back-compat registry insert
+    insert_mapped_metric(unified_key=unified_key, source_keys=[origin_label], tags=[category, subcategory, short_key])
 
-    # per-DC sample row
-    insert_metric_sample(
+    # 9) Insert Metric Sample
+    sample_id = insert_metric_sample(
         datacenter_id=dc_id,
         unified_key=unified_key,
         raw_key=raw_key_norm,
-        value=value,
-        unit=unit,
+        value=final_value,
+        unit=final_unit,
         tags={},
         source_file=origin_label,
         captured_at=captured_at or datetime.utcnow(),
@@ -231,17 +313,33 @@ def process_metric_sample(
         vm_id=vm_id,
         host=host,
         site_id=site_id,
-        clf_confidence=getattr (d, "confidence", None),
+        clf_confidence=getattr(d, "confidence", None),
         clf_rationale=getattr(d, "rationale", None),
         extra_meta=extra_meta,
         domain=domain,
     )
 
-    # JSON sync must record raw_key → unified_key (not origin)
+    # Log ingestion provenance
     try:
-        sync_metric_mapping(unified_key=unified_key, source_key=raw_key)
+        from cloud_metrics.services.provenance_registry_service import record_activity
+        record_activity(
+            entity_type="metric_sample",
+            entity_id=sample_id,
+            activity="ingestion",
+            agent="automated_mapper_pipeline",
+            inputs={"raw_key": raw_key, "raw_value": original_value, "origin": origin_label},
+            outputs={"unified_key": unified_key, "value": final_value, "unit": final_unit},
+            method="process_metric_sample",
+            confidence=getattr(d, "confidence", 1.0)
+        )
+    except Exception:
+        pass
+
+    # JSON sync must record raw_key → unified_key
+    try:
+        sync_metric_mapping(unified_key=unified_key, source_key=raw_key_norm)
     except Exception as e:
-        print(f"JSON sync failed for {raw_key} → {unified_key}: {e}")
+        print(f"JSON sync failed for {raw_key_norm} → {unified_key}: {e}")
 
     return unified_key
 

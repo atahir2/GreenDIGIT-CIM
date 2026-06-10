@@ -8,6 +8,11 @@ from .metric_sample import MetricSample
 from .upload_log import FileUploadLog           # <-- this is key
 from .standard_models import Standard, MetricStandardMap
 from .namespace_models import Category, Subcategory
+from .unit import QuantityKind, Unit
+from .source import Source
+from .asset import Asset
+from .cim_mapping import CimMapping
+from .provenance import ProvenanceRecord
 
 __all__ = [
     "Base",
@@ -19,4 +24,10 @@ __all__ = [
     "MetricStandardMap",
     "Category",
     "Subcategory",
+    "QuantityKind",
+    "Unit",
+    "Source",
+    "Asset",
+    "CimMapping",
+    "ProvenanceRecord",
 ]
