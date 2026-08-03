@@ -82,21 +82,21 @@ from cloud_metrics.registry import (
 
 ## 4. Relationship to ORM Models
 
-| Registry | Skeleton types | Existing SQLAlchemy model (if any) |
-|----------|----------------|-------------------------------------|
-| Metric | `MetricEntry` | `MetricDefinition` |
-| Unit | `UnitEntry`, `QuantityKindEntry` | `Unit`, `QuantityKind` |
-| Source | `SourceEntry` | `Source` |
-| Asset | `AssetEntry` | `Asset` |
-| Standards | `StandardEntry` | `Standard` |
-| Mapping | `MappingEntry` | `CimMapping` |
-| Lifecycle | `LifecycleStageEntry` | *(none yet)* |
-| Rule | `RuleEntry` | *(none yet — logic in service)* |
-| Evidence | `EvidenceRequirementEntry` | *(none yet)* |
-| Provenance | `ProvenanceEntry` | `ProvenanceRecord` |
-| Extension | `ExtensionEntry` | *(none yet)* |
+| Skeleton types (Milestone 1) | Existing SQLAlchemy model (if any) | Milestone 2 ORM (`cim_*`) |
+|------------------------------|------------------------------------|---------------------------|
+| `MetricEntry` | `MetricDefinition` | `CimMetricDefinition` → `cim_metric_definitions` |
+| `UnitEntry`, `QuantityKindEntry` | `Unit`, `QuantityKind` | `CimUnit`, `CimQuantityKind` |
+| `SourceEntry` | `Source` | `CimSource` |
+| `AssetEntry` | `Asset` | `CimAsset` |
+| `StandardEntry` | `Standard` | `CimStandard` (+ `CimStandardTerm`) |
+| `MappingEntry` | `CimMapping` | `CimMetricMapping` → `cim_metric_mappings` |
+| `LifecycleStageEntry` | *(none)* | `CimLifecycleStage` (+ `CimMetricLifecycleLink`) |
+| `RuleEntry` | *(none — logic in service)* | `CimValidationRule` |
+| `EvidenceRequirementEntry` | *(none)* | `CimEvidenceRequirement` |
+| `ProvenanceEntry` | `ProvenanceRecord` | `CimProvenanceRecord` |
+| `ExtensionEntry` | *(none)* | `CimExtensionMetric` |
 
-Milestone 1 **does not** add or alter database tables. Type ↔ ORM alignment is deferred.
+Milestone 1 types remain dataclasses. Milestone 2 adds parallel `cim_*` ORM tables; runtime still uses prior tables until a later cutover. See `docs/target/REGISTRY_DATABASE_MODEL.md`.
 
 ---
 

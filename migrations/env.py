@@ -17,6 +17,8 @@ if config.config_file_name is not None:
 # add your model's MetaData object here
 # for 'autogenerate' support
 from cloud_metrics.models.db_models import Base
+# Ensure Milestone 2 registry models are registered on Base.metadata
+import cloud_metrics.models.cim_registry  # noqa: F401
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,

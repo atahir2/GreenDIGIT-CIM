@@ -1,12 +1,61 @@
 # Registry-Driven CIM Architecture: Database Migration Plan
 
-This document details the database schema transitions, table deprecations, data porting strategies, and migration safeguards implemented to move the CIM codebase to the registry-driven architecture.
+This document details the database schema transitions, table deprecations, data porting strategies, and migration safeguards for the registry-driven CIM.
+
+> **Milestone 2 update (2026-08-03):** An additive `cim_*` schema was introduced (revision `c2f8a1b9e047`). It does **not** replace or drop the Antigravity-era tables described in §1 below. See [REGISTRY_DATABASE_MODEL.md](REGISTRY_DATABASE_MODEL.md) and [REGISTRY_SCHEMA_REFERENCE.md](REGISTRY_SCHEMA_REFERENCE.md).
 
 ---
 
-## 1. Target Database Schemas
+## 0. Milestone 2 Additive Schema (CURRENT)
 
-### 1.1 Core Registry Tables (NEW)
+### 0.1 Revision
+
+| Item | Value |
+|------|-------|
+| Alembic revision | `c2f8a1b9e047` |
+| Revises | `a7708d6bee50` |
+| File | `migrations/versions/c2f8a1b9e047_add_cim_registry_tables.py` |
+| ORM | `cloud_metrics/models/cim_registry.py` |
+| Tests | `tests/test_cim_registry_migration.py` |
+
+### 0.2 Tables created
+
+`cim_quantity_kinds`, `cim_units`, `cim_sources`, `cim_assets`, `cim_standards`, `cim_standard_terms`, `cim_metric_definitions`, `cim_metric_mappings`, `cim_lifecycle_stages`, `cim_metric_lifecycle_links`, `cim_validation_rules`, `cim_evidence_requirements`, `cim_provenance_records`, `cim_extension_metrics`
+
+### 0.3 Rollback strategy
+
+```bash
+# Apply Milestone 2 (after prior revisions are present on the target DB)
+alembic upgrade c2f8a1b9e047
+
+# Roll back Milestone 2 only (drops all cim_* tables created by this revision)
+alembic downgrade a7708d6bee50
+```
+
+Downgrade drops Milestone 2 tables in reverse dependency order and removes their indexes. Legacy / Antigravity tables are unaffected.
+
+### 0.4 Out of scope for Milestone 2
+
+* Migrating rows from `metric_definitions` / `cim_mappings` / etc. into `cim_*` tables
+* Seeding full registry catalogues
+* Changing ingestion / classifier / API runtime paths
+* Dropping or renaming old tables
+
+### 0.5 Validation
+
+Isolated SQLite tests in `tests/test_cim_registry_migration.py` verify:
+
+* upgrade creates all 14 tables with required columns
+* downgrade removes them
+* uniqueness constraints (namespace, symbol, quantity kind name, source name+type, lifecycle stage name)
+* multiple lifecycle links and multiple standards mappings per metric
+* legacy model tables remain registered on `Base.metadata`
+
+---
+
+## 1. Target Database Schemas (Antigravity-era — retained)
+
+### 1.1 Core Registry Tables (NEW at the time)
 
 #### `quantity_kinds`
 * Identifies the category of physical dimension being measured.
@@ -138,9 +187,10 @@ ALTER TABLE metric_definitions ADD COLUMN updated_at TIMESTAMP WITH TIME ZONE DE
 
 ## 3. Deprecated and Removed Tables
 
-The following legacy tables are fully deprecated and dropped:
-1. **`metric_keywords`**: The auto-learned keyword cache is replaced by `cim_mappings` (using `origin='auto-learned'`).
-2. **`metric_source_map`**: The raw-to-unified datacenter maps are merged into `cim_mappings` (using `origin='seeded'` and linking to specific source/asset registries).
+The following legacy tables were dropped in revision `a7708d6bee50` (Antigravity). Milestone 2 does **not** drop further tables:
+
+1. **`metric_keywords`**: Replaced conceptually by mapping registry entries (`origin='auto-learned'`).
+2. **`metric_source_map`**: Replaced conceptually by mapping registry entries.
 
 ---
 
@@ -153,6 +203,8 @@ The naming convention is defined in Alembic's `env.py` and models:
 * Unique constraints: `uq_%(table_name)s_%(column_0_name)s`
 * Indexes: `ix_%(table_name)s_%(column_0_name)s`
 
+Milestone 2 follows this pattern with explicit names on every FK / unique / index.
+
 ### 4.2 SQLite Batch Mode Workaround
 SQLite does not natively support many standard `ALTER TABLE` operations (such as adding foreign keys, dropping columns, or modifying column constraints). In migrations targeting SQLite, Alembic must be configured to run in **batch mode**:
 ```python
@@ -164,13 +216,28 @@ with op.batch_alter_table('metric_definitions', render_as_batch=True) as batch_o
     )
 ```
 
+Milestone 2 only `CREATE TABLE` / `DROP TABLE`, so batch mode is not required for revision `c2f8a1b9e047`.
+
 ---
 
 ## 5. Data Porting Logic
 
-Data migration is handled sequentially by `cloud_metrics/scripts/migrate_existing_data.py`:
-1. **Assets**: Datacenters in the legacy table are inserted as top-level `datacenter` type rows in the `assets` table.
-2. **Metrics Enrichment**: Standard `MetricDefinition` namespaces are mapped to their physical quantity kinds (e.g. `gd.energy.*` is enriched with `Energy` quantity kind and `kWh` canonical unit).
-3. **Legacy Map Migration**: Mappings from `metric_source_map` are ported to `cim_mappings` linked to the resolved asset.
-4. **Auto-Learned Keyword Migration**: Entries from `metric_keywords` are imported as `cim_mappings` with `origin='auto-learned'`, `confidence=0.85`, and `relation_type='closeMatch'`.
-5. **Static Seed Mapping**: Aliases from `alias_classifier.py` and standard mappings are loaded as approved seeded records.
+Data migration is handled sequentially by `cloud_metrics/scripts/migrate_existing_data.py` (planned / Antigravity). **Not executed in Milestone 2.**
+
+Future steps (later milestone):
+1. **Assets**: Datacenters → `cim_assets` (`type='datacenter'`).
+2. **Metrics**: Port / dual-write `metric_definitions` → `cim_metric_definitions`.
+3. **Mappings**: Port `cim_mappings` / legacy maps → `cim_metric_mappings`.
+4. **Standards / units / sources**: Seed and align catalogues into `cim_*` tables.
+
+---
+
+## 6. Migration Chain (current)
+
+```
+58e138959809  initial_schema
+    → 45460b743918  add_registries_and_expand_metric
+        → 270d7d8ed609  add_provenance_records
+            → a7708d6bee50  drop_legacy_tables
+                → c2f8a1b9e047  add_cim_registry_tables   ← Milestone 2
+```
