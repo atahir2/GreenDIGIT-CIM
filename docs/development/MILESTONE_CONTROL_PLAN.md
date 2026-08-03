@@ -11,7 +11,7 @@ The refactoring process follows a 14-stage incremental sequence defined in [IMPL
 | Stage | Focus Area | Primary Deliverables | Execution Rule |
 | :---: | :--- | :--- | :--- |
 | **Stage 1** | Audit & Documentation | Audit current code, map missing components, document target design. | Completed |
-| **Stage 2** | Registry Folder & Module Structure | Set up directory layout, base interfaces, CRUD schemas, placeholder services. | Completed |
+| **Stage 2** | Registry Folder & Module Structure | Set up directory layout, base interfaces, CRUD schemas, placeholder services. | Completed (formalized as Milestone 1 — see MILESTONE_1_REGISTRY_SKELETON.md) |
 | **Stage 3** | Database Models & Migrations | Alembic DDLs for Unit, Source, Asset, Mapping, Provenance, Rules registries. | Completed |
 | **Stage 4** | Mapping Migration | Port legacy `metric_keywords`, `metric_source_map`, and static aliases to `cim_mappings`. | Completed |
 | **Stage 5** | Namespace Generation | Refactor namespace generation to resolve via Metric Registry. | Completed |
