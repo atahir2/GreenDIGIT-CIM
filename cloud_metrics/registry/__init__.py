@@ -25,11 +25,13 @@ from cloud_metrics.registry.unit import (
 from cloud_metrics.registry.source import (
     SourceEntry,
     SourceRegistryService,
+    SourceResolutionResult,
     get_source_registry_service,
 )
 from cloud_metrics.registry.asset import (
     AssetEntry,
     AssetRegistryService,
+    AssetResolutionResult,
     get_asset_registry_service,
 )
 from cloud_metrics.registry.standards import (
@@ -121,9 +123,11 @@ __all__ = [
     "UnitRegistryService",
     "get_unit_registry_service",
     "SourceEntry",
+    "SourceResolutionResult",
     "SourceRegistryService",
     "get_source_registry_service",
     "AssetEntry",
+    "AssetResolutionResult",
     "AssetRegistryService",
     "get_asset_registry_service",
     "StandardEntry",

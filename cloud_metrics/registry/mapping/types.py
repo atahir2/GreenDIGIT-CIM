@@ -1,4 +1,4 @@
-"""Mapping Registry — lookup types (Milestone 4–5)."""
+"""Mapping Registry — lookup types (Milestone 4–6)."""
 
 from __future__ import annotations
 
@@ -6,6 +6,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, Optional
 
+from cloud_metrics.registry.asset.types import AssetResolutionResult
+from cloud_metrics.registry.source.types import SourceResolutionResult
 from cloud_metrics.registry.unit.types import UnitValidationResult
 
 
@@ -57,3 +59,6 @@ class MappingLookupResult:
     unit_validation: Optional[UnitValidationResult] = None
     expected_quantity_kind: Optional[str] = None
     canonical_unit: Optional[str] = None
+    # Milestone 6 — soft source / asset resolution (never blocks resolution)
+    source_resolution: Optional[SourceResolutionResult] = None
+    asset_resolution: Optional[AssetResolutionResult] = None

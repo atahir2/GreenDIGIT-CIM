@@ -12,7 +12,7 @@ explicitly.
 from __future__ import annotations
 
 import logging
-from typing import List, Optional
+from typing import Any, List, Mapping, Optional, Dict
 
 from sqlalchemy import func
 from sqlalchemy.orm import Session
@@ -136,11 +136,18 @@ class MappingRegistryService:
         create_candidate_on_fallback: bool = False,
         observed_unit: Optional[str] = None,
         validate_unit: Optional[bool] = None,
+        context: Optional[Mapping[str, Any]] = None,
+        resolve_source: Optional[bool] = None,
+        resolve_asset: Optional[bool] = None,
+        create_source_candidate: bool = True,
+        create_asset_candidate: bool = True,
     ) -> MappingLookupResult:
         """Resolve ``raw_key`` via registry, then optional legacy fallback.
 
-        Milestone 5: when a metric is resolved, optionally attach soft unit
-        validation metadata. Validation never flips ``resolved`` to False.
+        Milestone 5: soft unit validation when ``observed_unit`` is set.
+        Milestone 6: soft source/asset resolution when ``context`` is set
+        (or when ``resolve_source`` / ``resolve_asset`` is True).
+        Enrichment never flips ``resolved`` to False.
         """
         key = (raw_key or "").strip()
         if not key:
@@ -192,13 +199,22 @@ class MappingRegistryService:
             legacy = self._legacy_fallback(key)
             if legacy is None:
                 logger.info("unresolved metric: raw=%s", key)
-                return MappingLookupResult(
+                unresolved = MappingLookupResult(
                     raw_key=key,
                     resolved=False,
                     resolution_path="unresolved",
                     status="unresolved",
                     message="no registry or legacy mapping",
                 )
+                self._attach_context_resolution(
+                    unresolved,
+                    context=context,
+                    resolve_source=resolve_source,
+                    resolve_asset=resolve_asset,
+                    create_source_candidate=create_source_candidate,
+                    create_asset_candidate=create_asset_candidate,
+                )
+                return unresolved
 
             logger.info(
                 "legacy fallback hit: raw=%s → legacy=%s cim=%s",
@@ -236,7 +252,86 @@ class MappingRegistryService:
             observed_unit=observed_unit,
             validate_unit=validate_unit,
         )
+        self._attach_context_resolution(
+            result,
+            context=context,
+            resolve_source=resolve_source,
+            resolve_asset=resolve_asset,
+            create_source_candidate=create_source_candidate,
+            create_asset_candidate=create_asset_candidate,
+        )
         return result
+
+    def _should_resolve_context(
+        self,
+        *,
+        context: Optional[Mapping[str, Any]],
+        flag: Optional[bool],
+    ) -> bool:
+        if flag is False:
+            return False
+        if flag is True:
+            return True
+        return context is not None
+
+    def _attach_context_resolution(
+        self,
+        result: MappingLookupResult,
+        *,
+        context: Optional[Mapping[str, Any]],
+        resolve_source: Optional[bool],
+        resolve_asset: Optional[bool],
+        create_source_candidate: bool,
+        create_asset_candidate: bool,
+    ) -> None:
+        """Soft source/asset enrichment — never changes ``resolved``."""
+        do_source = self._should_resolve_context(
+            context=context, flag=resolve_source
+        )
+        do_asset = self._should_resolve_context(context=context, flag=resolve_asset)
+        if not do_source and not do_asset:
+            return
+        if self._session is None:
+            return
+
+        ctx = dict(context or {})
+
+        if do_source:
+            from cloud_metrics.registry.source.service import SourceRegistryService
+
+            src_svc = SourceRegistryService(session=self._session)
+            if ctx:
+                result.source_resolution = src_svc.resolve_from_metadata(
+                    ctx, create_candidate=create_source_candidate
+                )
+            else:
+                result.source_resolution = src_svc.resolve_or_create(
+                    name=None, create_candidate=False
+                )
+            if (
+                result.source_resolution
+                and result.source_resolution.source_id
+                and result.mapping is not None
+                and result.mapping.source_id is None
+            ):
+                result.mapping.source_id = result.source_resolution.source_id
+
+        if do_asset:
+            from cloud_metrics.registry.asset.service import AssetRegistryService
+
+            asset_svc = AssetRegistryService(session=self._session)
+            if ctx:
+                result.asset_resolution = asset_svc.resolve_from_metadata(
+                    ctx, create_candidate=create_asset_candidate
+                )
+            else:
+                from cloud_metrics.registry.asset.types import AssetResolutionResult
+
+                result.asset_resolution = AssetResolutionResult(
+                    resolution_status="missing",
+                    message="No context metadata for asset resolution",
+                    warnings=["empty context"],
+                )
 
     def _should_validate_unit(
         self,
@@ -506,6 +601,12 @@ def resolve_raw_metric(
     create_candidate_on_fallback: bool = False,
     observed_unit: Optional[str] = None,
     validate_unit: Optional[bool] = None,
+    source_id: Optional[int] = None,
+    context: Optional[Mapping[str, Any]] = None,
+    resolve_source: Optional[bool] = None,
+    resolve_asset: Optional[bool] = None,
+    create_source_candidate: bool = True,
+    create_asset_candidate: bool = True,
 ) -> MappingLookupResult:
     """Convenience entry point for registry-first mapping lookup.
 
@@ -513,12 +614,20 @@ def resolve_raw_metric(
     Does not replace legacy ``resolve_mapping`` / ``map_raw_to_unified``.
 
     Milestone 5: pass ``observed_unit`` to attach soft unit validation metadata.
+    Milestone 6: pass ``context`` (labels/metadata) to attach soft source/asset
+    resolution metadata.
     """
     svc = get_mapping_registry_service(session=session)
     return svc.resolve_with_fallback(
         raw_key,
+        source_id=source_id,
         use_fallback=use_fallback,
         create_candidate_on_fallback=create_candidate_on_fallback,
         observed_unit=observed_unit,
         validate_unit=validate_unit,
+        context=context,
+        resolve_source=resolve_source,
+        resolve_asset=resolve_asset,
+        create_source_candidate=create_source_candidate,
+        create_asset_candidate=create_asset_candidate,
     )
