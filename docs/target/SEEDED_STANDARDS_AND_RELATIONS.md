@@ -61,11 +61,19 @@ Synthetic bootstrap source: `cim_registry_bootstrap` (`type=manual`).
 | `cim:compute.node.power.draw` | SAREF | closeMatch | Device power concepts |
 | `cim:compute.node.power.draw` | ISO-IEC-30134 | inputToKPI | Input, not the KPI itself |
 | `cim:compute.node.power.draw` | EN-50600 | inputToKPI | Input measurement |
+| `cim:compute.gpu.power.average` | QUDT | contextualMatch | Quantity/unit alignment |
+| `cim:compute.gpu.power.average` | SOSA-SSN | contextualMatch | Observation model |
+| `cim:compute.gpu.power.average` | SAREF | closeMatch | Device power concepts |
+| `cim:compute.gpu.power.average` | OCP | contextualMatch | Hardware efficiency practices |
 | `cim:workflow.energy.per_run` | QUDT | contextualMatch | Unit alignment |
 | `cim:workflow.energy.per_run` | PROV-O | contextualMatch | Provenance relevance |
 | `cim:workflow.energy.per_run` | RO-CRATE | contextualMatch | Reproducibility packaging |
 | `cim:workflow.energy.per_run` | SCHEMA-ORG | contextualMatch | Metadata relevance |
+| `cim:carbon.emission.operational` | ISO-14040-14044 | contextualMatch | GHG/LCA framing only |
+| `cim:carbon.emission.operational` | EU-COC-DC | contextualMatch | Reporting practice relevance |
 | `cim:carbon.intensity.location_based` | ISO-14040-14044 | contextualMatch | Not exact clause claim |
 | `cim:carbon.intensity.location_based` | EU-COC-DC | contextualMatch | Reporting practice relevance |
+| `cim:water.usage.total` | ISO-IEC-30134 | inputToKPI | Input toward WUE |
+| `cim:water.usage.total` | EN-50600 | contextualMatch | Water/env reporting practice |
 
-**Not seeded as exactMatch:** workflow energy ↔ ISO/EN KPIs; carbon intensity ↔ specific ISO emission-factor clauses.
+**Not seeded as exactMatch:** workflow energy ↔ ISO/EN KPIs; node/GPU power ↔ ISO KPIs; carbon emission ↔ specific ISO emission-factor clauses.

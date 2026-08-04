@@ -419,6 +419,34 @@ STANDARD_MAPPINGS: List[Tuple[str, str, str, str, str]] = [
         "May contribute as an input measurement toward EN 50600 energy assessments.",
     ),
     (
+        "cim:compute.gpu.power.average",
+        "QUDT",
+        "contextualMatch",
+        "gpu-power",
+        "Quantity/unit alignment to QUDT Power/Watt concepts; not a full metric identity claim.",
+    ),
+    (
+        "cim:compute.gpu.power.average",
+        "SOSA-SSN",
+        "contextualMatch",
+        "gpu-observation",
+        "Fits SOSA Observation model for measured GPU power values.",
+    ),
+    (
+        "cim:compute.gpu.power.average",
+        "SAREF",
+        "closeMatch",
+        "gpu-power",
+        "Close conceptual match to SAREF power-related device measurements.",
+    ),
+    (
+        "cim:compute.gpu.power.average",
+        "OCP",
+        "contextualMatch",
+        "gpu-ocp",
+        "Contextual to Open Compute Project efficiency / hardware telemetry practices.",
+    ),
+    (
         "cim:workflow.energy.per_run",
         "QUDT",
         "contextualMatch",
@@ -447,6 +475,20 @@ STANDARD_MAPPINGS: List[Tuple[str, str, str, str, str]] = [
         "Reproducibility / Dataset metadata relevance via schema.org; not exact.",
     ),
     (
+        "cim:carbon.emission.operational",
+        "ISO-14040-14044",
+        "contextualMatch",
+        "carbon-op",
+        "Contextual to LCA / GHG inventory concepts; not claimed as exactMatch to a specific clause.",
+    ),
+    (
+        "cim:carbon.emission.operational",
+        "EU-COC-DC",
+        "contextualMatch",
+        "carbon-op-coc",
+        "Contextual to data-centre carbon reporting practices under EU CoC guidance.",
+    ),
+    (
         "cim:carbon.intensity.location_based",
         "ISO-14040-14044",
         "contextualMatch",
@@ -459,6 +501,20 @@ STANDARD_MAPPINGS: List[Tuple[str, str, str, str, str]] = [
         "contextualMatch",
         "carbon-intensity",
         "Relevant to data-centre carbon reporting practices under EU CoC guidance.",
+    ),
+    (
+        "cim:water.usage.total",
+        "ISO-IEC-30134",
+        "inputToKPI",
+        "water-wue-input",
+        "Facility water usage can feed WUE (ISO/IEC 30134-9); not itself the WUE KPI.",
+    ),
+    (
+        "cim:water.usage.total",
+        "EN-50600",
+        "contextualMatch",
+        "water-en",
+        "Contextual to EN 50600 water / environmental reporting practices.",
     ),
 ]
 

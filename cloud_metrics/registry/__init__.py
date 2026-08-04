@@ -36,6 +36,8 @@ from cloud_metrics.registry.asset import (
 )
 from cloud_metrics.registry.standards import (
     StandardEntry,
+    StandardMappingEntry,
+    StandardsLookupResult,
     StandardsRegistryService,
     get_standards_registry_service,
 )
@@ -47,8 +49,10 @@ from cloud_metrics.registry.mapping import (
     resolve_raw_metric,
 )
 from cloud_metrics.registry.lifecycle import (
+    LifecycleLookupResult,
     LifecycleStageEntry,
     LifecycleRegistryService,
+    MetricLifecycleLink,
     get_lifecycle_registry_service,
 )
 from cloud_metrics.registry.rule import (
@@ -139,6 +143,8 @@ __all__ = [
     "AssetRegistryService",
     "get_asset_registry_service",
     "StandardEntry",
+    "StandardMappingEntry",
+    "StandardsLookupResult",
     "StandardsRegistryService",
     "get_standards_registry_service",
     "MappingEntry",
@@ -147,6 +153,8 @@ __all__ = [
     "get_mapping_registry_service",
     "resolve_raw_metric",
     "LifecycleStageEntry",
+    "MetricLifecycleLink",
+    "LifecycleLookupResult",
     "LifecycleRegistryService",
     "get_lifecycle_registry_service",
     "RuleEntry",

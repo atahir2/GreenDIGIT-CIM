@@ -1,7 +1,8 @@
-"""Registry Orchestrator service — Milestone 7.
+"""Registry Orchestrator service — Milestone 7–8.
 
-Coordinates Metric / Mapping / Unit / Source / Asset registries during
-ingestion. Does not replace ``process_metric_sample``; callers opt in.
+Coordinates Metric / Mapping / Unit / Source / Asset / Lifecycle / Standards
+registries during ingestion. Does not replace ``process_metric_sample``;
+callers opt in.
 """
 
 from __future__ import annotations
@@ -19,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 # Reverse of trusted alignments for storage-key adaptation (gd.* for legacy sinks).
 _CIM_TO_GD: Dict[str, str] = {v: k for k, v in GD_TO_CIM.items()}
+_APPROVED_STATUSES = frozenset({"approved", "active"})
 
 
 def cim_namespace_to_storage_key(cim_namespace: Optional[str]) -> Optional[str]:
@@ -45,7 +47,6 @@ def _merge_context(ctx: RawMetricContext) -> Dict[str, Any]:
     if ctx.asset_labels:
         out.update(ctx.asset_labels)
     if ctx.tags:
-        # Flatten tags under tags= and also top-level for extractors
         out.setdefault("tags", ctx.tags)
         for k, v in ctx.tags.items():
             out.setdefault(k, v)
@@ -78,11 +79,13 @@ class RegistryOrchestratorService:
         validate_unit: Optional[bool] = None,
         resolve_source: Optional[bool] = None,
         resolve_asset: Optional[bool] = None,
+        attach_lifecycle: bool = True,
+        attach_standards: bool = True,
     ) -> OrchestratorResult:
-        """Run registry-first mapping + soft unit/source/asset enrichment.
+        """Run registry-first mapping + soft enrichment.
 
-        Never raises for unresolved metrics. Always returns an
-        ``OrchestratorResult`` with status / warnings / errors populated.
+        Milestone 8: optionally attaches lifecycle and standards metadata.
+        Never raises for unresolved metrics.
         """
         raw = (ctx.raw_metric_name or "").strip()
         logger.info("registry orchestrator invoked: raw=%s", raw)
@@ -90,7 +93,6 @@ class RegistryOrchestratorService:
         meta = _merge_context(ctx)
         has_context = bool(meta)
 
-        # Default: resolve source/asset when any context metadata is present
         do_source = resolve_source if resolve_source is not None else has_context
         do_asset = resolve_asset if resolve_asset is not None else has_context
 
@@ -119,9 +121,89 @@ class RegistryOrchestratorService:
                 original_raw_metadata=dict(meta),
                 observed_unit=ctx.unit,
                 message=str(exc),
+                no_direct_standard_match=True,
             )
 
-        return self._to_result(ctx, meta, lookup)
+        result = self._to_result(ctx, meta, lookup)
+        if attach_lifecycle or attach_standards:
+            self._attach_lifecycle_and_standards(
+                result,
+                attach_lifecycle=attach_lifecycle,
+                attach_standards=attach_standards,
+            )
+        return result
+
+    def _attach_lifecycle_and_standards(
+        self,
+        result: OrchestratorResult,
+        *,
+        attach_lifecycle: bool,
+        attach_standards: bool,
+    ) -> None:
+        """Soft lifecycle/standards enrichment — never changes ``resolved``."""
+        if self._session is None or not result.cim_namespace:
+            if attach_standards and not result.standards_mappings:
+                result.no_direct_standard_match = True
+            return
+
+        allow_approved_standards = (
+            result.resolved
+            and (result.mapping_status or "").lower() in _APPROVED_STATUSES
+            and not result.fallback_used
+            and not result.candidate_flags.get("metric_unresolved")
+            and not result.candidate_flags.get("mapping_candidate")
+        )
+
+        if attach_lifecycle:
+            try:
+                from cloud_metrics.registry.lifecycle import LifecycleRegistryService
+
+                life = LifecycleRegistryService(session=self._session)
+                life_res = life.get_links_for_metric(
+                    result.cim_namespace,
+                    metric_id=result.metric_definition_id,
+                )
+                result.lifecycle_links = list(life_res.links)
+                result.lifecycle_stages = list(life_res.stages)
+                result.lifecycle_usage_purposes = list(life_res.usage_purposes)
+                result.lifecycle_importance = list(life_res.importance)
+                result.lifecycle_review_status = list(life_res.review_statuses)
+                logger.info(
+                    "lifecycle enrichment: ns=%s stages=%s",
+                    result.cim_namespace,
+                    result.lifecycle_stages,
+                )
+            except Exception as exc:
+                logger.warning("lifecycle enrichment failed: %s", exc)
+                result.warnings.append(f"lifecycle enrichment failed: {exc}")
+
+        if attach_standards:
+            try:
+                from cloud_metrics.registry.standards import StandardsRegistryService
+
+                std = StandardsRegistryService(session=self._session)
+                std_res = std.get_mappings_for_metric(
+                    result.cim_namespace,
+                    metric_id=result.metric_definition_id,
+                    allow_approved=allow_approved_standards,
+                )
+                result.standards_mappings = list(std_res.mappings)
+                result.standards_relation_types = list(std_res.relation_types)
+                result.standards_confidence_scores = list(std_res.confidence_scores)
+                result.standards_review_status = list(std_res.review_statuses)
+                result.standards_notes = list(std_res.notes)
+                result.no_direct_standard_match = bool(std_res.no_direct_standard_match)
+                logger.info(
+                    "standards enrichment: ns=%s relations=%s no_direct=%s approved=%s",
+                    result.cim_namespace,
+                    result.standards_relation_types,
+                    result.no_direct_standard_match,
+                    allow_approved_standards,
+                )
+            except Exception as exc:
+                logger.warning("standards enrichment failed: %s", exc)
+                result.warnings.append(f"standards enrichment failed: {exc}")
+                result.no_direct_standard_match = True
 
     def _to_result(
         self,
@@ -165,7 +247,6 @@ class RegistryOrchestratorService:
             candidate_flags["mapping_candidate"] = True
         if not lookup.resolved:
             candidate_flags["metric_unresolved"] = True
-            # Do not silently approve
             if mapping_status in {"approved", "active"}:
                 mapping_status = "unresolved"
 
@@ -177,7 +258,6 @@ class RegistryOrchestratorService:
             confidence = lookup.mapping.confidence
             relation_type = lookup.mapping.relation_type
 
-        # Unit validation
         unit_status = None
         observed_unit = ctx.unit
         canonical_unit = lookup.canonical_unit
@@ -207,7 +287,6 @@ class RegistryOrchestratorService:
             elif uv.severity == "error" and uv.message:
                 errors.append(uv.message)
 
-        # Source resolution
         source_status = None
         source_id = None
         if lookup.source_resolution is not None:
@@ -228,7 +307,6 @@ class RegistryOrchestratorService:
             elif sr.warnings:
                 warnings.extend(sr.warnings)
 
-        # Asset resolution
         asset_status = None
         asset_id = None
         if lookup.asset_resolution is not None:
@@ -290,6 +368,7 @@ class RegistryOrchestratorService:
             storage_unified_key=storage_key,
             relation_type=relation_type,
             message=lookup.message,
+            no_direct_standard_match=True,
         )
 
 
@@ -299,6 +378,5 @@ def get_registry_orchestrator(
     return RegistryOrchestratorService(session=session)
 
 
-# Alias matching suggested naming in the milestone brief
 CimRegistryOrchestrator = RegistryOrchestratorService
 RegistryOrchestrator = RegistryOrchestratorService
