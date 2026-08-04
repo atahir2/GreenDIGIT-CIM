@@ -71,6 +71,14 @@ from cloud_metrics.registry.extension import (
     ExtensionRegistryService,
     get_extension_registry_service,
 )
+from cloud_metrics.registry.orchestrator import (
+    CimRegistryOrchestrator,
+    OrchestratorResult,
+    RawMetricContext,
+    RegistryOrchestrator,
+    RegistryOrchestratorService,
+    get_registry_orchestrator,
+)
 
 # All 11 registry names for discovery / smoke tests.
 REGISTRY_MODULES = (
@@ -153,4 +161,10 @@ __all__ = [
     "ExtensionEntry",
     "ExtensionRegistryService",
     "get_extension_registry_service",
+    "RawMetricContext",
+    "OrchestratorResult",
+    "RegistryOrchestratorService",
+    "RegistryOrchestrator",
+    "CimRegistryOrchestrator",
+    "get_registry_orchestrator",
 ]

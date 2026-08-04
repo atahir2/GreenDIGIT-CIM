@@ -17,11 +17,18 @@ SUPPORTED_FILE_TYPES = [".json", ".xml", ".csv", ".yaml", ".txt"]
 def ingest_from_file(
     file_path: str,
     datacenter_name: str,
-    uploaded_by: str | None = None
+    uploaded_by: str | None = None,
+    *,
+    use_registry_orchestrator: bool = True,
 ):
     """
     Master ingestion: validate file type, ensure datacenter, parse & classify,
     write to InfluxDB, log the upload, and persist any new metric definitions.
+
+    Milestone 7: structured/unified file ingestion opts into the registry
+    orchestrator by default (``use_registry_orchestrator=True``). Pass
+    ``False`` to force the pre-Milestone-7 ensemble classifier path.
+    Real-time / API ingestion remains on the legacy path.
     """
     ext = os.path.splitext(file_path)[1].lower()
     if ext not in SUPPORTED_FILE_TYPES:
@@ -47,6 +54,13 @@ def ingest_from_file(
             value=float(value),
             origin=origin,
             captured_at=datetime.utcnow(),
+            use_registry_orchestrator=use_registry_orchestrator,
+            extra_meta={
+                "ingestion_path": "unified_ingestion",
+                "datacenter_name": datacenter_name,
+                "source": "file_upload",
+                "source_type": "file",
+            },
         )
         new_mapped_metrics[unified_key] = value
 

@@ -62,6 +62,14 @@ When using the new lookup:
 
 ---
 
+## Next compatibility step (Milestone 7 — partial)
+
+Unified file ingestion (`ingest_from_file`) opts into `RegistryOrchestratorService`
+via `process_metric_sample(..., use_registry_orchestrator=True)`. Other callers
+remain on the legacy ensemble path. See `INGESTION_BACKWARD_COMPATIBILITY.md`.
+
 ## Next compatibility step (later milestone)
 
-Wire ensemble / automated mapper to call registry-first lookup **with** fallback, then gradually retire JSON and `CimMapping` once coverage and review are complete.
+Wire ensemble / automated mapper defaults and real-time paths to registry-first
+lookup **with** fallback, then gradually retire JSON and `CimMapping` once
+coverage and review are complete.

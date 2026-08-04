@@ -1,8 +1,9 @@
 # cloud_metrics/ingestion/automated_mapper.py
 
+import logging
 import re
 from datetime import datetime
-from typing import Tuple, Optional
+from typing import Any, Dict, Tuple, Optional
 from sqlalchemy import func
 
 from cloud_metrics.ingestion.semantic_classifier import classify_by_semantics
@@ -24,6 +25,8 @@ from cloud_metrics.models.asset import Asset
 from cloud_metrics.models.source import Source
 from cloud_metrics.models.metric_definition import MetricDefinition
 from cloud_metrics.models.unit import Unit
+
+logger = logging.getLogger(__name__)
 
 
 _WORD = re.compile(r"[A-Z]?[a-z]+|[0-9]+")
@@ -141,6 +144,94 @@ def _classify_to_parts(raw_key: str) -> tuple[str, str, str]:
     return "uncategorized", "unknown", "unknown"
 
 
+def _run_registry_orchestrator(
+    *,
+    raw_key: str,
+    value: float,
+    origin: str,
+    captured_at: Optional[datetime],
+    ri_id: Optional[str],
+    node_id: Optional[str],
+    vm_id: Optional[str],
+    host: Optional[str],
+    site_id: Optional[str],
+    domain: Optional[str],
+    source_name: str,
+    observed_unit: Optional[str],
+    extra_meta: Optional[dict],
+    registry_session=None,
+):
+    """Invoke RegistryOrchestratorService; never raises to the caller."""
+    from cloud_metrics.registry.orchestrator import (
+        RawMetricContext,
+        get_registry_orchestrator,
+    )
+
+    owns_session = registry_session is None
+    session = registry_session
+    try:
+        if session is None:
+            session = SessionLocal()
+        orch = get_registry_orchestrator(session)
+        ctx = RawMetricContext(
+            raw_metric_name=raw_key,
+            value=value,
+            unit=observed_unit,
+            timestamp=captured_at,
+            source=source_name,
+            source_type="file" if source_name == "file_upload" else "cloud_api",
+            source_metadata={
+                "source": source_name,
+                "source_name": source_name,
+                "origin": origin,
+                "ingestion_method": "file_upload",
+            },
+            asset_labels={
+                "datacenter": origin,
+                "asset_name": origin,
+                "asset_type": "data_centre",
+                "site_id": site_id,
+                "node_id": node_id,
+                "vm_id": vm_id,
+                "host": host,
+                "ri_id": ri_id,
+            },
+            tags={"domain": domain} if domain else None,
+            original_raw_metadata=dict(extra_meta or {}),
+        )
+        result = orch.process(
+            ctx,
+            use_fallback=True,
+            create_candidate_on_fallback=True,
+            create_source_candidate=True,
+            create_asset_candidate=bool(origin),
+        )
+        if owns_session:
+            try:
+                session.commit()
+            except Exception:
+                session.rollback()
+        return result
+    except Exception as exc:
+        logger.warning(
+            "registry orchestrator failed, using legacy classifier: raw=%s err=%s",
+            raw_key,
+            exc,
+        )
+        if owns_session and session is not None:
+            try:
+                session.rollback()
+            except Exception:
+                pass
+        return None
+    finally:
+        if owns_session and session is not None:
+            try:
+                session.close()
+            except Exception:
+                pass
+
+
 def process_metric_sample(
         *,
         raw_key: str,
@@ -154,18 +245,27 @@ def process_metric_sample(
         site_id: Optional[str] = None,
         extra_meta: Optional[dict] = None,
         domain: Optional[str] = None,
+        use_registry_orchestrator: bool = False,
+        observed_unit: Optional[str] = None,
+        registry_session=None,
 ) -> str:
     """
     Ingest a single metric (raw_key + value) from a given origin (filename/datacenter).
-    1) Classify using Ensemble & Mapping Registry.
+    1) Classify using Ensemble & Mapping Registry
+       (or RegistryOrchestrator when ``use_registry_orchestrator=True``).
     2) Normalize unit and value using Unit Registry conversion rules.
     3) Run validation rules from Rule Registry.
     4) Persist metric sample.
     5) Log activity provenance in Provenance Registry.
+
+    Milestone 7: ``use_registry_orchestrator`` is opt-in (default False) so
+    existing callers keep the legacy classifier path. Unified file ingestion
+    enables it.
     """
     raw_key_norm = (raw_key or "").strip()
     origin_label = (origin or "unknown").strip()
     original_value = value
+    orch_meta: Dict[str, Any] = {}
 
     # 1) Get/Create Datacenter and Asset
     try:
@@ -192,34 +292,91 @@ def process_metric_sample(
         source = session.query(Source).filter_by(name=source_name).first()
         source_id = source.id if source else None
 
-    # 2) Classify with Ensemble (which checks Mapping Registry first)
-    d = classify_metric(raw_key_norm)
-    category, subcategory, short_key = d.category, d.subcategory, d.short_key
-    raw_unit = _infer_unit_from_key(_norm(raw_key_norm))
+    raw_unit = observed_unit or _infer_unit_from_key(_norm(raw_key_norm))
+    used_orchestrator = False
 
-    # 3) Check for fallback/unknown taxonomy
-    if category == "uncategorized" or subcategory == "unknown":
+    # 2) Optional Milestone 7 registry orchestrator (mapping + unit + source + asset)
+    if use_registry_orchestrator:
+        orch_result = _run_registry_orchestrator(
+            raw_key=raw_key_norm,
+            value=value,
+            origin=origin_label,
+            captured_at=captured_at,
+            ri_id=ri_id,
+            node_id=node_id,
+            vm_id=vm_id,
+            host=host,
+            site_id=site_id,
+            domain=domain,
+            source_name=source_name,
+            observed_unit=raw_unit,
+            extra_meta=extra_meta,
+            registry_session=registry_session,
+        )
+        if orch_result is not None:
+            orch_meta = {"registry_orchestrator": orch_result.to_metadata()}
+            if orch_result.resolved and orch_result.storage_unified_key:
+                used_orchestrator = True
+                unified_key = orch_result.storage_unified_key
+                parts = unified_key.split(".")
+                if len(parts) >= 4 and parts[0] == "gd":
+                    category, subcategory, short_key = parts[1], parts[2], ".".join(parts[3:])
+                else:
+                    category, subcategory, short_key = "extension", "orchestrator", _norm(raw_key_norm) or "unknown"
+
+                class _OrchDecision:
+                    pass
+
+                d = _OrchDecision()
+                d.category = category
+                d.subcategory = subcategory
+                d.short_key = short_key
+                d.confidence = orch_result.mapping_confidence if orch_result.mapping_confidence is not None else 1.0
+                d.rationale = (
+                    f"registry_orchestrator:{orch_result.resolution_path}"
+                    f" status={orch_result.mapping_status}"
+                    f" fallback={orch_result.fallback_used}"
+                )
+                if orch_result.observed_unit:
+                    raw_unit = orch_result.observed_unit
+                logger.info(
+                    "orchestrator classification used: raw=%s → %s path=%s fallback=%s",
+                    raw_key_norm,
+                    unified_key,
+                    orch_result.resolution_path,
+                    orch_result.fallback_used,
+                )
+
+    if not used_orchestrator:
+        # 2b) Classify with Ensemble (which checks Mapping Registry first)
+        d = classify_metric(raw_key_norm)
+        category, subcategory, short_key = d.category, d.subcategory, d.short_key
+
+        # 3) Check for fallback/unknown taxonomy
+        if category == "uncategorized" or subcategory == "unknown":
+            try:
+                from cloud_metrics.classifiers.fallbacks import fallback_namespace_from_raw
+                category, subcategory, short_key = fallback_namespace_from_raw(raw_key_norm, unit_hint=raw_unit)
+            except Exception:
+                category, subcategory, short_key = ("custom", "unknown", "".join(_tokens(raw_key_norm)) or "unknown")
+
+        # 4) Prefix taxonomy
         try:
-            from cloud_metrics.classifiers.fallbacks import fallback_namespace_from_raw
-            category, subcategory, short_key = fallback_namespace_from_raw(raw_key_norm, unit_hint=raw_unit)
-        except Exception:
-            category, subcategory, short_key = ("custom", "unknown", "".join(_tokens(raw_key_norm)) or "unknown")
-
-    # 4) Prefix taxonomy
-    try:
-        unified_key = ensure_gd_namespace(category, subcategory, short_key, auto_create=True)
-    except Exception as e:
-        unified_key = f"gd.{category.lower()}.{subcategory.lower()}.{short_key.lower()}"
-        unified_key = to_gd(unified_key)
+            unified_key = ensure_gd_namespace(category, subcategory, short_key, auto_create=True)
+        except Exception as e:
+            unified_key = f"gd.{category.lower()}.{subcategory.lower()}.{short_key.lower()}"
+            unified_key = to_gd(unified_key)
 
     # 5) Auto-learn mapping if confident and not already in Mapping Registry
+    # Skip when the registry orchestrator already resolved the metric.
     from cloud_metrics.services.mapping_registry_service import resolve_mapping, auto_learn_mapping
-    existing_mapping = resolve_mapping(raw_key_norm)
-    if not existing_mapping and (d.confidence or 0) >= 0.85 and category != "uncategorized" and subcategory != "unknown":
-        try:
-            auto_learn_mapping(raw_key_norm, unified_key, d.confidence, d.rationale)
-        except Exception:
-            pass
+    if not used_orchestrator:
+        existing_mapping = resolve_mapping(raw_key_norm)
+        if not existing_mapping and (d.confidence or 0) >= 0.85 and category != "uncategorized" and subcategory != "unknown":
+            try:
+                auto_learn_mapping(raw_key_norm, unified_key, d.confidence, d.rationale)
+            except Exception:
+                pass
 
     # 6) Unit Normalization and Conversion
     final_value = value
@@ -299,6 +456,12 @@ def process_metric_sample(
     insert_mapped_metric(unified_key=unified_key, source_keys=[origin_label], tags=[category, subcategory, short_key])
 
     # 9) Insert Metric Sample
+    merged_extra: Dict[str, Any] = {}
+    if extra_meta:
+        merged_extra.update(extra_meta)
+    if orch_meta:
+        merged_extra.update(orch_meta)
+
     sample_id = insert_metric_sample(
         datacenter_id=dc_id,
         unified_key=unified_key,
@@ -315,7 +478,7 @@ def process_metric_sample(
         site_id=site_id,
         clf_confidence=getattr(d, "confidence", None),
         clf_rationale=getattr(d, "rationale", None),
-        extra_meta=extra_meta,
+        extra_meta=merged_extra or None,
         domain=domain,
     )
 
