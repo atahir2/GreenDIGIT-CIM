@@ -19,6 +19,7 @@ from cloud_metrics.registry.unit import (
     QuantityKindEntry,
     UnitEntry,
     UnitRegistryService,
+    UnitValidationResult,
     get_unit_registry_service,
 )
 from cloud_metrics.registry.source import (
@@ -38,8 +39,10 @@ from cloud_metrics.registry.standards import (
 )
 from cloud_metrics.registry.mapping import (
     MappingEntry,
+    MappingLookupResult,
     MappingRegistryService,
     get_mapping_registry_service,
+    resolve_raw_metric,
 )
 from cloud_metrics.registry.lifecycle import (
     LifecycleStageEntry,
@@ -114,6 +117,7 @@ __all__ = [
     "get_metric_registry_service",
     "QuantityKindEntry",
     "UnitEntry",
+    "UnitValidationResult",
     "UnitRegistryService",
     "get_unit_registry_service",
     "SourceEntry",
@@ -126,8 +130,10 @@ __all__ = [
     "StandardsRegistryService",
     "get_standards_registry_service",
     "MappingEntry",
+    "MappingLookupResult",
     "MappingRegistryService",
     "get_mapping_registry_service",
+    "resolve_raw_metric",
     "LifecycleStageEntry",
     "LifecycleRegistryService",
     "get_lifecycle_registry_service",

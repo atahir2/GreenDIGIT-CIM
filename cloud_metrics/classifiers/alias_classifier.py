@@ -1,8 +1,7 @@
 # cloud_metrics/classifiers/alias_classifier.py
 
 from dataclasses import dataclass
-from typing import Optional, Tuple
-from rapidfuzz import process, fuzz
+from typing import Optional
 import re
 
 _WORD = re.compile(r"[A-Z]?[a-z]+|[0-9]+")
@@ -124,8 +123,19 @@ def guess_from_alias(raw_key: str, cutoff: int = 88) -> Optional[AliasHit]:
     if not raw_key:
         return None
 
-    # search across alias names
     q = _norm(raw_key)
+
+    try:
+        from rapidfuzz import process, fuzz
+    except ImportError:
+        # Exact normalized match without RapidFuzz (dev/test environments).
+        triple = _ALIAS_TO_TRIPLE.get(q)
+        if triple is None:
+            return None
+        c, s, k = triple
+        return AliasHit(c, s, k, 100.0, matched_alias=q)
+
+    # search across alias names
     match = process.extractOne(
         q,
         _CANDIDATES,
