@@ -18,12 +18,12 @@ The refactoring process follows a 14-stage incremental sequence defined in [IMPL
 | **Stage 6** | Unit Handling | Integrate CIM Unit Registry validation into registry-first mapping lookup. | Completed (see MILESTONE_5_UNIT_REGISTRY.md) |
 | **Stage 7** | Ingestion & Candidate Proposals | Create `proposed` / `underReview` mapping entries for unknown metrics. | Completed |
 | **Stage 8** | Standards Status & Confidence | Add `relation_type`, `confidence`, and rationale scoring. | Completed |
-| **Stage 9** | Lifecycle Stage Linkage | Connect infrastructure assets and metrics to RI lifecycle stages. | Next recommended after Milestone 6 |
-| **Stage 10** | Validation Rules & Evidence | Enforce declarative rules (`rule_registry_service.py`) during ingestion. | Completed |
-| **Stage 11** | Provenance Logging | Audit data lineage (`provenance_registry_service.py`) across pipeline events. | Completed |
-| **Stage 12** | Extension Metrics | Route non-standard metrics to `gd.uncategorized.*` with proposal flags. | Completed |
+| **Stage 9** | Lifecycle Stage Linkage | Connect infrastructure assets and metrics to RI lifecycle stages. | Completed (Milestone 8) |
+| **Stage 10** | Validation Rules & Evidence | Enforce declarative rules (`rule_registry_service.py`) during ingestion. | Completed (Milestone 9) |
+| **Stage 11** | Provenance Logging | Audit data lineage (`provenance_registry_service.py`) across pipeline events. | Completed (Milestone 9) |
+| **Stage 12** | Extension Metrics | Route non-standard metrics to extension candidates with proposal flags. | Completed (Milestone 9) |
 | **Stage 13** | Registry Test Suite | Maintain unit and integration tests across all registry services. | Completed |
-| **Stage 14** | Workflow & Dataset Validation | E2E verification across sample datasets and Streamlit UI portals. | Ongoing |
+| **Stage 14** | Workflow & Dataset Validation | E2E verification across sample datasets and demo runner. | Completed (Milestone 10 demonstrator) |
 
 ---
 

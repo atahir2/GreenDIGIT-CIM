@@ -1,0 +1,5 @@
+At RI-site-1 on cluster-A, the HPC node reported that CPU usage reached 73 %.
+Memory used was at 64 GB during the same window.
+Power consumption was 420 W under load.
+Network incoming traffic was at 120 Mbps while network outgoing traffic reached 80 Mbps.
+Temperature peaked at 42 °C in the rack aisle.

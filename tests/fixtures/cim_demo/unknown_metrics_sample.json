@@ -1,0 +1,31 @@
+{
+  "scenario": "E_unknown_extension",
+  "description": "Custom / experimental metrics that must become extension candidates, not approved CIM metrics. Demonstrator runs this scenario with legacy fallback disabled so fuzzy alias hits (e.g. 'work' in workflow_*) cannot silently assign a CIM namespace.",
+  "context": {
+    "source": "research_scheduler",
+    "source_type": "experimental_tooling",
+    "asset_labels": {
+      "cluster": "cluster-A",
+      "site": "RI-site-1"
+    },
+    "timestamp": "2026-08-07T12:00:00Z",
+    "justification": "Research prototype metrics pending CIM catalogue review"
+  },
+  "metrics": [
+    {
+      "name": "workflow_green_score",
+      "value": 0.78,
+      "unit": "score"
+    },
+    {
+      "name": "carbon_aware_scheduling_gain",
+      "value": 12,
+      "unit": "%"
+    },
+    {
+      "name": "experimental_efficiency_index",
+      "value": 0.64,
+      "unit": "ratio"
+    }
+  ]
+}

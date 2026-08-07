@@ -1,0 +1,50 @@
+{
+  "scenario": "D_facility_kpi_reporting",
+  "description": "Facility energy and environmental KPIs. PUE inputs are prepared; no calculation engine is invoked.",
+  "context": {
+    "source": "facility_bms",
+    "source_type": "building_management_system",
+    "aggregation_period": "monthly",
+    "boundary": "facility",
+    "asset_labels": {
+      "site": "RI-site-1",
+      "facility": "RI-site-1-main",
+      "cluster": "cluster-A"
+    },
+    "timestamp": "2026-07-31T23:59:59Z",
+    "reporting_period": {
+      "start": "2026-07-01T00:00:00Z",
+      "end": "2026-07-31T23:59:59Z"
+    }
+  },
+  "metrics": [
+    {
+      "name": "total_facility_energy",
+      "value": 1200,
+      "unit": "kWh"
+    },
+    {
+      "name": "it_equipment_energy",
+      "value": 800,
+      "unit": "kWh"
+    },
+    {
+      "name": "water_usage_total",
+      "value": 2.5,
+      "unit": "m3"
+    },
+    {
+      "name": "carbon_emission_operational",
+      "value": 250,
+      "unit": "kgCO2e"
+    }
+  ],
+  "pue_preparation": {
+    "notes": "Inputs prepared for cim:energy.efficiency.pue — calculation engine not required for this demo.",
+    "numerator_metric": "total_facility_energy",
+    "denominator_metric": "it_equipment_energy",
+    "prepared_pue_value": 1.5,
+    "prepared_pue_unit": "ratio",
+    "raw_metric_name_for_evidence": "energy_efficiency_pue"
+  }
+}

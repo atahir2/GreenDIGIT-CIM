@@ -1,0 +1,41 @@
+{
+  "scenario": "C_workflow_reproducibility",
+  "description": "Workflow-level energy and carbon metrics with run context for reproducibility.",
+  "context": {
+    "source": "workflow_energy_profiler",
+    "source_type": "workflow_instrumentation",
+    "workflow_id": "wf-204",
+    "run_id": "run-2026-001",
+    "workflow_run_id": "run-2026-001",
+    "formula_or_derivation_method": "sum_of_node_energy_over_run_window",
+    "asset_labels": {
+      "node": "hpc-node-07",
+      "cluster": "cluster-A",
+      "site": "RI-site-1",
+      "allocated_cores": 32,
+      "allocated_gpus": 2
+    },
+    "timestamp": "2026-08-07T11:00:00Z",
+    "time_window": {
+      "start": "2026-08-07T10:00:00Z",
+      "end": "2026-08-07T11:00:00Z"
+    }
+  },
+  "metrics": [
+    {
+      "name": "workflow_execution_duration",
+      "value": 3600,
+      "unit": "s"
+    },
+    {
+      "name": "workflow_energy_per_run",
+      "value": 0.42,
+      "unit": "kWh"
+    },
+    {
+      "name": "workflow_carbon_per_run",
+      "value": 0.11,
+      "unit": "kgCO2e"
+    }
+  ]
+}

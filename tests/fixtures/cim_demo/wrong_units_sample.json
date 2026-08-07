@@ -1,0 +1,37 @@
+{
+  "scenario": "B_wrong_units",
+  "description": "Intentionally incorrect units for known metrics — unit validation must flag incompatibility.",
+  "context": {
+    "source": "prometheus_node_exporter",
+    "source_type": "monitoring_system",
+    "asset_labels": {
+      "node": "hpc-node-07",
+      "cluster": "cluster-A",
+      "site": "RI-site-1"
+    },
+    "timestamp": "2026-08-07T10:20:00Z"
+  },
+  "metrics": [
+    {
+      "name": "node_power_watts",
+      "value": 420,
+      "unit": "kWh",
+      "expected_unit_status": "incompatible",
+      "notes": "Power metric observed as Energy unit"
+    },
+    {
+      "name": "energy_consumption",
+      "value": 500,
+      "unit": "W",
+      "expected_unit_status": "incompatible",
+      "notes": "Energy metric observed as Power unit"
+    },
+    {
+      "name": "carbon_intensity",
+      "value": 300,
+      "unit": "kgCO2e",
+      "expected_unit_status": "incompatible",
+      "notes": "Carbon intensity expects gCO2e/kWh, not kgCO2e emission mass"
+    }
+  ]
+}

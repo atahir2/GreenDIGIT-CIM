@@ -95,5 +95,6 @@ This document maps out the 14-stage implementation sequence used to transition t
 ## Stage 14: Validate with Sample Datasets and Existing Workflows
 * **Objective**: Ensure end-to-end telemetry workflows run error-free and verify UI dashboards.
 * **Actions**:
-  * Refactored Streamlit Admin Dashboard and AWS/GCP ingestion scripts.
+  * Milestone 10: registry-driven CIM demonstrator with fixtures under `tests/fixtures/cim_demo/`, CLI `cloud_metrics.scripts.run_cim_demo`, and `tests/test_cim_end_to_end_demo.py`.
+  * Refactored Streamlit Admin Dashboard and AWS/GCP ingestion scripts (prior work).
   * Executed pipeline queries on sample AWS CloudWatch and GCP datasets to verify correctness.
