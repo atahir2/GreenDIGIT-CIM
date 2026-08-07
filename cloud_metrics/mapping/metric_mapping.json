@@ -1,4 +1,20 @@
 {
+  "gd.custom.unknown.doc0execunitfinished": [
+    "doc0.ExecUnitFinished",
+    "ifca"
+  ],
+  "gd.custom.unknown.execunitfinished": [
+    "eu-central-1-cloud-site",
+    "execunitfinished"
+  ],
+  "gd.custom.unknown.jobfinished": [
+    "eu-central-1-cloud-site",
+    "job_finished"
+  ],
+  "gd.custom.unknown.unknown": [
+    "PUE",
+    "eu-central-1-cloud-site"
+  ],
   "gd.energy.consumption.total": [
     "1-grid-site",
     "30",

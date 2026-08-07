@@ -25,6 +25,8 @@ The refactoring process follows a 14-stage incremental sequence defined in [IMPL
 | **Stage 13** | Registry Test Suite | Maintain unit and integration tests across all registry services. | Completed |
 | **Stage 14** | Workflow & Dataset Validation | E2E verification across sample datasets and demo runner. | Completed (Milestone 10 demonstrator) |
 
+**Milestone 11 (Stabilization):** CI workflow (`.github/workflows/ci.yml`), `docs/deployment/*` runbooks, and implementation health report — no new CIM features.
+
 ---
 
 ## 2. Milestone Entry & Exit Criteria

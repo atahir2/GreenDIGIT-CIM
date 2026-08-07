@@ -34,6 +34,8 @@ alembic downgrade a7708d6bee50
 
 Downgrade drops Milestone 2 tables in reverse dependency order and removes their indexes. Legacy / Antigravity tables are unaffected.
 
+**Operations:** see the staging/production runbook [POSTGRES_MIGRATION_RUNBOOK.md](../deployment/POSTGRES_MIGRATION_RUNBOOK.md) (Milestone 11).
+
 ### 0.4 Out of scope for Milestone 2
 
 * Migrating rows from `metric_definitions` / `cim_mappings` / etc. into `cim_*` tables

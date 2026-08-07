@@ -1,0 +1,21 @@
+# CI dependency set for GitHub Actions (Milestone 11).
+# Derived from requirements.txt with:
+# - sentence-transformers omitted (optional; ensemble classifier degrades gracefully)
+# - httpx / uvicorn added for FastAPI TestClient API tests
+# - psycopg2-binary listed for local Postgres parity (CI uses SQLite DATABASE_URL)
+
+pytest~=8.4.1
+SQLAlchemy~=2.0.43
+fastapi~=0.116.1
+uvicorn~=0.35.0
+httpx~=0.28.1
+setuptools~=80.9.0
+pydantic~=2.11.7
+pydantic-settings~=2.10.1
+python-dotenv~=1.1.1
+PyYAML~=6.0.2
+streamlit~=1.48.1
+influxdb-client~=1.49.0
+RapidFuzz~=3.13.0
+alembic~=1.18.4
+psycopg2-binary~=2.9.10

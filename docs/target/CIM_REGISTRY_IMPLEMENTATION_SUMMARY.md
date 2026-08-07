@@ -44,7 +44,10 @@ Metric, Mapping, Unit, Source, Asset, Lifecycle, Standards, Rule, Evidence, Prov
 | Tests | `tests/test_cim_end_to_end_demo.py` |
 | Docs | `docs/demo/`, architecture docs under `docs/target/` |
 
-## Test posture (Milestone 10)
+## Test posture (Milestone 10–11)
 
-- New e2e demo tests: 16
-- Full suite at completion: **180 passed** (prior Milestone 9 baseline: 164)
+- E2E demo tests: `tests/test_cim_end_to_end_demo.py`
+- Migration tests: `tests/test_cim_registry_migration.py`
+- CI: `.github/workflows/ci.yml` + `requirements-ci.txt` (Milestone 11)
+- Deployment docs: `docs/deployment/`
+- Health report: `docs/target/MS1_TO_MS10_IMPLEMENTATION_HEALTH_REPORT.md`
