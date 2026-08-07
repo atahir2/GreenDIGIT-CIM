@@ -1,10 +1,10 @@
-"""Provenance Registry — base types (Milestone 1 skeleton)."""
+"""Provenance Registry — types (Milestone 9)."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
@@ -21,6 +21,8 @@ class ProvenanceEntry:
     outputs: Dict[str, Any] = field(default_factory=dict)
     method: Optional[str] = None
     confidence: Optional[float] = None
+    status: str = "approved"
+    notes: Optional[str] = None
     prov_uri: Optional[str] = None
     id: Optional[int] = None
     created_at: Optional[datetime] = None

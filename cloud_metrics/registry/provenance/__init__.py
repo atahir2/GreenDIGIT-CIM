@@ -1,4 +1,4 @@
-"""Provenance Registry package."""
+"""Provenance Registry package (Milestone 9)."""
 
 from cloud_metrics.registry.provenance.types import ProvenanceEntry
 from cloud_metrics.registry.provenance.service import (

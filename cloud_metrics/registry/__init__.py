@@ -57,10 +57,13 @@ from cloud_metrics.registry.lifecycle import (
 )
 from cloud_metrics.registry.rule import (
     RuleEntry,
+    RuleEvaluationResult,
     RuleRegistryService,
+    ValidationResult,
     get_rule_registry_service,
 )
 from cloud_metrics.registry.evidence import (
+    EvidenceLookupResult,
     EvidenceRequirementEntry,
     EvidenceRegistryService,
     get_evidence_registry_service,
@@ -158,9 +161,12 @@ __all__ = [
     "LifecycleRegistryService",
     "get_lifecycle_registry_service",
     "RuleEntry",
+    "ValidationResult",
+    "RuleEvaluationResult",
     "RuleRegistryService",
     "get_rule_registry_service",
     "EvidenceRequirementEntry",
+    "EvidenceLookupResult",
     "EvidenceRegistryService",
     "get_evidence_registry_service",
     "ProvenanceEntry",

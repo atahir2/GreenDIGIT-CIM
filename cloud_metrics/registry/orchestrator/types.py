@@ -1,4 +1,4 @@
-"""Registry Orchestrator — types (Milestone 7–8)."""
+"""Registry Orchestrator — types (Milestone 7–9)."""
 
 from __future__ import annotations
 
@@ -6,7 +6,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+from cloud_metrics.registry.evidence.types import EvidenceRequirementEntry
 from cloud_metrics.registry.lifecycle.types import MetricLifecycleLink
+from cloud_metrics.registry.rule.types import ValidationResult
 from cloud_metrics.registry.standards.types import StandardMappingEntry
 
 
@@ -25,6 +27,12 @@ class RawMetricContext:
     tags: Optional[Dict[str, Any]] = None
     labels: Optional[Dict[str, Any]] = None
     original_raw_metadata: Optional[Dict[str, Any]] = None
+    # Optional governance context
+    aggregation_period: Optional[str] = None
+    boundary: Optional[str] = None
+    formula_or_derivation_method: Optional[str] = None
+    workflow_id: Optional[str] = None
+    run_id: Optional[str] = None
 
 
 @dataclass
@@ -34,7 +42,7 @@ class OrchestratorResult:
     raw_metric_name: str
     cim_namespace: Optional[str] = None
     metric_definition_id: Optional[int] = None
-    mapping_status: str = "unresolved"  # approved | candidate | unresolved | ...
+    mapping_status: str = "unresolved"
     mapping_confidence: Optional[float] = None
     unit_validation_status: Optional[str] = None
     observed_unit: Optional[str] = None
@@ -49,26 +57,36 @@ class OrchestratorResult:
     errors: List[str] = field(default_factory=list)
     fallback_used: bool = False
     original_raw_metadata: Dict[str, Any] = field(default_factory=dict)
-    # Adapter / tracing helpers
     resolved: bool = False
-    resolution_path: str = "unresolved"  # registry | legacy_fallback | unresolved
+    resolution_path: str = "unresolved"
     legacy_unified_key: Optional[str] = None
     storage_unified_key: Optional[str] = None
     relation_type: Optional[str] = None
     message: Optional[str] = None
-    # Milestone 8 — lifecycle (additive)
+    # Milestone 8 — lifecycle
     lifecycle_stages: List[str] = field(default_factory=list)
     lifecycle_usage_purposes: List[str] = field(default_factory=list)
     lifecycle_importance: List[str] = field(default_factory=list)
     lifecycle_review_status: List[str] = field(default_factory=list)
     lifecycle_links: List[MetricLifecycleLink] = field(default_factory=list)
-    # Milestone 8 — standards (additive)
+    # Milestone 8 — standards
     standards_mappings: List[StandardMappingEntry] = field(default_factory=list)
     standards_relation_types: List[str] = field(default_factory=list)
     standards_confidence_scores: List[Optional[float]] = field(default_factory=list)
     standards_review_status: List[str] = field(default_factory=list)
     standards_notes: List[Optional[str]] = field(default_factory=list)
     no_direct_standard_match: bool = False
+    # Milestone 9 — governance
+    validation_results: List[ValidationResult] = field(default_factory=list)
+    rule_results: List[ValidationResult] = field(default_factory=list)
+    evidence_requirements: List[EvidenceRequirementEntry] = field(default_factory=list)
+    evidence_readiness_status: Optional[str] = None
+    provenance_record_id: Optional[int] = None
+    provenance_log_reference: Optional[str] = None
+    extension_candidate_id: Optional[int] = None
+    governance_warnings: List[str] = field(default_factory=list)
+    governance_errors: List[str] = field(default_factory=list)
+    review_required: bool = False
 
     def to_metadata(self) -> Dict[str, Any]:
         """Compact dict suitable for ``extra_meta`` / sample tags."""
@@ -117,4 +135,29 @@ class OrchestratorResult:
                 for m in self.standards_mappings
             ],
             "no_direct_standard_match": self.no_direct_standard_match,
+            "validation_results": [
+                {
+                    "rule_name": v.rule_name,
+                    "passed": v.passed,
+                    "severity": v.severity,
+                    "message": v.message,
+                }
+                for v in self.validation_results
+            ],
+            "evidence_requirements": [
+                {
+                    "standard_code": e.standard_code,
+                    "evidence_type": e.evidence_type,
+                    "requirement_level": e.requirement_level,
+                    "description": e.description,
+                }
+                for e in self.evidence_requirements
+            ],
+            "evidence_readiness_status": self.evidence_readiness_status,
+            "provenance_record_id": self.provenance_record_id,
+            "provenance_log_reference": self.provenance_log_reference,
+            "extension_candidate_id": self.extension_candidate_id,
+            "governance_warnings": list(self.governance_warnings),
+            "governance_errors": list(self.governance_errors),
+            "review_required": self.review_required,
         }

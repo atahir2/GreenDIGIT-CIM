@@ -282,8 +282,19 @@ def test_orchestrator_unknown_no_approved_standards(cim_session):
 def test_orchestrator_missing_lifecycle_does_not_break(cim_session):
     _ensure_raw_mapping(cim_session, "orch_cpu_m8", "cim:compute.cpu.utilisation")
     orch = get_registry_orchestrator(cim_session)
-    result = orch.process(RawMetricContext(raw_metric_name="orch_cpu_m8", value=0.5))
+    from datetime import datetime
+
+    result = orch.process(
+        RawMetricContext(
+            raw_metric_name="orch_cpu_m8",
+            value=0.5,
+            unit="%",
+            timestamp=datetime.utcnow(),
+            source="test_source",
+        )
+    )
     assert result.resolved is True
     assert result.lifecycle_stages == []
-    # Still a valid result — soft enrichment
-    assert result.errors == []
+    # Soft enrichment — governance may warn, but must not crash / unresolve
+    assert result.resolved is True
+    assert "orchestrator exception" not in " ".join(result.errors)

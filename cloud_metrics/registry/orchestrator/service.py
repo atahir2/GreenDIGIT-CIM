@@ -81,11 +81,14 @@ class RegistryOrchestratorService:
         resolve_asset: Optional[bool] = None,
         attach_lifecycle: bool = True,
         attach_standards: bool = True,
+        attach_governance: bool = True,
+        record_provenance: bool = True,
+        create_extension_on_unresolved: bool = True,
     ) -> OrchestratorResult:
-        """Run registry-first mapping + soft enrichment.
+        """Run registry-first mapping + soft enrichment + governance.
 
-        Milestone 8: optionally attaches lifecycle and standards metadata.
-        Never raises for unresolved metrics.
+        Milestone 9: optionally applies rules, evidence, provenance, extension.
+        Never raises for unresolved metrics; does not hard-block ingestion.
         """
         raw = (ctx.raw_metric_name or "").strip()
         logger.info("registry orchestrator invoked: raw=%s", raw)
@@ -122,6 +125,7 @@ class RegistryOrchestratorService:
                 observed_unit=ctx.unit,
                 message=str(exc),
                 no_direct_standard_match=True,
+                review_required=True,
             )
 
         result = self._to_result(ctx, meta, lookup)
@@ -131,7 +135,329 @@ class RegistryOrchestratorService:
                 attach_lifecycle=attach_lifecycle,
                 attach_standards=attach_standards,
             )
+        if attach_governance:
+            self._attach_governance(
+                result,
+                ctx,
+                meta,
+                record_provenance=record_provenance,
+                create_extension_on_unresolved=create_extension_on_unresolved,
+            )
         return result
+
+    def _attach_governance(
+        self,
+        result: OrchestratorResult,
+        ctx: RawMetricContext,
+        meta: Mapping[str, Any],
+        *,
+        record_provenance: bool,
+        create_extension_on_unresolved: bool,
+    ) -> None:
+        """Soft Rule / Evidence / Extension / Provenance enrichment."""
+        gov_warnings: list[str] = []
+        gov_errors: list[str] = []
+        review_required = bool(
+            result.candidate_flags.get("metric_unresolved")
+            or result.candidate_flags.get("mapping_candidate")
+            or result.fallback_used
+            or not result.resolved
+        )
+
+        # --- Extension candidates for unresolved / unknown ---
+        if (
+            create_extension_on_unresolved
+            and self._session is not None
+            and (
+                not result.resolved
+                or result.candidate_flags.get("metric_unresolved")
+            )
+        ):
+            try:
+                from cloud_metrics.registry.extension import ExtensionRegistryService
+
+                ext_svc = ExtensionRegistryService(session=self._session)
+                ext = ext_svc.propose_from_raw(
+                    result.raw_metric_name,
+                    source_context=dict(meta) if meta else None,
+                    suggested_unit=result.observed_unit or ctx.unit,
+                    confidence_score=result.mapping_confidence,
+                )
+                result.extension_candidate_id = ext.id
+                review_required = True
+                if not ext.is_approved:
+                    result.candidate_flags["extension_candidate"] = True
+                logger.info(
+                    "extension candidate: raw=%s id=%s status=%s",
+                    result.raw_metric_name,
+                    ext.id,
+                    ext.review_status,
+                )
+            except Exception as exc:
+                logger.warning("extension candidate failed: %s", exc)
+                gov_warnings.append(f"extension candidate failed: {exc}")
+
+        # --- Metric definition hints for rules / evidence ---
+        metric_type = None
+        domain = None
+        category = None
+        quantity_kind = result.expected_quantity_kind
+        if self._session is not None and (
+            result.metric_definition_id or result.cim_namespace
+        ):
+            try:
+                from cloud_metrics.models.cim_registry import CimMetricDefinition
+
+                metric = None
+                if result.metric_definition_id:
+                    metric = self._session.get(
+                        CimMetricDefinition, result.metric_definition_id
+                    )
+                if metric is None and result.cim_namespace:
+                    metric = (
+                        self._session.query(CimMetricDefinition)
+                        .filter_by(namespace=result.cim_namespace)
+                        .first()
+                    )
+                if metric is not None:
+                    metric_type = metric.metric_type
+                    domain = metric.domain
+                    category = metric.category
+                    if metric.quantity_kind is not None:
+                        quantity_kind = metric.quantity_kind.name
+                    if result.metric_definition_id is None:
+                        result.metric_definition_id = metric.id
+            except Exception as exc:
+                logger.debug("metric def lookup for governance failed: %s", exc)
+
+        # --- Rules ---
+        try:
+            from cloud_metrics.registry.rule import RuleRegistryService
+
+            rule_svc = RuleRegistryService(session=self._session)
+            payload: Dict[str, Any] = {
+                "namespace": result.cim_namespace or result.storage_unified_key,
+                "metric_type": metric_type,
+                "domain": domain,
+                "category": category,
+                "quantity_kind": quantity_kind,
+                "expected_quantity_kind": result.expected_quantity_kind,
+                "observed_unit": result.observed_unit or ctx.unit,
+                "canonical_unit": result.canonical_unit,
+                "unit": result.observed_unit or ctx.unit,
+                "unit_validation_status": result.unit_validation_status,
+                "timestamp": ctx.timestamp,
+                "source": ctx.source or meta.get("source") or meta.get("source_name"),
+                "source_id": result.source_id,
+                "value": ctx.value,
+                "aggregation_period": ctx.aggregation_period
+                or meta.get("aggregation_period"),
+                "boundary": ctx.boundary or meta.get("boundary"),
+                "formula_or_derivation_method": ctx.formula_or_derivation_method
+                or meta.get("formula_or_derivation_method")
+                or meta.get("formula"),
+                "workflow_id": ctx.workflow_id
+                or meta.get("workflow_id")
+                or meta.get("workflow"),
+                "run_id": ctx.run_id
+                or meta.get("run_id")
+                or meta.get("workflow_run_id"),
+                "lifecycle_stages": list(result.lifecycle_stages),
+                "is_extension": bool(result.extension_candidate_id)
+                or (result.cim_namespace or "").startswith("cim:extension."),
+                "justification": meta.get("justification"),
+                "review_status": result.mapping_status,
+            }
+            eval_res = rule_svc.evaluate(payload)
+            result.validation_results = list(eval_res.results)
+            result.rule_results = list(eval_res.results)
+            gov_warnings.extend(eval_res.warnings)
+            gov_errors.extend(eval_res.errors)
+            if eval_res.has_critical or any(
+                (not r.passed and r.severity in {"error", "critical"})
+                for r in eval_res.results
+            ):
+                review_required = True
+        except Exception as exc:
+            logger.warning("rule evaluation failed: %s", exc)
+            gov_warnings.append(f"rule evaluation failed: {exc}")
+
+        # --- Evidence (reportable / seeded metrics only) ---
+        if self._session is not None and result.cim_namespace and result.resolved:
+            try:
+                from cloud_metrics.registry.evidence import EvidenceRegistryService
+
+                ev_svc = EvidenceRegistryService(session=self._session)
+                ev_res = ev_svc.get_requirements_for_metric(
+                    result.cim_namespace,
+                    metric_id=result.metric_definition_id,
+                )
+                result.evidence_requirements = list(ev_res.requirements)
+                result.evidence_readiness_status = ev_res.readiness_status
+            except Exception as exc:
+                logger.warning("evidence lookup failed: %s", exc)
+                gov_warnings.append(f"evidence lookup failed: {exc}")
+                result.evidence_readiness_status = "unknown"
+        elif not result.resolved:
+            result.evidence_readiness_status = "not_applicable"
+
+        # --- Provenance ---
+        if record_provenance and self._session is not None:
+            try:
+                from cloud_metrics.registry.provenance import ProvenanceRegistryService
+
+                prov = ProvenanceRegistryService(session=self._session)
+                entity_id = result.metric_definition_id or result.extension_candidate_id
+                # Primary orchestration record
+                main = prov.record_activity(
+                    entity_type="orchestrator_result",
+                    entity_id=entity_id,
+                    activity="orchestration",
+                    agent="registry_orchestrator",
+                    method="RegistryOrchestratorService.process",
+                    confidence=result.mapping_confidence,
+                    inputs={
+                        "raw_metric_name": result.raw_metric_name,
+                        "unit": ctx.unit,
+                        "source": ctx.source,
+                    },
+                    outputs={
+                        "cim_namespace": result.cim_namespace,
+                        "resolved": result.resolved,
+                        "resolution_path": result.resolution_path,
+                        "mapping_status": result.mapping_status,
+                        "fallback_used": result.fallback_used,
+                        "extension_candidate_id": result.extension_candidate_id,
+                    },
+                    notes="registry orchestrator decision",
+                )
+                result.provenance_record_id = main.id
+                result.provenance_log_reference = (
+                    f"cim_provenance_records:{main.id}" if main.id else None
+                )
+
+                # Sub-events (best effort)
+                events = [
+                    (
+                        "registry_mapping_lookup",
+                        {
+                            "path": result.resolution_path,
+                            "namespace": result.cim_namespace,
+                        },
+                    ),
+                ]
+                if result.fallback_used:
+                    events.append(
+                        (
+                            "legacy_fallback",
+                            {"legacy_unified_key": result.legacy_unified_key},
+                        )
+                    )
+                if result.unit_validation_status:
+                    events.append(
+                        (
+                            "unit_validation",
+                            {"status": result.unit_validation_status},
+                        )
+                    )
+                if result.source_resolution_status:
+                    events.append(
+                        (
+                            "source_resolution",
+                            {
+                                "status": result.source_resolution_status,
+                                "source_id": result.source_id,
+                            },
+                        )
+                    )
+                if result.asset_resolution_status:
+                    events.append(
+                        (
+                            "asset_resolution",
+                            {
+                                "status": result.asset_resolution_status,
+                                "asset_id": result.asset_id,
+                            },
+                        )
+                    )
+                if result.lifecycle_stages:
+                    events.append(
+                        ("lifecycle_mapping_retrieval", {"stages": result.lifecycle_stages})
+                    )
+                if result.standards_mappings or result.no_direct_standard_match:
+                    events.append(
+                        (
+                            "standards_mapping_retrieval",
+                            {
+                                "relations": result.standards_relation_types,
+                                "no_direct": result.no_direct_standard_match,
+                            },
+                        )
+                    )
+                if result.validation_results:
+                    events.append(
+                        (
+                            "validation_rule_application",
+                            {
+                                "count": len(result.validation_results),
+                                "failed": [
+                                    v.rule_name
+                                    for v in result.validation_results
+                                    if not v.passed
+                                ],
+                            },
+                        )
+                    )
+                if result.evidence_requirements:
+                    events.append(
+                        (
+                            "evidence_requirement_retrieval",
+                            {
+                                "count": len(result.evidence_requirements),
+                                "readiness": result.evidence_readiness_status,
+                            },
+                        )
+                    )
+                if result.extension_candidate_id:
+                    events.append(
+                        (
+                            "extension_candidate_creation",
+                            {"extension_candidate_id": result.extension_candidate_id},
+                        )
+                    )
+                if not result.resolved:
+                    events.append(
+                        (
+                            "unresolved_metric_handling",
+                            {"mapping_status": result.mapping_status},
+                        )
+                    )
+
+                for activity, outputs in events:
+                    prov.record_activity(
+                        entity_type="orchestrator_result",
+                        entity_id=entity_id,
+                        activity=activity,
+                        agent="registry_orchestrator",
+                        method="RegistryOrchestratorService.process",
+                        inputs={"raw_metric_name": result.raw_metric_name},
+                        outputs=outputs,
+                        confidence=result.mapping_confidence,
+                    )
+            except Exception as exc:
+                logger.warning("provenance recording failed: %s", exc)
+                gov_warnings.append(f"provenance recording failed: {exc}")
+
+        result.governance_warnings = gov_warnings
+        result.governance_errors = gov_errors
+        result.review_required = review_required
+        # Merge into general warnings/errors without replacing existing
+        for w in gov_warnings:
+            if w not in result.warnings:
+                result.warnings.append(w)
+        for e in gov_errors:
+            if e not in result.errors:
+                result.errors.append(e)
 
     def _attach_lifecycle_and_standards(
         self,
