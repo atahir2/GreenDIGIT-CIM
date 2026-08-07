@@ -22,4 +22,5 @@ cloud_metrics/utils/.env
 
 # Output / generated folders
 output/
+generated/
 cloud_metrics/data/exports/

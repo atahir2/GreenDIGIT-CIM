@@ -1,6 +1,6 @@
 # Development Status and Remaining Work
 
-> Updated: Milestone 11 (stabilization / CI/CD)
+> Updated: Milestone 12 (admin review workflow)
 
 ## Completed (Milestones 1–11)
 
@@ -16,7 +16,8 @@
 | 8 | Lifecycle + Standards enrichment | Approved |
 | 9 | Rule / Evidence / Provenance / Extension | Approved |
 | 10 | End-to-end demonstrator + fixtures + docs | Approved |
-| 11 | CI/CD, migration runbook, deployment readiness | Complete (this milestone) |
+| 11 | CI/CD, migration runbook, deployment readiness | Approved |
+| 12 | Admin review workflow for candidates / extensions | Complete (this milestone) |
 
 ## What remains manual
 
@@ -44,11 +45,11 @@
 
 ## Recommended next development phase
 
-1. **Admin review queue** for extension + mapping candidates (approve / reject / promote).
+1. **Admin UI** over `/api/v1/cim-review` (Streamlit or web) for extension + mapping queues.
 2. **Hardening policy toggle** — optional hard-block on incompatible units for reportable KPIs.
 3. **KPI calculation service** — PUE/WUE/CUE from prepared facility inputs with provenance.
-4. **Promote stable demo mappings** into seed / migration sync once reviewed.
-5. **UI dashboards** — registry browser, evidence readiness, provenance timeline.
-6. **Deprecate duplicate legacy paths** only after dual-run observability period (do not remove yet).
+4. **Promote stable demo mappings** into seed after explicit review + `promote_to_seed`.
+5. **Registry browser** — evidence readiness, provenance timeline.
+6. **Deprecate duplicate legacy paths** only after dual-run observability period.
 
-See also: [MS1_TO_MS10_IMPLEMENTATION_HEALTH_REPORT.md](MS1_TO_MS10_IMPLEMENTATION_HEALTH_REPORT.md), [CI_CD_VALIDATION.md](../deployment/CI_CD_VALIDATION.md).
+See also: [ADMIN_REVIEW_WORKFLOW.md](ADMIN_REVIEW_WORKFLOW.md), [MS1_TO_MS10_IMPLEMENTATION_HEALTH_REPORT.md](MS1_TO_MS10_IMPLEMENTATION_HEALTH_REPORT.md).

@@ -27,6 +27,8 @@ The refactoring process follows a 14-stage incremental sequence defined in [IMPL
 
 **Milestone 11 (Stabilization):** CI workflow (`.github/workflows/ci.yml`), `docs/deployment/*` runbooks, and implementation health report — no new CIM features.
 
+**Milestone 12 (Admin Review):** `AdminReviewService` + CLI/API for candidate/extension/mapping review with provenance and seed-proposal export — ingestion/orchestrator unchanged.
+
 ---
 
 ## 2. Milestone Entry & Exit Criteria

@@ -86,6 +86,19 @@ from cloud_metrics.registry.orchestrator import (
     RegistryOrchestratorService,
     get_registry_orchestrator,
 )
+from cloud_metrics.registry.review import (
+    AdminReviewService,
+    CandidateReviewService,
+    RegistryReviewService,
+    ReviewAction,
+    ReviewDecision,
+    ReviewEntityType,
+    ReviewError,
+    ReviewableEntry,
+    get_admin_review_service,
+    get_candidate_review_service,
+    get_registry_review_service,
+)
 
 # All 11 registry names for discovery / smoke tests.
 REGISTRY_MODULES = (
@@ -181,4 +194,15 @@ __all__ = [
     "RegistryOrchestrator",
     "CimRegistryOrchestrator",
     "get_registry_orchestrator",
+    "AdminReviewService",
+    "RegistryReviewService",
+    "CandidateReviewService",
+    "get_admin_review_service",
+    "get_registry_review_service",
+    "get_candidate_review_service",
+    "ReviewAction",
+    "ReviewDecision",
+    "ReviewEntityType",
+    "ReviewError",
+    "ReviewableEntry",
 ]
