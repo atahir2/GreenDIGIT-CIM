@@ -1,26 +1,29 @@
 # Development Status and Remaining Work
 
-> Updated: Milestone 15 (export / interoperability)
+> Updated: Milestone 16C (API-based external organization / RI integration)
 
-## Completed (Milestones 1–15)
+## Completed (Milestones 1–16C)
 
 | Milestone | Focus | Status |
 |-----------|-------|--------|
-| 1 | Registry skeleton (11 registries) | Approved |
-| 2 | SQLAlchemy `Cim*` models + `cim_*` tables | Approved |
-| 3 | Initial seed catalogues | Approved |
-| 4 | Legacy mapping migration + registry-first lookup | Approved |
-| 5 | Unit Registry validation | Approved |
-| 6 | Source + Asset resolution | Approved |
-| 7 | Registry Orchestrator | Approved |
-| 8 | Lifecycle + Standards enrichment | Approved |
-| 9 | Rule / Evidence / Provenance / Extension | Approved |
-| 10 | End-to-end demonstrator + fixtures + docs | Approved |
-| 11 | CI/CD, migration runbook, deployment readiness | Approved |
-| 12 | Admin review workflow for candidates / extensions | Approved |
-| 13 | KPI calculation (PUE / WUE / CUE) with provenance | Approved |
-| 14 | Admin portal UI (registry / review / evidence / KPI / provenance) | Approved |
-| 15 | Export / interoperability (JSON, CSV, JSON-LD, RO-Crate-style, DCAT-style) | Complete (this milestone) |
+| 1–15 | Registry-driven CIM through export | Approved |
+| 16A | Browser workload validation | Completed / documented |
+| 16B | Admin Portal browser validation | Planned / partial prior screenshots |
+| 16C | API ingest for external orgs/RIs | Complete (this milestone) |
+
+## Milestone 16C deliverables
+
+| Artifact | Path |
+|----------|------|
+| Ingest service | `cloud_metrics/services/cim_api_ingest.py` |
+| API router | `cloud_metrics/api/cim_ingest_api.py` |
+| Tests | `tests/test_cim_api_ingest.py` |
+| Docs | `docs/api/*` |
+
+Endpoints:
+
+- `POST /api/v1/cim-ingest/metrics`
+- `POST /api/v1/cim-ingest/scenarios/{A-E}`
 
 ## What remains manual
 
@@ -31,6 +34,7 @@
 - Full RO-Crate 1.1 crate directories, DCAT-AP validation, RDF/Turtle
 - Admin portal download tab for exports (CLI/API exist)
 - Signing the [DEPLOYMENT_READINESS_CHECKLIST.md](../deployment/DEPLOYMENT_READINESS_CHECKLIST.md) for each environment promotion
+- Production API authentication / multi-tenant enforcement (see `docs/api/API_SECURITY_AND_AUTH_NOTES.md`)
 
 ## What remains candidate / under_review
 
@@ -42,18 +46,20 @@
 ## Known limitations
 
 - Soft validation only on **ingestion** — incompatible units warn but do not hard-block samples
-- Reportable KPI calculation **does** hard-block (Milestone 13); not yet wired into the facility demo runner
+- Reportable KPI calculation **does** hard-block (Milestone 13); API ingest can optionally call it via `options.calculate_kpi`
 - Unstructured text is parsed by legacy regex parser; not fully orchestrated
 - Demo mappings are session helpers (`origin=demo`), not core seed data
 - Some seeded metrics lack lifecycle/evidence links by design (avoid speculative claims)
+- Legacy `/metrics/aws` and `/metrics/gcp` remain non-orchestrated GET triggers
+- No production auth on FastAPI
 
-## Recommended next development phase
+## Recommended next development phase (consolidation)
 
-1. **Evidence fulfillment store** and mark-complete UI for mandatory PUE/WUE/CUE evidence.
-2. **Validated RO-Crate 1.1 directory writer** and optional Process Run Crate profile.
-3. **DCAT-AP validation** plus real distribution URLs; RDF/Turtle with a published CIM IRI.
-4. **Wire KPI service into the facility demo** (Scenario D) without changing operational ingestion.
+1. **Final consolidation docs** — single operator runbook tying browser, admin, API, and export.
+2. **Production auth** for `/api/v1/cim-ingest` and `/api/v1/cim-review`.
+3. **Evidence fulfillment store** and mark-complete UI for mandatory PUE/WUE/CUE evidence.
+4. **Wire KPI service into facility demo** paths consistently (UI + API already available).
 5. **Promote stable demo mappings** into seed after explicit review + `promote_to_seed`.
 6. **Deprecate duplicate legacy paths** only after dual-run observability period.
 
-See also: [EXPORT_LAYER.md](EXPORT_LAYER.md), [KPI_CALCULATION_SERVICE.md](KPI_CALCULATION_SERVICE.md), [ADMIN_REVIEW_WORKFLOW.md](ADMIN_REVIEW_WORKFLOW.md).
+See also: [docs/api/CIM_API_INTEGRATION_GUIDE.md](../api/CIM_API_INTEGRATION_GUIDE.md), [EXPORT_LAYER.md](EXPORT_LAYER.md), [KPI_CALCULATION_SERVICE.md](KPI_CALCULATION_SERVICE.md).

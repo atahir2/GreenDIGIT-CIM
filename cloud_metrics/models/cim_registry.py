@@ -114,7 +114,7 @@ class CimUnit(CimGovernanceMixin, Base):
         ),
         nullable=False,
     )
-    si_base = Column(Boolean, nullable=False, server_default="0")
+    si_base = Column(Boolean, nullable=False, server_default="false")
     canonical_unit_id = Column(
         Integer,
         ForeignKey("cim_units.id", name="fk_cim_units_canonical_unit_id_cim_units"),
@@ -414,7 +414,7 @@ class CimMetricLifecycleLink(CimGovernanceMixin, Base):
         Integer,
         ForeignKey(
             "cim_lifecycle_stages.id",
-            name="fk_cim_metric_lifecycle_links_lifecycle_stage_id_cim_lifecycle_stages",
+            name="fk_cim_metric_lifecycle_links_stage_id",
             ondelete="CASCADE",
         ),
         nullable=False,

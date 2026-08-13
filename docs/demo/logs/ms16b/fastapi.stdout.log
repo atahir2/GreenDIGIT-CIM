@@ -1,0 +1,8 @@
+[config] DB=postgresql+psycopg2://postgres:admin123@localhost:5433/cloud_metrics
+[config] CORS=['http://localhost:3000', 'http://localhost:8000']
+[config] MAP=Z:\GreenDIGIT_CIM_testing_v1\cloud_metrics\data\metric_mapping.json
+INFO:     127.0.0.1:59617 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57921 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57921 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57921 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57921 - "GET /openapi.json HTTP/1.1" 200 OK

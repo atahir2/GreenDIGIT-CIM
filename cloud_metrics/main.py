@@ -3,7 +3,15 @@
 from fastapi import FastAPI
 
 # Routers
-from cloud_metrics.api import metrics, query, registry_api, cim_review_api, cim_kpi_api, cim_export_api
+from cloud_metrics.api import (
+    metrics,
+    query,
+    registry_api,
+    cim_review_api,
+    cim_kpi_api,
+    cim_export_api,
+    cim_ingest_api,
+)
 
 app = FastAPI(title="Cloud Metrics API", version="0.1.0")
 
@@ -17,6 +25,9 @@ app.include_router(
 app.include_router(cim_kpi_api.router, prefix="/api/v1/cim-kpi", tags=["cim-kpi"])
 app.include_router(
     cim_export_api.router, prefix="/api/v1/cim-export", tags=["cim-export"]
+)
+app.include_router(
+    cim_ingest_api.router, prefix="/api/v1/cim-ingest", tags=["cim-ingest"]
 )
 
 @app.get("/health")

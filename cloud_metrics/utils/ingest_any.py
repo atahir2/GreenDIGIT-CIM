@@ -161,8 +161,13 @@ def _deep_numeric_map(obj: Any) -> Dict[str, float]:
     return out
 
 def _infer_domain(doc: Dict[str, Any]) -> str:
-    # look across all keys
-    keys = set(k.lower() for k,_ in _deep_items(doc) if k)
+    # look across all keys (path tuples from _deep_items, not bare strings)
+    keys = set()
+    for path, _ in _deep_items(doc):
+        if not path:
+            continue
+        keys.add(path[-1].lower())
+        keys.add(".".join(path).lower())
     if any("networktype" in k or "amountofdatatransferred" in k for k in keys):
         return "network"
     if any("ncores" in k or "tdp_w" in k or "normcputime_s" in k for k in keys):

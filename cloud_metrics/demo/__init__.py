@@ -4,7 +4,9 @@ from cloud_metrics.demo.cim_demonstrator import (
     DEMO_RAW_TO_CIM,
     FIXTURE_DIR,
     SAMPLE_FILES,
+    WORKLOAD_RAW_TO_CIM,
     ensure_demo_mappings,
+    ensure_workload_mappings,
     format_result_summary,
     load_sample,
     process_sample,
@@ -15,9 +17,11 @@ from cloud_metrics.demo.cim_demonstrator import (
 
 __all__ = [
     "DEMO_RAW_TO_CIM",
+    "WORKLOAD_RAW_TO_CIM",
     "FIXTURE_DIR",
     "SAMPLE_FILES",
     "ensure_demo_mappings",
+    "ensure_workload_mappings",
     "format_result_summary",
     "load_sample",
     "process_sample",

@@ -76,7 +76,7 @@ def upgrade() -> None:
         sa.Column("symbol", sa.String(length=64), nullable=False),
         sa.Column("name", sa.String(length=128), nullable=False),
         sa.Column("quantity_kind_id", sa.Integer(), nullable=False),
-        sa.Column("si_base", sa.Boolean(), server_default=sa.text("0"), nullable=False),
+        sa.Column("si_base", sa.Boolean(), server_default=sa.text("false"), nullable=False),
         sa.Column("canonical_unit_id", sa.Integer(), nullable=True),
         sa.Column(
             "conversion_factor", sa.Float(), server_default="1.0", nullable=False
@@ -390,7 +390,7 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(
             ["lifecycle_stage_id"],
             ["cim_lifecycle_stages.id"],
-            name="fk_cim_metric_lifecycle_links_lifecycle_stage_id_cim_lifecycle_stages",
+            name="fk_cim_metric_lifecycle_links_stage_id",
             ondelete="CASCADE",
         ),
         sa.PrimaryKeyConstraint("id"),

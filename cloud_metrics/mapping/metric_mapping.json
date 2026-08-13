@@ -1,18 +1,52 @@
 {
+  "gd.custom.unknown.alphaenergyrenewable": [
+    "alpha.energy.renewable",
+    "datacenter_A"
+  ],
+  "gd.custom.unknown.alphanetin": [
+    "alpha.net.in",
+    "datacenter_A"
+  ],
+  "gd.custom.unknown.alphanetout": [
+    "alpha.net.out",
+    "datacenter_A"
+  ],
   "gd.custom.unknown.doc0execunitfinished": [
     "doc0.ExecUnitFinished",
     "ifca"
   ],
   "gd.custom.unknown.execunitfinished": [
+    "1-grid-site",
+    "backbone-milan-link",
     "eu-central-1-cloud-site",
     "execunitfinished"
   ],
   "gd.custom.unknown.jobfinished": [
+    "1-grid-site",
+    "backbone-milan-link",
     "eu-central-1-cloud-site",
     "job_finished"
   ],
+  "gd.custom.unknown.lambdacfp": [
+    "datacenter_A",
+    "lambda.cfp"
+  ],
+  "gd.custom.unknown.lambdapue": [
+    "datacenter_A",
+    "lambda.pue"
+  ],
+  "gd.custom.unknown.lambdawue": [
+    "datacenter_A",
+    "lambda.wue"
+  ],
+  "gd.custom.unknown.lambdawush": [
+    "datacenter_A",
+    "lambda.wush"
+  ],
   "gd.custom.unknown.unknown": [
+    "1-grid-site",
     "PUE",
+    "backbone-milan-link",
     "eu-central-1-cloud-site"
   ],
   "gd.energy.consumption.total": [
@@ -20,40 +54,75 @@
     "30",
     "EnergyWh",
     "alpha.energy.kwh",
+    "backbone-milan-link",
     "datacenter_A",
+    "datacenter_Z",
     "doc0.EnergyWh",
     "energy_wh",
     "eu-central-1-cloud-site",
     "ifca",
-    "q"
+    "metadata.energy.kwh",
+    "q",
+    "unknown"
   ],
   "gd.energy.efficiency.pue": [
     "30",
+    "PUE",
     "datacenter_A",
+    "eu-central-1-cloud-site",
     "lambda.pue",
     "q"
   ],
   "gd.energy.power.total": [
+    ".power",
     "1-grid-site",
     "30",
     "CFP_g",
     "CI_g",
+    "backbone-milan-link",
+    "beta.elec.power",
     "datacenter_A",
+    "datacenter_B",
+    "elec.power",
     "eu-central-1-cloud-site",
     "lambda.power",
-    "q"
+    "q",
+    "unstructured_dc_1",
+    "unstructured_dc_2"
   ],
   "gd.energy.renewable.solar": [
     "30",
     "alpha.energy.renewable",
+    "beta.power.solar",
     "datacenter_A",
-    "q"
+    "datacenter_B",
+    "datacenter_Z",
+    "metadata.energy.renewable",
+    "power.solar",
+    "q",
+    "unknown"
+  ],
+  "gd.environment.emissions.carbon_intensity": [
+    "CI_g",
+    "eu-central-1-cloud-site"
   ],
   "gd.environment.emissions.cfp": [
     "30",
+    "CFP_g",
     "datacenter_A",
+    "eu-central-1-cloud-site",
     "lambda.cfp",
     "q"
+  ],
+  "gd.environment.temperature.ambient": [
+    "alpha.temp.ext",
+    "alpha.temp.int",
+    "beta.env.externalTemp",
+    "beta.env.internalTemp",
+    "datacenter_A",
+    "datacenter_B",
+    "env.externalTemp",
+    "env.internalTemp"
   ],
   "gd.environment.temperature.exterior": [
     "30",
@@ -62,10 +131,12 @@
     "q"
   ],
   "gd.environment.temperature.interior": [
+    ".temperature",
     "30",
     "alpha.temp.int",
     "datacenter_A",
-    "q"
+    "q",
+    "unstructured_dc_1"
   ],
   "gd.environment.water.wue": [
     "30",
@@ -74,16 +145,42 @@
     "q"
   ],
   "gd.network.traffic.incoming": [
+    ".network.in",
     "30",
     "alpha.net.in",
+    "beta.network.incoming",
     "datacenter_A",
-    "q"
+    "datacenter_B",
+    "datacenter_C",
+    "datacenter_D",
+    "doc0.system.network.in",
+    "net_in",
+    "network.incoming",
+    "network.outgoing",
+    "q",
+    "system.network.in",
+    "tmpypi-03-mku",
+    "unstructured_dc_1"
   ],
   "gd.network.traffic.outgoing": [
+    ".network.out",
     "30",
     "alpha.net.out",
+    "beta.network.outgoing",
     "datacenter_A",
-    "q"
+    "datacenter_B",
+    "datacenter_C",
+    "datacenter_D",
+    "doc0.system.network.out",
+    "net_out",
+    "q",
+    "system.network.out",
+    "tmpypi-03-mku",
+    "unstructured_dc_1"
+  ],
+  "gd.network.traffic.total_bytes": [
+    "amountofdatatransferred",
+    "backbone-milan-link"
   ],
   "gd.performance.cpu.count": [
     "1-grid-site",
@@ -101,10 +198,13 @@
     "tdp_w"
   ],
   "gd.performance.cpu.time": [
+    ".cpu",
     "1-grid-site",
     "cpuduration_s",
     "eu-central-1-cloud-site",
-    "totalcputime_s"
+    "totalcputime_s",
+    "unstructured_dc_1",
+    "unstructured_dc_2"
   ],
   "gd.performance.cpu.time_normalized": [
     "1-grid-site",
@@ -117,23 +217,51 @@
   "gd.performance.cpu.utilization": [
     "30",
     "alpha.cpu",
+    "beta.compute.cpu",
+    "compute.cpu",
+    "cpu_usage",
     "datacenter_A",
+    "datacenter_B",
+    "datacenter_C",
+    "datacenter_D",
+    "datacenter_Z",
     "doc0.CpuDuration_s",
+    "doc0.system.cpu",
     "ifca",
-    "q"
+    "metadata.cpu",
+    "q",
+    "system.cpu",
+    "tmpypi-03-mku",
+    "unknown"
   ],
   "gd.performance.efficiency.compute": [
     "1-grid-site",
+    "beta.compute.cpu",
+    "datacenter_B",
     "doc0.Efficiency",
     "efficiency",
     "eu-central-1-cloud-site",
     "ifca"
   ],
   "gd.performance.memory.usage": [
+    ".memory",
     "30",
     "alpha.mem",
+    "beta.hardware.memory.used",
     "datacenter_A",
-    "q"
+    "datacenter_B",
+    "datacenter_C",
+    "datacenter_D",
+    "datacenter_Z",
+    "doc0.system.memory.usage",
+    "hardware.memory.used",
+    "memory_usage",
+    "metadata.mem",
+    "q",
+    "system.memory.usage",
+    "tmpypi-03-mku",
+    "unknown",
+    "unstructured_dc_1"
   ],
   "gd.performance.time.suspend": [
     "doc0.SuspendDuration_s",
@@ -150,6 +278,7 @@
   ],
   "gd.performance.work.total": [
     "1-grid-site",
+    "backbone-milan-link",
     "doc0.Work",
     "eu-central-1-cloud-site",
     "ifca",
@@ -158,13 +287,19 @@
   "gd.storage.disk.read_io": [
     "30",
     "alpha.storage.read",
+    "beta.disk.readIO",
     "datacenter_A",
+    "datacenter_B",
+    "disk.readIO",
     "q"
   ],
   "gd.storage.disk.write_io": [
     "30",
     "alpha.storage.write",
+    "beta.disk.writeIO",
     "datacenter_A",
+    "datacenter_B",
+    "disk.writeIO",
     "q"
   ],
   "gd.uncategorized.unknown.unknown": [

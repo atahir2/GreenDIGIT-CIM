@@ -28,14 +28,371 @@ from cloud_metrics.mapping.namespace_mapper_core import parse_and_extract_file_m
 
 # NEW robust loader (format + structure agnostic)
 from cloud_metrics.utils.ingest_any import load_any_file
+from cloud_metrics.utils.config import SessionLocal
+from cloud_metrics.demo.cim_demonstrator import ensure_workload_mappings
+from cloud_metrics.registry.export import get_export_service
 
 
-st.set_page_config(page_title="Cloud Metrics Uploader", layout="centered")
-st.title("Ingestion Uploader (Any Format)")
+def _json_bytes(obj: object) -> str:
+    return json.dumps(obj, default=str, indent=2)
+
+
+def _namespaces_from_orch(orch_rows: list) -> list[str]:
+    seen: list[str] = []
+    for row in orch_rows:
+        ns = row.get("cim_namespace")
+        if ns and ns not in seen:
+            seen.append(ns)
+    return seen
+
+
+def _table_from_orch(orch_rows: list) -> tuple[list[dict], list[str]]:
+    table_rows: list[dict] = []
+    unit_flags: list[str] = []
+    for row in orch_rows:
+        unit_status = row.get("unit_validation_status")
+        table_rows.append(
+            {
+                "raw_key": row.get("raw_metric_name"),
+                "observed_value": row.get("observed_value"),
+                "cim_namespace": row.get("cim_namespace"),
+                "resolved": row.get("resolved"),
+                "path": row.get("resolution_path"),
+                "mapping_status": row.get("mapping_status"),
+                "unit": unit_status,
+                "canonical_unit": row.get("canonical_unit"),
+                "source": row.get("source_resolution_status"),
+                "asset": row.get("asset_resolution_status"),
+                "lifecycle": ", ".join(row.get("lifecycle_stages") or []),
+                "standards": ", ".join(row.get("standards_relation_types") or []),
+                "evidence": row.get("evidence_readiness_status"),
+                "provenance_id": row.get("provenance_record_id"),
+                "extension_id": row.get("extension_candidate_id"),
+                "review_required": row.get("review_required"),
+            }
+        )
+        if unit_status in {"incompatible", "invalid", "conflict"}:
+            unit_flags.append(
+                f"{row.get('raw_metric_name')}: unit {unit_status} "
+                f"(observed={row.get('observed_unit')}, expected={row.get('canonical_unit')})"
+            )
+    return table_rows, unit_flags
+
+
+def _samples_from_orch(orch_rows: list) -> list[dict]:
+    samples: list[dict] = []
+    for row in orch_rows:
+        samples.append(
+            {
+                "raw_key": row.get("raw_metric_name"),
+                "observed_value": row.get("observed_value"),
+                "observed_unit": row.get("observed_unit"),
+                "canonical_unit": row.get("canonical_unit"),
+                "cim_namespace": row.get("cim_namespace"),
+                "unified_key": row.get("storage_unified_key") or row.get("legacy_unified_key"),
+            }
+        )
+    return samples
+
+
+def _build_export_packs(orch_rows: list, mapped: dict, header: dict) -> tuple[dict, dict]:
+    """Workload-scoped pack + full CIM catalogue pack (existing ExportService)."""
+    namespaces = _namespaces_from_orch(orch_rows)
+    samples = _samples_from_orch(orch_rows)
+    prov_ids = {
+        row.get("provenance_record_id")
+        for row in orch_rows
+        if row.get("provenance_record_id") is not None
+    }
+    ext_ids = {
+        row.get("extension_candidate_id")
+        for row in orch_rows
+        if row.get("extension_candidate_id") is not None
+    }
+
+    def _ns_of(row: dict) -> str | None:
+        return row.get("cim_namespace") or row.get("namespace") or row.get("metric_namespace")
+
+    with SessionLocal() as export_session:
+        svc = get_export_service(export_session)
+        catalogue = {
+            "json": svc.export_json(),
+            "jsonld": svc.export_jsonld(include_all_metrics=True),
+            "provenance": svc.export_provenance(),
+            "crosswalk": svc.export_standards_crosswalk(),
+            "evidence": svc.export_evidence_readiness(),
+        }
+        ns_set = set(namespaces)
+        full_json = catalogue["json"]
+        workload_json = {
+            "scope": "workload_ingest",
+            "source_file": header.get("source_file"),
+            "parser": header.get("parser"),
+            "datacenter": header.get("datacenter"),
+            "site_id": header.get("site_id"),
+            "captured_at": header.get("captured_at"),
+            "domain": header.get("domain"),
+            "metrics_written": len(mapped),
+            "observed_samples": samples,
+            "unified_keys": mapped,
+            "cim_namespaces": namespaces,
+            "orchestration": orch_rows,
+            "format": "json",
+            "profile": full_json.get("profile"),
+            "metric_definitions": [
+                m
+                for m in (full_json.get("metric_definitions") or [])
+                if _ns_of(m) in ns_set
+            ],
+            "metric_mappings": [
+                m
+                for m in (full_json.get("metric_mappings") or [])
+                if _ns_of(m) in ns_set
+            ],
+            "standards_mappings": [
+                m
+                for m in (full_json.get("standards_mappings") or [])
+                if _ns_of(m) in ns_set
+            ],
+            "lifecycle_mappings": [
+                m
+                for m in (full_json.get("lifecycle_mappings") or [])
+                if _ns_of(m) in ns_set
+            ],
+            "evidence_requirements": [
+                m
+                for m in (full_json.get("evidence_requirements") or [])
+                if _ns_of(m) in ns_set
+            ],
+            "provenance_records": [
+                rec
+                for rec in (full_json.get("provenance_records") or [])
+                if rec.get("id") in prov_ids
+            ],
+            "extension_candidates": [
+                e
+                for e in (full_json.get("extension_candidates") or [])
+                if e.get("id") in ext_ids or _ns_of(e) in ns_set
+            ],
+        }
+
+        graph = []
+        ctx = None
+        for ns in namespaces:
+            doc = svc.export_jsonld(metric_namespace=ns)
+            if ctx is None:
+                ctx = doc.get("@context")
+            graph.append(
+                {k: v for k, v in doc.items() if k not in {"@context", "compliance", "profile"}}
+            )
+        workload_jsonld = {
+            "scope": "workload_ingest",
+            "source_file": header.get("source_file"),
+            "@context": ctx,
+            "@graph": graph,
+            "note": "Partial JSON-LD for namespaces resolved from this ingest only.",
+        }
+
+        all_prov = catalogue["provenance"]
+        workload_prov = {
+            "scope": "workload_ingest",
+            "source_file": header.get("source_file"),
+            "format": "provenance",
+            "provenance_ids": sorted(prov_ids),
+            "extension_ids": sorted(ext_ids),
+            "records": [
+                rec
+                for rec in (all_prov.get("records") or [])
+                if rec.get("id") in prov_ids
+            ],
+        }
+
+        ns_set = set(namespaces)
+        all_cross = catalogue["crosswalk"]
+        workload_cross = {
+            "scope": "workload_ingest",
+            "source_file": header.get("source_file"),
+            "format": "standards_crosswalk",
+            "mappings": [
+                m
+                for m in (all_cross.get("mappings") or [])
+                if m.get("cim_namespace") in ns_set
+            ],
+        }
+
+        workload_evidence = {
+            "scope": "workload_ingest",
+            "source_file": header.get("source_file"),
+            "metrics": [
+                svc.export_evidence_readiness(metric_namespace=ns) for ns in namespaces
+            ],
+        }
+
+    return {
+        "json": _json_bytes(workload_json),
+        "jsonld": _json_bytes(workload_jsonld),
+        "provenance": _json_bytes(workload_prov),
+        "crosswalk": _json_bytes(workload_cross),
+        "evidence": _json_bytes(workload_evidence),
+    }, {
+        "json": _json_bytes(catalogue["json"]),
+        "jsonld": _json_bytes(catalogue["jsonld"]),
+        "provenance": _json_bytes(catalogue["provenance"]),
+        "crosswalk": _json_bytes(catalogue["crosswalk"]),
+        "evidence": _json_bytes(catalogue["evidence"]),
+    }
+
+
+def _render_downloads(stem: str, workload: dict, catalogue: dict) -> None:
+    st.subheader("Downloads")
+    st.caption(
+        "This ingest = observed values from the file plus CIM enrichment for those metrics. "
+        "CIM catalogues = metric definitions and mappings for the whole registry "
+        "(no sample values — those live in Postgres metric_samples / Workload JSON)."
+    )
+    st.markdown("**This ingest**")
+    w1, w2, w3, w4, w5 = st.columns(5)
+    w1.download_button(
+        "Workload JSON",
+        workload["json"],
+        file_name=f"{stem}_workload.json",
+        mime="application/json",
+        key="dl_wl_json",
+    )
+    w2.download_button(
+        "Workload JSON-LD",
+        workload["jsonld"],
+        file_name=f"{stem}_workload.jsonld",
+        mime="application/ld+json",
+        key="dl_wl_jsonld",
+    )
+    w3.download_button(
+        "Workload provenance",
+        workload["provenance"],
+        file_name=f"{stem}_workload_provenance.json",
+        mime="application/json",
+        key="dl_wl_prov",
+    )
+    w4.download_button(
+        "Workload crosswalk",
+        workload["crosswalk"],
+        file_name=f"{stem}_workload_crosswalk.json",
+        mime="application/json",
+        key="dl_wl_cross",
+    )
+    w5.download_button(
+        "Workload evidence",
+        workload["evidence"],
+        file_name=f"{stem}_workload_evidence.json",
+        mime="application/json",
+        key="dl_wl_ev",
+    )
+
+    st.markdown("**CIM catalogues (full system)**")
+    c1, c2, c3, c4, c5 = st.columns(5)
+    c1.download_button(
+        "CIM JSON",
+        catalogue["json"],
+        file_name="cim_catalogue.json",
+        mime="application/json",
+        key="dl_cat_json",
+    )
+    c2.download_button(
+        "CIM JSON-LD",
+        catalogue["jsonld"],
+        file_name="cim_catalogue.jsonld",
+        mime="application/ld+json",
+        key="dl_cat_jsonld",
+    )
+    c3.download_button(
+        "CIM provenance",
+        catalogue["provenance"],
+        file_name="cim_catalogue_provenance.json",
+        mime="application/json",
+        key="dl_cat_prov",
+    )
+    c4.download_button(
+        "CIM crosswalk",
+        catalogue["crosswalk"],
+        file_name="cim_catalogue_crosswalk.json",
+        mime="application/json",
+        key="dl_cat_cross",
+    )
+    c5.download_button(
+        "CIM evidence",
+        catalogue["evidence"],
+        file_name="cim_catalogue_evidence.json",
+        mime="application/json",
+        key="dl_cat_ev",
+    )
+    st.caption(
+        "JSON-LD / RO-Crate / DCAT packages are partial style exports (Milestone 15), "
+        "not certified compliance."
+    )
+
+
+def _render_result(result: dict) -> None:
+    header = result["header"]
+    st.success(
+        f"Ingestion complete (registry orchestrator) — **{header.get('source_file')}**"
+    )
+    st.write(f"Parser: **{header.get('parser')}**")
+    st.write(f"Datacenter: **{header.get('datacenter')}**")
+    st.write(f"Site ID: **{header.get('site_id')}**")
+    st.write(f"Captured at: **{header.get('captured_at')}**")
+    st.write(f"Domain: **{header.get('domain')}**")
+    st.write(f"Found **{header.get('metric_count')}** metrics")
+    st.write("Path: **registry orchestrator** (cim:* + governance)")
+
+    st.subheader("Observed metric values")
+    st.caption(
+        "Numeric readings from this file. They are stored in Postgres `metric_samples` "
+        "(and Influx when available). CIM catalogue downloads list definitions, not these values."
+    )
+    sample_rows = result.get("samples") or []
+    if sample_rows:
+        st.dataframe(sample_rows, use_container_width=True)
+    else:
+        st.json(
+            {
+                "metrics_written": result.get("metrics_written"),
+                "errors": result.get("errors"),
+                "unified_keys": result.get("unified_keys"),
+            }
+        )
+    if result.get("influx_warning"):
+        st.warning(result["influx_warning"])
+    if result.get("output_path"):
+        st.write(f"Partner JSON exported: `{result['output_path']}`")
+
+    st.subheader("CIM orchestration results")
+    if result.get("table_rows"):
+        st.dataframe(result["table_rows"], use_container_width=True)
+    for flag in result.get("unit_flags") or []:
+        st.error(flag)
+    if any(r.get("extension_id") for r in (result.get("orch_rows") or [])):
+        st.info("Unresolved metrics created or reused extension candidates (not approved).")
+    with st.expander("Full orchestrator metadata"):
+        st.json(result.get("orch_rows") or [])
+
+    try:
+        _render_downloads(
+            result.get("stem") or "workload",
+            result["workload_exports"],
+            result["catalogue_exports"],
+        )
+    except Exception as e_exp:
+        st.warning(f"CIM export download unavailable: {e_exp}")
+
+
+st.set_page_config(page_title="CIM Workload Ingestion", layout="wide")
+st.title("CIM Workload Ingestion")
 
 st.caption(
     "Upload partner metric files (JSON/YAML/XML/CSV/TXT). "
-    "We’ll auto-extract metadata + numeric metrics, classify, persist, and export gd.* JSON."
+    "Each metric is processed by the registry orchestrator: CIM namespace, "
+    "unit validation, source/asset resolution, lifecycle, standards, evidence, "
+    "provenance, and extension candidates."
 )
 
 uploaded_file = st.file_uploader(
@@ -43,183 +400,192 @@ uploaded_file = st.file_uploader(
     type=["json", "yml", "yaml", "xml", "csv", "txt"],
 )
 
-if not uploaded_file:
-    st.info("Choose a file to start.")
-    st.stop()
+actions = st.columns([1, 1, 4])
+run = actions[0].button("Ingest", disabled=uploaded_file is None, type="primary")
+clear = actions[1].button("Clear results")
+if clear:
+    st.session_state.pop("last_ingest", None)
 
-run = st.button("Ingest")
-if not run:
-    st.stop()
-
-temp_path = None
-try:
-    # Save uploaded file to a safe temp path
-    suffix = (
-        "." + uploaded_file.name.rsplit(".", 1)[-1].lower()
-        if "." in uploaded_file.name
-        else ""
-    )
-    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
-        tmp.write(uploaded_file.getbuffer())
-        temp_path = tmp.name
-
-    # --- Parse meta + metrics (robust path) ---
+if run and uploaded_file:
+    temp_path = None
     try:
-        meta, raw_metrics = load_any_file(temp_path)
-        used_loader = "ingest_any"
-    except Exception as e_any:
-        # --- Fallback to legacy core parser ---
-        st.warning(f"Generic loader failed ({e_any}). Falling back to legacy parser.")
-        st.write("Parsed file (legacy), now mapping metrics…")
-        raw_metrics, _ = parse_and_extract_file_metrics(str(temp_path), datacenter="")
-        # Synthesize minimal meta from filename when using fallback:
-        stem = uploaded_file.name.rsplit(".", 1)[0]
-        meta = type("Meta", (), {})()  # lightweight anonymous object
-        meta.datacenter = stem
-        meta.captured_at = None
-        meta.site_id = f"{stem}.default_node.default_vm"
-        meta.ri_id = meta.node_id = meta.vm_id = meta.host = None
-        meta.extra = None
-        meta.domain = "unknown"
-        used_loader = "legacy_core"
+        suffix = (
+            "." + uploaded_file.name.rsplit(".", 1)[-1].lower()
+            if "." in uploaded_file.name
+            else ""
+        )
+        with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
+            tmp.write(uploaded_file.getbuffer())
+            temp_path = tmp.name
 
-    # ensure datacenter row
-    origin_label = (meta.datacenter or "").strip() or uploaded_file.name.rsplit(".", 1)[0]
-    dc_id = get_or_create_datacenter_id(origin_label)
-
-    st.write(f"Parser: **{used_loader}**")
-    st.write(f"Datacenter: **{origin_label}**")
-    st.write(f"Site ID: **{meta.site_id}**")
-    st.write(f"Captured at: **{(meta.captured_at or datetime.utcnow()).isoformat()}**")
-    st.write(f"Domain: **{meta.domain}**")
-    st.write(f"Found **{len(raw_metrics)}** metrics")
-
-    if not raw_metrics:
-        st.error("No numeric metrics detected in this file.")
-        st.stop()
-
-    # Ingest metrics (DB + registry + JSON sync) and prepare for Influx
-    new_mapped_metrics = {}
-    errors = 0
-
-    for raw_key, value in raw_metrics.items():
         try:
-            unified_key = process_metric_sample(
-                raw_key=str(raw_key),
-                value=float(value),
-                origin=origin_label,
-                captured_at=meta.captured_at,
+            meta, raw_metrics = load_any_file(temp_path)
+            used_loader = "ingest_any"
+        except Exception as e_any:
+            st.warning(f"Generic loader failed ({e_any}). Falling back to legacy parser.")
+            raw_metrics, _ = parse_and_extract_file_metrics(str(temp_path), datacenter="")
+            stem = uploaded_file.name.rsplit(".", 1)[0]
+            meta = type("Meta", (), {})()
+            meta.datacenter = stem
+            meta.captured_at = None
+            meta.site_id = f"{stem}.default_node.default_vm"
+            meta.ri_id = meta.node_id = meta.vm_id = meta.host = None
+            meta.extra = None
+            meta.domain = "unknown"
+            used_loader = "legacy_core"
+
+        if used_loader == "ingest_any" and not raw_metrics:
+            st.warning("Generic loader found no numeric metrics. Falling back to legacy parser.")
+            raw_metrics, _ = parse_and_extract_file_metrics(str(temp_path), datacenter="")
+            stem = uploaded_file.name.rsplit(".", 1)[0]
+            if not getattr(meta, "datacenter", None):
+                meta.datacenter = stem
+            if not getattr(meta, "site_id", None):
+                meta.site_id = f"{stem}.default_node.default_vm"
+            used_loader = "legacy_core_empty_fallback"
+
+        origin_label = (meta.datacenter or "").strip() or uploaded_file.name.rsplit(".", 1)[0]
+        temp_stem = os.path.basename(temp_path).rsplit(".", 1)[0] if temp_path else ""
+        if origin_label.startswith("tmp") or (temp_stem and origin_label == temp_stem):
+            origin_label = uploaded_file.name.rsplit(".", 1)[0]
+        if meta.site_id and temp_stem and temp_stem in str(meta.site_id):
+            meta.site_id = f"{origin_label}.default_node.default_vm"
+        dc_id = get_or_create_datacenter_id(origin_label)
+
+        with SessionLocal() as seed_session:
+            ensure_workload_mappings(seed_session)
+
+        if not raw_metrics:
+            st.error("No numeric metrics detected in this file.")
+        else:
+            extra_meta = dict(getattr(meta, "extra", None) or {})
+            extra_meta.update(
+                {
+                    "ingestion_path": "streamlit_uploader",
+                    "datacenter_name": origin_label,
+                    "source": "file_upload",
+                    "source_type": "file",
+                    "file_name": uploaded_file.name,
+                }
+            )
+
+            new_mapped_metrics = {}
+            errors = 0
+            orch_rows: list = []
+            skipped: list = []
+
+            for raw_key, value in raw_metrics.items():
+                try:
+                    unified_key = process_metric_sample(
+                        raw_key=str(raw_key),
+                        value=float(value),
+                        origin=origin_label,
+                        captured_at=meta.captured_at,
+                        ri_id=getattr(meta, "ri_id", None),
+                        node_id=getattr(meta, "node_id", None),
+                        vm_id=getattr(meta, "vm_id", None),
+                        host=getattr(meta, "host", None),
+                        site_id=meta.site_id,
+                        extra_meta=extra_meta,
+                        domain=getattr(meta, "domain", None),
+                        use_registry_orchestrator=True,
+                        orchestrator_results=orch_rows,
+                    )
+                    new_mapped_metrics[unified_key] = float(value)
+                    if orch_rows:
+                        orch_rows[-1]["observed_value"] = float(value)
+                        orch_rows[-1]["storage_unified_key"] = (
+                            orch_rows[-1].get("storage_unified_key") or unified_key
+                        )
+                except Exception as ex:
+                    errors += 1
+                    skipped.append(f"{raw_key} skipped: {ex}")
+
+            influx_warning = None
+            try:
+                write_mapped_metrics(new_mapped_metrics, meta.captured_at or datetime.utcnow())
+            except Exception as e_influx:
+                influx_warning = (
+                    f"Influx time-series write skipped (sink unavailable): {e_influx}. "
+                    "Postgres samples, mapping, and partner JSON export still proceed."
+                )
+
+            insert_file_upload_log(
+                filename=uploaded_file.name,
+                datacenter_id=dc_id,
+                uploaded_by=None,
+            )
+
+            meta_out = build_metadata(
                 ri_id=getattr(meta, "ri_id", None),
                 node_id=getattr(meta, "node_id", None),
                 vm_id=getattr(meta, "vm_id", None),
+                datacenter=origin_label,
                 host=getattr(meta, "host", None),
+                timestamp=meta.captured_at or datetime.utcnow(),
                 site_id=meta.site_id,
-                extra_meta=getattr(meta, "extra", None),
-                domain=getattr(meta, "domain", None),
+                extra=getattr(meta, "extra", None),
             )
-            new_mapped_metrics[unified_key] = float(value)
-        except Exception as ex:
-            errors += 1
-            st.warning(f"⚠️ {raw_key} skipped: {ex}")
+            output_path = write_external_metrics_json(
+                metadata=meta_out,
+                metrics_unified_values=new_mapped_metrics,
+                file_basename=origin_label,
+            )
 
-    # Write valid points to Influx
-    write_mapped_metrics(new_mapped_metrics, meta.captured_at or datetime.utcnow())
+            for unified_key in new_mapped_metrics.keys():
+                try:
+                    insert_metric_definition(unified_key=unified_key)
+                except Exception:
+                    pass
 
-    # Upload log
-    insert_file_upload_log(
-        filename=uploaded_file.name,
-        datacenter_id=dc_id,
-        uploaded_by=None,
-    )
-
-    # Export partner JSON (gd.* keys)
-    meta_out = build_metadata(
-        ri_id=getattr(meta, "ri_id", None),
-        node_id=getattr(meta, "node_id", None),
-        vm_id=getattr(meta, "vm_id", None),
-        datacenter=origin_label,
-        host=getattr(meta, "host", None),
-        timestamp=meta.captured_at or datetime.utcnow(),
-        site_id=meta.site_id,
-        extra=getattr(meta, "extra", None),
-    )
-    output_path = write_external_metrics_json(
-        metadata=meta_out,
-        metrics_unified_values=new_mapped_metrics,
-        file_basename=origin_label,
-    )
-
-    # Ensure metric definitions exist (for admin / standards hook)
-    for unified_key in new_mapped_metrics.keys():
+            table_rows, unit_flags = _table_from_orch(orch_rows)
+            samples = _samples_from_orch(orch_rows)
+            header = {
+                "source_file": uploaded_file.name,
+                "parser": used_loader,
+                "datacenter": origin_label,
+                "site_id": meta.site_id,
+                "captured_at": (meta.captured_at or datetime.utcnow()).isoformat(),
+                "domain": getattr(meta, "domain", None),
+                "metric_count": len(raw_metrics),
+            }
+            workload_exports, catalogue_exports = _build_export_packs(
+                orch_rows, new_mapped_metrics, header
+            )
+            st.session_state.last_ingest = {
+                "header": header,
+                "stem": uploaded_file.name.rsplit(".", 1)[0],
+                "unified_keys": new_mapped_metrics,
+                "samples": samples,
+                "metrics_written": len(new_mapped_metrics),
+                "errors": errors,
+                "skipped": skipped,
+                "orch_rows": orch_rows,
+                "table_rows": table_rows,
+                "unit_flags": unit_flags,
+                "influx_warning": influx_warning,
+                "output_path": output_path,
+                "workload_exports": workload_exports,
+                "catalogue_exports": catalogue_exports,
+            }
+    except Exception as e:
+        st.error(f"Ingestion failed: {e}")
+    finally:
         try:
-            insert_metric_definition(unified_key=unified_key)
-        except Exception as e_def:
-            st.warning(f"Definition upsert failed for {unified_key}: {e_def}")
+            if temp_path and os.path.exists(temp_path):
+                os.remove(temp_path)
+        except Exception:
+            pass
 
-    st.success("✅ Ingestion complete.")
-    st.json({"metrics_written": len(new_mapped_metrics), "errors": errors})
-    st.write(f"Partner JSON exported: `{output_path}`")
-
-except Exception as e:
-    st.error(f"❌ Ingestion failed: {e}")
-
-finally:
-    # best-effort cleanup
-    try:
-        if temp_path and os.path.exists(temp_path):
-            os.remove(temp_path)
-    except Exception:
-        pass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+result = st.session_state.get("last_ingest")
+if result:
+    for msg in result.get("skipped") or []:
+        st.warning(msg)
+    _render_result(result)
+elif uploaded_file:
+    st.info("Click Ingest to process this file through the registry orchestrator.")
+else:
+    st.info("Choose a file to start.")
 
 # # cloud_metrics/scripts/streamlit_uploader.py
 #

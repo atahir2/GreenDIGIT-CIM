@@ -1,0 +1,208 @@
+{
+  "started_at": "2026-08-13T13:13:03.338910+00:00",
+  "urls": {
+    "uploader": "http://127.0.0.1:8501",
+    "admin": "http://127.0.0.1:8502",
+    "api_docs": "http://127.0.0.1:8000/docs",
+    "api_health": "http://127.0.0.1:8000/health"
+  },
+  "sample_dir": "Z:\\GreenDIGIT_CIM_testing_v1\\sample_data",
+  "health": {
+    "body": "{\"status\":\"ok\"}",
+    "screenshot": "docs/demo/screenshots/ms16a/00_api_health.png"
+  },
+  "landing": {
+    "api_docs_screenshot": "docs/demo/screenshots/ms16a/01_api_docs.png",
+    "uploader_text": "Deploy\nIngestion Uploader (Any Format)\n\nUpload partner metric files (JSON/YAML/XML/CSV/TXT). We\u2019ll auto-extract metadata + numeric metrics, classify, persist, and export gd.* JSON.\n\nSelect metrics file\n\nDrag and drop file here\nLimit 200MB per file \u2022 JSON, YML, YAML, XML, CSV, TXT\nBrowse files\n\nChoose a file to start.",
+    "uploader_screenshot": "docs/demo/screenshots/ms16a/02_uploader_landing.png"
+  },
+  "uploads": [
+    {
+      "scenario_tag": "A_known_operational+D_facility_kpi",
+      "exists": true,
+      "file": "datacenter_A.json",
+      "accepted": true,
+      "ingest_clicked": true,
+      "success": true,
+      "error": null,
+      "page_text": "Stop\nDeploy\nIngestion Uploader (Any Format)\n\nUpload partner metric files (JSON/YAML/XML/CSV/TXT). We\u2019ll auto-extract metadata + numeric metrics, classify, persist, and export gd.* JSON.\n\nSelect metrics file\n\nDrag and drop file here\nLimit 200MB per file \u2022 JSON, YML, YAML, XML, CSV, TXT\nBrowse files\ndatacenter_A.json\n434.0B\n\nIngest\n\nParser: ingest_any\n\nDatacenter: datacenter_A\n\nSite ID: tmpv-by-1-xug.default_node.default_vm\n\nCaptured at: 2026-08-13T13:13:21.798176\n\nDomain: unknown\n\nFound 15 metrics\n\nInflux time-series write skipped (sink unavailable): <urllib3.connection.HTTPConnection object at 0x0000020AA8A982F0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it. Postgres samples, mapping, and partner JSON export still proceed.\n\nIngestion complete.\n\n{\n\"metrics_written\":14\n\"errors\":0\n\"unified_keys\":{\n\"gd.performance.cpu.utilization\":67.2\n\"gd.performance.memory.usage\":14.8\n\"gd.energy.consumption.total\":162.5\n\"gd.custom.unknown.alphaenergyrenewable\":62.1\n\"gd.custom.unknown.alphanetin\":125.6\n\"gd.custom.unknown.alphanetout\":98.3\n\"gd.storage.disk.read_io\":320.1\n\"gd.storage.disk.write_io\":290.4\n\"gd.environment.temperature.ambient\":40.1\n\"gd.custom.unknown.lambdapue\":62.1\n\"gd.custom.unknown.lambdawue\":58.2\n\"gd.custom.unknown.lambdacfp\":25.3\n\"gd.energy.power.total\":49.7\n\"gd.custom.unknown.lambdawush\":5.2\n}\n}\n\nPartner JSON exported: cloud_metrics\\data\\exports\\datacenter_A_unified.json",
+      "screenshot": "docs/demo/screenshots/ms16a/uploader_datacenter_a_json.png",
+      "elapsed_s": 10.99
+    },
+    {
+      "scenario_tag": "A_known_operational",
+      "exists": true,
+      "file": "datacenter_B.xml",
+      "accepted": true,
+      "ingest_clicked": true,
+      "success": true,
+      "error": null,
+      "page_text": "Stop\nDeploy\nIngestion Uploader (Any Format)\n\nUpload partner metric files (JSON/YAML/XML/CSV/TXT). We\u2019ll auto-extract metadata + numeric metrics, classify, persist, and export gd.* JSON.\n\nSelect metrics file\n\nDrag and drop file here\nLimit 200MB per file \u2022 JSON, YML, YAML, XML, CSV, TXT\nBrowse files\ndatacenter_B.xml\n510.0B\n\nIngest\n\nParser: ingest_any\n\nDatacenter: datacenter_B\n\nSite ID: tmpah-380-smx.default_node.default_vm\n\nCaptured at: 2026-08-13T13:13:34.901424\n\nDomain: unknown\n\nFound 10 metrics\n\nInflux time-series write skipped (sink unavailable): <urllib3.connection.HTTPConnection object at 0x0000020AA8AD20D0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it. Postgres samples, mapping, and partner JSON export still proceed.\n\nIngestion complete.\n\n{\n\"metrics_written\":9\n\"errors\":0\n\"unified_keys\":{\n\"gd.performance.efficiency.compute\":70.9\n\"gd.performance.memory.usage\":13.7\n\"gd.energy.power.total\":158.2\n\"gd.energy.renewable.solar\":48.9\n\"gd.network.traffic.incoming\":132.7\n\"gd.network.traffic.outgoing\":101.6\n\"gd.storage.disk.read_io\":310.2\n\"gd.storage.disk.write_io\":295.7\n\"gd.environment.temperature.ambient\":39.8\n}\n}",
+      "screenshot": "docs/demo/screenshots/ms16a/uploader_datacenter_b_xml.png",
+      "elapsed_s": 10.33
+    },
+    {
+      "scenario_tag": "A_known_operational",
+      "exists": true,
+      "file": "datacenter_C.csv",
+      "accepted": true,
+      "ingest_clicked": true,
+      "success": true,
+      "error": null,
+      "page_text": "Deploy\nIngestion Uploader (Any Format)\n\nUpload partner metric files (JSON/YAML/XML/CSV/TXT). We\u2019ll auto-extract metadata + numeric metrics, classify, persist, and export gd.* JSON.\n\nSelect metrics file\n\nDrag and drop file here\nLimit 200MB per file \u2022 JSON, YML, YAML, XML, CSV, TXT\nBrowse files\ndatacenter_C.csv\n61.0B\n\nIngest\n\nParser: ingest_any\n\nDatacenter: datacenter_C\n\nSite ID: tmpaemhmagp.default_node.default_vm\n\nCaptured at: 2026-08-13T13:13:48.834577\n\nDomain: unknown\n\nFound 4 metrics\n\nInflux time-series write skipped (sink unavailable): <urllib3.connection.HTTPConnection object at 0x0000020AA893F750>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it. Postgres samples, mapping, and partner JSON export still proceed.\n\nIngestion complete.\n\n{\n\"metrics_written\":4\n\"errors\":0\n\"unified_keys\":{\n\"gd.performance.cpu.utilization\":66.5\n\"gd.performance.memory.usage\":11.2\n\"gd.network.traffic.incoming\":115.3\n\"gd.network.traffic.outgoing\":98.1\n}\n}\n\nPartner JSON exported: cloud_metrics\\data\\exports\\datacenter_C_unified.json",
+      "screenshot": "docs/demo/screenshots/ms16a/uploader_datacenter_c_csv.png",
+      "elapsed_s": 13.74
+    },
+    {
+      "scenario_tag": "A_known_operational",
+      "exists": true,
+      "file": "datacenter_D.yaml",
+      "accepted": true,
+      "ingest_clicked": true,
+      "success": true,
+      "error": null,
+      "page_text": "Deploy\nIngestion Uploader (Any Format)\n\nUpload partner metric files (JSON/YAML/XML/CSV/TXT). We\u2019ll auto-extract metadata + numeric metrics, classify, persist, and export gd.* JSON.\n\nSelect metrics file\n\nDrag and drop file here\nLimit 200MB per file \u2022 JSON, YML, YAML, XML, CSV, TXT\nBrowse files\ndatacenter_D.yaml\n93.0B\n\nIngest\n\nParser: ingest_any\n\nDatacenter: datacenter_D\n\nSite ID: tmpd-71-pu-3-sr.default_node.default_vm\n\nCaptured at: 2026-08-13T13:14:00.173985\n\nDomain: unknown\n\nFound 4 metrics\n\nInflux time-series write skipped (sink unavailable): <urllib3.connection.HTTPConnection object at 0x0000020AA8AF69E0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it. Postgres samples, mapping, and partner JSON export still proceed.\n\nIngestion complete.\n\n{\n\"metrics_written\":4\n\"errors\":0\n\"unified_keys\":{\n\"gd.performance.cpu.utilization\":65.4\n\"gd.performance.memory.usage\":13.6\n\"gd.network.traffic.incoming\":129\n\"gd.network.traffic.outgoing\":101.4\n}\n}\n\nPartner JSON exported: cloud_metrics\\data\\exports\\datacenter_D_unified.json",
+      "screenshot": "docs/demo/screenshots/ms16a/uploader_datacenter_d_yaml.png",
+      "elapsed_s": 11.31
+    },
+    {
+      "scenario_tag": "A_known_operational_partial",
+      "exists": true,
+      "file": "datacenter_Z.json",
+      "accepted": true,
+      "ingest_clicked": true,
+      "success": true,
+      "error": null,
+      "page_text": "Deploy\nIngestion Uploader (Any Format)\n\nUpload partner metric files (JSON/YAML/XML/CSV/TXT). We\u2019ll auto-extract metadata + numeric metrics, classify, persist, and export gd.* JSON.\n\nSelect metrics file\n\nDrag and drop file here\nLimit 200MB per file \u2022 JSON, YML, YAML, XML, CSV, TXT\nBrowse files\ndatacenter_Z.json\n259.0B\n\nIngest\n\nParser: ingest_any\n\nDatacenter: unknown\n\nSite ID: node01\n\nCaptured at: 2026-08-13T13:14:10.563368\n\nDomain: unknown\n\nFound 4 metrics\n\nInflux time-series write skipped (sink unavailable): <urllib3.connection.HTTPConnection object at 0x0000020AA8AF5CD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it. Postgres samples, mapping, and partner JSON export still proceed.\n\nIngestion complete.\n\n{\n\"metrics_written\":4\n\"errors\":0\n\"unified_keys\":{\n\"gd.performance.cpu.utilization\":67.2\n\"gd.performance.memory.usage\":14.8\n\"gd.energy.consumption.total\":162.5\n\"gd.energy.renewable.solar\":62.1\n}\n}\n\nPartner JSON exported: cloud_metrics\\data\\exports\\unknown_unified.json",
+      "screenshot": "docs/demo/screenshots/ms16a/uploader_datacenter_z_json.png",
+      "elapsed_s": 10.07
+    },
+    {
+      "scenario_tag": "C_workflow+D_facility_kpi",
+      "exists": true,
+      "file": "payload_cloud.json",
+      "accepted": true,
+      "ingest_clicked": true,
+      "success": true,
+      "error": null,
+      "page_text": "Deploy\nIngestion Uploader (Any Format)\n\nUpload partner metric files (JSON/YAML/XML/CSV/TXT). We\u2019ll auto-extract metadata + numeric metrics, classify, persist, and export gd.* JSON.\n\nSelect metrics file\n\nDrag and drop file here\nLimit 200MB per file \u2022 JSON, YML, YAML, XML, CSV, TXT\nBrowse files\npayload_cloud.json\n0.8KB\n\nIngest\n\nParser: ingest_any\n\nDatacenter: eu-central-1-cloud-site\n\nSite ID: eu-central-1-cloud-site.exec-cloud-001\n\nCaptured at: 2025-09-18T11:00:00\n\nDomain: cloud\n\nFound 12 metrics\n\nInflux time-series write skipped (sink unavailable): <urllib3.connection.HTTPConnection object at 0x0000020ADEFFA210>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it. Postgres samples, mapping, and partner JSON export still proceed.\n\nIngestion complete.\n\n{\n\"metrics_written\":11\n\"errors\":0\n\"unified_keys\":{\n\"gd.custom.unknown.jobfinished\":1\n\"gd.energy.power.total\":310\n\"gd.custom.unknown.unknown\":1.38\n\"gd.energy.consumption.total\":1180.2\n\"gd.performance.work.total\":520\n\"gd.custom.unknown.execunitfinished\":1\n\"gd.performance.time.wallclock\":7200\n\"gd.performance.time.suspend\":0\n\"gd.performance.cpu.time\":7120\n\"gd.performance.cpu.normalization_factor\":1\n\"gd.performance.efficiency.compute\":0.94\n}\n}\n\nPartner JSON exported: cloud_metrics\\data\\exports\\eu-central-1-cloud-site_unified.json",
+      "screenshot": "docs/demo/screenshots/ms16a/uploader_payload_cloud_json.png",
+      "elapsed_s": 11.03
+    },
+    {
+      "scenario_tag": "C_workflow+D_facility_kpi",
+      "exists": true,
+      "file": "payload_grid.json",
+      "accepted": true,
+      "ingest_clicked": true,
+      "success": true,
+      "error": null,
+      "page_text": "Deploy\nIngestion Uploader (Any Format)\n\nUpload partner metric files (JSON/YAML/XML/CSV/TXT). We\u2019ll auto-extract metadata + numeric metrics, classify, persist, and export gd.* JSON.\n\nSelect metrics file\n\nDrag and drop file here\nLimit 200MB per file \u2022 JSON, YML, YAML, XML, CSV, TXT\nBrowse files\npayload_grid.json\n0.8KB\n\nIngest\n\nParser: ingest_any\n\nDatacenter: 1-grid-site\n\nSite ID: 1-grid-site.exec-grid-055\n\nCaptured at: 2025-09-18T16:30:00\n\nDomain: grid\n\nFound 15 metrics\n\nInflux time-series write skipped (sink unavailable): <urllib3.connection.HTTPConnection object at 0x0000020AA8AADBF0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it. Postgres samples, mapping, and partner JSON export still proceed.\n\nIngestion complete.\n\n{\n\"metrics_written\":14\n\"errors\":0\n\"unified_keys\":{\n\"gd.custom.unknown.jobfinished\":1\n\"gd.energy.power.total\":520\n\"gd.custom.unknown.unknown\":1.42\n\"gd.energy.consumption.total\":1800\n\"gd.performance.work.total\":950\n\"gd.custom.unknown.execunitfinished\":1\n\"gd.performance.time.wallclock\":12600\n\"gd.performance.cpu.normalization_factor\":10.5\n\"gd.performance.cpu.count\":32\n\"gd.performance.cpu.time_normalized\":11500\n\"gd.performance.efficiency.compute\":0.88\n\"gd.performance.cpu.tdp\":95\n\"gd.performance.cpu.time\":12000\n\"gd.performance.cpu.time_scaled\":126000\n}\n}\n\nPartner JSON exported: cloud_metrics\\data\\exports\\1-grid-site_unified.json",
+      "screenshot": "docs/demo/screenshots/ms16a/uploader_payload_grid_json.png",
+      "elapsed_s": 12.07
+    },
+    {
+      "scenario_tag": "C_workflow+network",
+      "exists": true,
+      "file": "payload_network.json",
+      "accepted": true,
+      "ingest_clicked": true,
+      "success": true,
+      "error": null,
+      "page_text": "Stop\nDeploy\nIngestion Uploader (Any Format)\n\nUpload partner metric files (JSON/YAML/XML/CSV/TXT). We\u2019ll auto-extract metadata + numeric metrics, classify, persist, and export gd.* JSON.\n\nSelect metrics file\n\nDrag and drop file here\nLimit 200MB per file \u2022 JSON, YML, YAML, XML, CSV, TXT\nBrowse files\npayload_network.json\n0.7KB\n\nIngest\n\nParser: ingest_any\n\nDatacenter: backbone-milan-link\n\nSite ID: backbone-milan-link.exec-net-101\n\nCaptured at: 2025-09-18T12:30:00\n\nDomain: network\n\nFound 8 metrics\n\nInflux time-series write skipped (sink unavailable): <urllib3.connection.HTTPConnection object at 0x0000020AA8AADD00>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it. Postgres samples, mapping, and partner JSON export still proceed.\n\nIngestion complete.\n\n{\n\"metrics_written\":7\n\"errors\":0\n\"unified_keys\":{\n\"gd.custom.unknown.jobfinished\":1\n\"gd.energy.power.total\":42\n\"gd.custom.unknown.unknown\":1.5\n\"gd.energy.consumption.total\":85.4\n\"gd.performance.work.total\":0\n\"gd.custom.unknown.execunitfinished\":1\n\"gd.network.traffic.total_bytes\":9876543210\n}\n}\n\nPartner JSON exported: cloud_metrics\\data\\exports\\backbone-milan-link_unified.json",
+      "screenshot": "docs/demo/screenshots/ms16a/uploader_payload_network_json.png",
+      "elapsed_s": 10.36
+    },
+    {
+      "scenario_tag": "C_workflow",
+      "exists": true,
+      "file": "ifca.json",
+      "accepted": true,
+      "ingest_clicked": true,
+      "success": true,
+      "error": null,
+      "page_text": "Stop\nDeploy\nIngestion Uploader (Any Format)\n\nUpload partner metric files (JSON/YAML/XML/CSV/TXT). We\u2019ll auto-extract metadata + numeric metrics, classify, persist, and export gd.* JSON.\n\nSelect metrics file\n\nDrag and drop file here\nLimit 200MB per file \u2022 JSON, YML, YAML, XML, CSV, TXT\nBrowse files\nifca.json\n471.0B\n\nIngest\n\nGeneric loader failed (Expecting property name enclosed in double quotes: line 2 column 3 (char 4)). Falling back to legacy parser.\n\nParsed file (legacy), now mapping metrics\u2026\n\nParser: legacy_core\n\nDatacenter: ifca\n\nSite ID: ifca.default_node.default_vm\n\nCaptured at: 2026-08-13T13:14:55.206624\n\nDomain: unknown\n\nFound 8 metrics\n\nInflux time-series write skipped (sink unavailable): <urllib3.connection.HTTPConnection object at 0x0000020AA889B790>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it. Postgres samples, mapping, and partner JSON export still proceed.\n\nIngestion complete.\n\n{\n\"metrics_written\":8\n\"errors\":0\n\"unified_keys\":{\n\"gd.energy.consumption.total\":45.45\n\"gd.performance.work.total\":145.46\n\"gd.custom.unknown.doc0execunitfinished\":0\n\"gd.performance.time.wallclock\":20562\n\"gd.performance.time.suspend\":0\n\"gd.performance.cpu.utilization\":6611\n\"gd.performance.cpu.normalization_factor\":1.5\n\"gd.performance.efficiency.compute\":0.31\n}\n}\n\nPartner JSON exported: cloud_metrics\\data\\exports\\ifca_unified.json",
+      "screenshot": "docs/demo/screenshots/ms16a/uploader_ifca_json.png",
+      "elapsed_s": 11.03
+    },
+    {
+      "scenario_tag": "A_known_operational_unstructured",
+      "exists": true,
+      "file": "unstructured_dc_1.txt",
+      "accepted": true,
+      "ingest_clicked": true,
+      "success": true,
+      "error": null,
+      "page_text": "Stop\nDeploy\nIngestion Uploader (Any Format)\n\nUpload partner metric files (JSON/YAML/XML/CSV/TXT). We\u2019ll auto-extract metadata + numeric metrics, classify, persist, and export gd.* JSON.\n\nSelect metrics file\n\nDrag and drop file here\nLimit 200MB per file \u2022 JSON, YML, YAML, XML, CSV, TXT\nBrowse files\nunstructured_dc_1.txt\n241.0B\n\nIngest\n\nGeneric loader found no numeric metrics. Falling back to legacy parser.\n\nParsed file (legacy), now mapping metrics\u2026\n\nParser: legacy_core_empty_fallback\n\nDatacenter: unstructured_dc_1\n\nSite ID: tmp-2-d-5-ytn-5.default_node.default_vm\n\nCaptured at: 2026-08-13T13:15:05.838059\n\nDomain: unknown\n\nFound 6 metrics\n\nInflux time-series write skipped (sink unavailable): <urllib3.connection.HTTPConnection object at 0x0000020AA889B790>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it. Postgres samples, mapping, and partner JSON export still proceed.\n\nIngestion complete.\n\n{\n\"metrics_written\":6\n\"errors\":0\n\"unified_keys\":{\n\"gd.performance.cpu.time\":87.3\n\"gd.performance.memory.usage\":10.5\n\"gd.energy.power.total\":302.5\n\"gd.network.traffic.incoming\":115.3\n\"gd.network.traffic.outgoing\":98.1\n\"gd.environment.temperature.interior\":31.2\n}\n}",
+      "screenshot": "docs/demo/screenshots/ms16a/uploader_unstructured_dc_1_txt.png",
+      "elapsed_s": 10.51
+    },
+    {
+      "scenario_tag": "A_known_operational_unstructured",
+      "exists": true,
+      "file": "unstructured_dc_2.txt",
+      "accepted": true,
+      "ingest_clicked": true,
+      "success": true,
+      "error": null,
+      "page_text": "Deploy\nIngestion Uploader (Any Format)\n\nUpload partner metric files (JSON/YAML/XML/CSV/TXT). We\u2019ll auto-extract metadata + numeric metrics, classify, persist, and export gd.* JSON.\n\nSelect metrics file\n\nDrag and drop file here\nLimit 200MB per file \u2022 JSON, YML, YAML, XML, CSV, TXT\nBrowse files\nunstructured_dc_2.txt\n127.0B\n\nIngest\n\nGeneric loader found no numeric metrics. Falling back to legacy parser.\n\nParsed file (legacy), now mapping metrics\u2026\n\nParser: legacy_core_empty_fallback\n\nDatacenter: unstructured_dc_2\n\nSite ID: tmph-2-lc-8-mh-8.default_node.default_vm\n\nCaptured at: 2026-08-13T13:15:16.368576\n\nDomain: unknown\n\nFound 2 metrics\n\nInflux time-series write skipped (sink unavailable): <urllib3.connection.HTTPConnection object at 0x0000020AA889B790>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it. Postgres samples, mapping, and partner JSON export still proceed.\n\nIngestion complete.\n\n{\n\"metrics_written\":2\n\"errors\":0\n\"unified_keys\":{\n\"gd.performance.cpu.time\":88.2\n\"gd.energy.power.total\":304\n}\n}\n\nPartner JSON exported: cloud_metrics\\data\\exports\\unstructured_dc_2_unified.json",
+      "screenshot": "docs/demo/screenshots/ms16a/uploader_unstructured_dc_2_txt.png",
+      "elapsed_s": 10.13
+    }
+  ],
+  "admin": [
+    {
+      "section": "landing",
+      "text": "Section\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nSearch raw_key contains\n\nStop\nDeploy\nCIM Admin Portal\nUnknown metrics review (legacy)\n\nShowing 8 unknown raw keys since 2026-08-06 13:15 UTC\n\nkeyboard_arrow_right\n\ndoc0.ExecUnitFinished \u2022 4 hits \u2022 last seen 2026-08-13 13:14:55 \u2022 example dc: ifca\n\nkeyboard_arrow_right\n\nlambda.wush \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A",
+      "screenshot": "docs/demo/screenshots/ms16a/90_admin_landing.png"
+    },
+    {
+      "section": "Unknown metrics (legacy)",
+      "text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nUnknown metrics review (legacy)\n\nShowing 8 unknown raw keys since 2026-08-06 13:15 UTC\n\nkeyboard_arrow_right\n\ndoc0.ExecUnitFinished \u2022 4 hits \u2022 last seen 2026-08-13 13:14:55 \u2022 example dc: ifca\n\nkeyboard_arrow_right\n\nlambda.wush \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nkeyboard_arrow_right\n\nlambda.cfp \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nkeyboard_arrow_right\n\nlambda.wue \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nkeyboard_arrow_right\n\nlambda.pue \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nkeyboard_arrow_right\n\nalpha.net.out \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nkeyboard_arrow_right\n\nalpha.net.in \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nkeyboard_arrow_right\n\nalpha.energy.renewable \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nMaintenance\n\nRebuild mapping JSON file\n\nClear classifier cache",
+      "screenshot": "docs/demo/screenshots/ms16a/91_admin_unknown_metrics_legacy.png",
+      "error": null
+    },
+    {
+      "section": "Registry browser",
+      "text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nRegistry browser\n\nRead-only view of cim_* catalogues. Mutations go through Candidate review.\n\nRegistry\n\nmetric\n\nStatus filter\n\nReview status filter\n\nSearch\n\n20 / 20 entries\n\nDetails for id\n\n1\n{\n\"id\":1\n\"namespace\":\"cim:energy.power.total\"\n\"label\":\"Total power\"\n\"description\":\"Aggregate instantaneous or average power draw.\"\n\"domain\":\"energy\"\n\"category\":\"energy\"\n\"subcategory\":\"power\"\n\"quantity_kind_id\":1\n\"canonical_unit_id\":1\n\"metric_type\":\"observed\"\n\"tags\":[\n0:\"energy\"\n1:\"energy\"\n2:\"power\"\n]\n\"sources\":[]\n\"status\":\"approved\"\n\"review_status\":\"approved\"\n\"confidence_score\":1\n\"version\":1\n\"created_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"updated_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"created_by\":\"milestone3_seed\"\n\"notes\":\"Facility- or scope-level total power.\"\n\"quantity_kind\":\"Power\"\n\"canonical_unit\":\"W\"\n}",
+      "screenshot": "docs/demo/screenshots/ms16a/91_admin_registry_browser.png",
+      "error": null
+    },
+    {
+      "section": "Candidate review",
+      "text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nCandidate review queue\n\nAll actions call AdminReviewService. The UI does not write cim_* rows directly.\n\nEntity type\n\n(all)\n\nNo candidate / under_review entries.",
+      "screenshot": "docs/demo/screenshots/ms16a/91_admin_candidate_review.png",
+      "error": null
+    },
+    {
+      "section": "Evidence readiness",
+      "text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nEvidence readiness\n\nDeclared ISO/PROV evidence for reportable KPIs. Fulfillment artifacts are not stored \u2014 mandatory items appear as missing fulfillment.\n\nDetails\n\ncim:energy.efficiency.pue\n\nMandatory / required\n\n[\n0:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"calculation\"\n\"requirement_level\":\"mandatory\"\n\"boundary\":\"facility\"\n\"reporting_period\":\"monthly_or_annual\"\n\"description\":\"PUE requires total facility energy, IT equipment energy, aggregation period, calculation boundary, and metering source.\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"measurement\"\n\"requirement_level\":\"mandatory\"\n\"boundary\":\"facility_and_it\"\n\"reporting_period\":\"continuous_or_interval\"\n\"description\":\"Metered facility and IT energy inputs for PUE.\"\n}\n]\n\nMissing fulfillment\n\n[\n0:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"calculation\"\n\"description\":\"PUE requires total facility energy, IT equipment energy, aggregation period, calculation boundary, and metering source.\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"measurement\"\n\"description\":\"Metered facility and IT energy inputs for PUE.\"\n}\n]\n\nOptional / recommended\n\n[]\n\nStandards mappings\n\n[\n0:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"relation_type\":\"exactMatch\"\n}\n1:{\n\"standard_code\":\"EN-50600\"\n\"relation_type\":\"exactMatch\"\n}\n]\n\nLifecycle stages\n\n[\n0:\"operation\"\n1:\"reporting\"\n2:\"continuous_improvement\"\n]",
+      "screenshot": "docs/demo/screenshots/ms16a/91_admin_evidence_readiness.png",
+      "error": null
+    },
+    {
+      "section": "KPI calculation",
+      "text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nKPI calculation (PUE / WUE / CUE)\n\nCalls KpiCalculationService. Blocked / missing_input is shown as-is \u2014 no fake values.\n\nKPI\n\npue\n\nAggregation period\n\nBoundary\n\nIT equipment energy\n\nIT energy unit\n\nAllow candidate inputs (review override)\n\nTotal facility energy\n\nFacility energy unit\n\nCalculate",
+      "screenshot": "docs/demo/screenshots/ms16a/91_admin_kpi_calculation.png",
+      "error": null
+    },
+    {
+      "section": "Provenance timeline",
+      "text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nProvenance timeline\n\nOrchestration, review, and KPI calculation records from cim_provenance_records. Review actions use entity_type cim_<kind> (e.g. cim_mapping).\n\nEntity type (optional)\n\nEntity id (optional)\n\nRecord detail\n\n1\n{\n\"id\":1\n\"entity_type\":\"registry_seed\"\n\"entity_id\":NULL\n\"activity\":\"bootstrap\"\n\"agent\":\"milestone3_seed\"\n\"method\":\"seed_cim_registries\"\n\"started_at\":NULL\n\"inputs\":{\n\"milestone\":3\n}\n\"outputs\":{\n\"relation_types\":[\n0:\"exactMatch\"\n1:\"closeMatch\"\n2:\"broadMatch\"\n3:\"narrowMatch\"\n4:\"inputToKPI\"\n5:\"derivedFrom\"\n6:\"contextualMatch\"\n7:\"extensionMetric\"\n8:\"noMatch\"\n9:\"underReview\"\n]\n}\n\"notes\":\"Milestone 3 controlled registry seed applied.\"\n}",
+      "screenshot": "docs/demo/screenshots/ms16a/91_admin_provenance_timeline.png",
+      "error": null
+    }
+  ],
+  "console": {
+    "errors": [
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      }
+    ],
+    "warnings": [],
+    "error_count": 1,
+    "warning_count": 0
+  },
+  "ended_at": "2026-08-13T13:15:34.764417+00:00"
+}

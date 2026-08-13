@@ -47,6 +47,53 @@ DEMO_RAW_TO_CIM: Dict[str, str] = {
     "energy_efficiency_pue": "cim:energy.efficiency.pue",
 }
 
+# Partner ``sample_data/`` raw keys → the same seeded CIM catalogue.
+# Does not modify sample files. Unknown keys (e.g. ``lambda.wush``) are omitted
+# so the orchestrator creates extension candidates.
+WORKLOAD_RAW_TO_CIM: Dict[str, str] = {
+    "cpu": "cim:compute.cpu.utilisation",
+    "cpu_usage": "cim:compute.cpu.utilisation",
+    "alpha.cpu": "cim:compute.cpu.utilisation",
+    "beta.compute.cpu": "cim:compute.cpu.utilisation",
+    "system.cpu": "cim:compute.cpu.utilisation",
+    "mem": "cim:compute.memory.usage",
+    "memory_usage": "cim:compute.memory.usage",
+    "alpha.mem": "cim:compute.memory.usage",
+    "beta.hardware.memory.used": "cim:compute.memory.usage",
+    "system.memory.usage": "cim:compute.memory.usage",
+    "alpha.energy.kwh": "cim:energy.consumption.total",
+    "energy_wh": "cim:energy.consumption.total",
+    "EnergyWh": "cim:energy.consumption.total",
+    "doc0.EnergyWh": "cim:energy.consumption.total",
+    "metadata.energy.kwh": "cim:energy.consumption.total",
+    "power": "cim:energy.power.total",
+    "lambda.power": "cim:energy.power.total",
+    "beta.elec.power": "cim:energy.power.total",
+    "alpha.net.in": "cim:network.traffic.ingress",
+    "net_in": "cim:network.traffic.ingress",
+    "network.in": "cim:network.traffic.ingress",
+    "beta.network.incoming": "cim:network.traffic.ingress",
+    "system.network.in": "cim:network.traffic.ingress",
+    "alpha.net.out": "cim:network.traffic.egress",
+    "net_out": "cim:network.traffic.egress",
+    "network.out": "cim:network.traffic.egress",
+    "beta.network.outgoing": "cim:network.traffic.egress",
+    "system.network.out": "cim:network.traffic.egress",
+    "pue": "cim:energy.efficiency.pue",
+    "PUE": "cim:energy.efficiency.pue",
+    "lambda.pue": "cim:energy.efficiency.pue",
+    "wue": "cim:energy.efficiency.wue",
+    "WUE": "cim:energy.efficiency.wue",
+    "lambda.wue": "cim:energy.efficiency.wue",
+    "cfp": "cim:carbon.emission.operational",
+    "CFP_g": "cim:carbon.emission.operational",
+    "lambda.cfp": "cim:carbon.emission.operational",
+    "CI_g": "cim:carbon.intensity.location_based",
+    "wallclocktime_s": "cim:workflow.execution.duration",
+    "WallClockTime_s": "cim:workflow.execution.duration",
+    "doc0.WallClockTime_s": "cim:workflow.execution.duration",
+}
+
 SAMPLE_FILES: Dict[str, str] = {
     "A": "known_metrics_sample.json",
     "B": "wrong_units_sample.json",
@@ -72,10 +119,16 @@ def load_unstructured_sample() -> str:
     return fixture_path(UNSTRUCTURED_SAMPLE).read_text(encoding="utf-8")
 
 
-def ensure_demo_mappings(session: Session) -> int:
-    """Idempotently create approved mappings for demo raw keys. Returns created count."""
+def _ensure_raw_to_cim_mappings(
+    session: Session,
+    mapping: Dict[str, str],
+    *,
+    origin: str,
+    created_by: str,
+) -> int:
+    """Idempotently create approved Mapping Registry rows. Returns created count."""
     created = 0
-    for raw_key, namespace in DEMO_RAW_TO_CIM.items():
+    for raw_key, namespace in mapping.items():
         metric = (
             session.query(CimMetricDefinition).filter_by(namespace=namespace).one_or_none()
         )
@@ -94,18 +147,40 @@ def ensure_demo_mappings(session: Session) -> int:
                 source_id=None,
                 metric_id=metric.id,
                 relation_type="exactMatch",
-                origin="demo",
+                origin=origin,
                 status="approved",
                 review_status="approved",
                 confidence_score=1.0,
                 version=1,
-                created_by="milestone10_cim_demo",
-                notes=f"Demo mapping {raw_key} → {namespace}",
+                created_by=created_by,
+                notes=f"{origin} mapping {raw_key} → {namespace}",
             )
         )
         created += 1
     if created:
         session.commit()
+    return created
+
+
+def ensure_demo_mappings(session: Session) -> int:
+    """Idempotently create approved mappings for demo raw keys. Returns created count."""
+    return _ensure_raw_to_cim_mappings(
+        session,
+        DEMO_RAW_TO_CIM,
+        origin="demo",
+        created_by="milestone10_cim_demo",
+    )
+
+
+def ensure_workload_mappings(session: Session) -> int:
+    """Demo mappings plus partner ``sample_data/`` aliases into the same CIM catalogue."""
+    created = ensure_demo_mappings(session)
+    created += _ensure_raw_to_cim_mappings(
+        session,
+        WORKLOAD_RAW_TO_CIM,
+        origin="workload_sample",
+        created_by="workload_cim_aliases",
+    )
     return created
 
 

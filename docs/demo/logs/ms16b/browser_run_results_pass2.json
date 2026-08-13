@@ -1,0 +1,127 @@
+{
+  "started_at": "2026-08-13T16:40:08.851078+00:00",
+  "registry_browser": [
+    {
+      "registry": "metric",
+      "ok": true,
+      "snip": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nRegistry browser\n\nRead-only view of cim_* catalogues. Mutations go through Candidate review.\n\nRegistry\n\nmetric\n\nStatus filter\n\nReview status filter\n\nSearch\n\n35 / 35 entries\n\nDetails for id\n\n1\n{\n\"id\":1\n\"namespace\":\"cim:energy.power.total\"\n\"label\":\"Total power\"\n\"description\":\"Aggregate instantaneous or average power draw.\"\n\"domain\":\"energy\"\n\"category\":\"energy\"\n\"subcategory\":\"power\"\n\"quantity_kind_id\":1\n\"canonical_unit_id\":1\n\"metric_type\":\"observed\"\n\"tags\":[\n0:\"energy\"\n1:\"energy\"\n2:\"power\"\n]\n\"sources\":[]\n\"status\":\"approved\"\n\"review_status\":\"approved\"\n\"confidence_score\":1\n\"version\":1\n\"created_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"updated_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"created_by\":\"milestone3_seed\"\n\"notes\":\"Facility- or scope-level total power.\"\n\"quantit",
+      "screenshot": "docs/demo/screenshots/ms16b/32_registry_metric.png",
+      "search_pue": false,
+      "filter_screenshot": "docs/demo/screenshots/ms16b/33_registry_metric_search_pue.png",
+      "status_filter_screenshot": "docs/demo/screenshots/ms16b/34_registry_metric_status_approved.png"
+    },
+    {
+      "registry": "mapping",
+      "ok": true,
+      "snip": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nRegistry browser\n\nRead-only view of cim_* catalogues. Mutations go through Candidate review.\n\nRegistry\n\nmetric\n\nStatus filter\n\nReview status filter\n\nSearch\n\n35 / 35 entries\n\nDetails for id\n\n1\n{\n\"id\":1\n\"namespace\":\"cim:energy.power.total\"\n\"label\":\"Total power\"\n\"description\":\"Aggregate instantaneous or average power draw.\"\n\"domain\":\"energy\"\n\"category\":\"energy\"\n\"subcategory\":\"power\"\n\"quantity_kind_id\":1\n\"canonical_unit_id\":1\n\"metric_type\":\"observed\"\n\"tags\":[\n0:\"energy\"\n1:\"energy\"\n2:\"power\"\n]\n\"sources\":[]\n\"status\":\"approved\"\n\"review_status\":\"approved\"\n\"confidence_score\":1\n\"version\":1\n\"created_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"updated_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"created_by\":\"milestone3_seed\"\n\"notes\":\"Facility- or scope-level total power.\"\n\"quantit",
+      "screenshot": "docs/demo/screenshots/ms16b/32_registry_mapping.png"
+    },
+    {
+      "registry": "unit",
+      "ok": true,
+      "snip": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\neu-central-1-cloud-site\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nRegistry browser\n\nRead-only view of cim_* catalogues. Mutations go through Candidate review.\n\nRegistry\n\nmetric\n\nStatus filter\n\nReview status filter\n\nSearch\n\n35 / 35 entries\n\nDetails for id\n\n1\n{\n\"id\":1\n\"namespace\":\"cim:energy.power.total\"\n\"label\":\"Total power\"\n\"description\":\"Aggregate instantaneous or average power draw.\"\n\"domain\":\"energy\"\n\"category\":\"energy\"\n\"subcategory\":\"power\"\n\"quantity_kind_id\":1\n\"canonical_unit_id\":1\n\"metric_type\":\"observed\"\n\"tags\":[\n0:\"energy\"\n1:\"energy\"\n2:\"power\"\n]\n\"sources\":[]\n\"status\":\"approved\"\n\"review_status\":\"approved\"\n\"confidence_score\":1\n\"version\":1\n\"created_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"updated_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"created_by\":\"milestone3_seed\"\n\"notes\":\"Facility- or scope-lev",
+      "screenshot": "docs/demo/screenshots/ms16b/32_registry_unit.png"
+    },
+    {
+      "registry": "source",
+      "ok": true,
+      "snip": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nRegistry browser\n\nRead-only view of cim_* catalogues. Mutations go through Candidate review.\n\nRegistry\n\nmetric\n\nStatus filter\n\nReview status filter\n\nSearch\n\n35 / 35 entries\n\nDetails for id\n\n1\n{\n\"id\":1\n\"namespace\":\"cim:energy.power.total\"\n\"label\":\"Total power\"\n\"description\":\"Aggregate instantaneous or average power draw.\"\n\"domain\":\"energy\"\n\"category\":\"energy\"\n\"subcategory\":\"power\"\n\"quantity_kind_id\":1\n\"canonical_unit_id\":1\n\"metric_type\":\"observed\"\n\"tags\":[\n0:\"energy\"\n1:\"energy\"\n2:\"power\"\n]\n\"sources\":[]\n\"status\":\"approved\"\n\"review_status\":\"approved\"\n\"confidence_score\":1\n\"version\":1\n\"created_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"updated_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"created_by\":\"milestone3_seed\"\n\"notes\":\"Facility- or scope-level total power.\"\n\"quantit",
+      "screenshot": "docs/demo/screenshots/ms16b/32_registry_source.png"
+    },
+    {
+      "registry": "asset",
+      "ok": true,
+      "snip": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nRegistry browser\n\nRead-only view of cim_* catalogues. Mutations go through Candidate review.\n\nRegistry\n\nmetric\n\nStatus filter\n\nReview status filter\n\nSearch\n\n35 / 35 entries\n\nDetails for id\n\n1\n{\n\"id\":1\n\"namespace\":\"cim:energy.power.total\"\n\"label\":\"Total power\"\n\"description\":\"Aggregate instantaneous or average power draw.\"\n\"domain\":\"energy\"\n\"category\":\"energy\"\n\"subcategory\":\"power\"\n\"quantity_kind_id\":1\n\"canonical_unit_id\":1\n\"metric_type\":\"observed\"\n\"tags\":[\n0:\"energy\"\n1:\"energy\"\n2:\"power\"\n]\n\"sources\":[]\n\"status\":\"approved\"\n\"review_status\":\"approved\"\n\"confidence_score\":1\n\"version\":1\n\"created_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"updated_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"created_by\":\"milestone3_seed\"\n\"notes\":\"Facility- or scope-level total power.\"\n\"quantit",
+      "screenshot": "docs/demo/screenshots/ms16b/32_registry_asset.png"
+    },
+    {
+      "registry": "standards",
+      "ok": true,
+      "snip": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nRegistry browser\n\nRead-only view of cim_* catalogues. Mutations go through Candidate review.\n\nRegistry\n\nmetric\n\nStatus filter\n\nReview status filter\n\nSearch\n\n35 / 35 entries\n\nDetails for id\n\n1\n{\n\"id\":1\n\"namespace\":\"cim:energy.power.total\"\n\"label\":\"Total power\"\n\"description\":\"Aggregate instantaneous or average power draw.\"\n\"domain\":\"energy\"\n\"category\":\"energy\"\n\"subcategory\":\"power\"\n\"quantity_kind_id\":1\n\"canonical_unit_id\":1\n\"metric_type\":\"observed\"\n\"tags\":[\n0:\"energy\"\n1:\"energy\"\n2:\"power\"\n]\n\"sources\":[]\n\"status\":\"approved\"\n\"review_status\":\"approved\"\n\"confidence_score\":1\n\"version\":1\n\"created_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"updated_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"created_by\":\"milestone3_seed\"\n\"notes\":\"Facility- or scope-level total power.\"\n\"quantit",
+      "screenshot": "docs/demo/screenshots/ms16b/32_registry_standards.png"
+    },
+    {
+      "registry": "lifecycle",
+      "ok": true,
+      "snip": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nRegistry browser\n\nRead-only view of cim_* catalogues. Mutations go through Candidate review.\n\nRegistry\n\nmetric\n\nStatus filter\n\nReview status filter\n\nSearch\n\n35 / 35 entries\n\nDetails for id\n\n1\n{\n\"id\":1\n\"namespace\":\"cim:energy.power.total\"\n\"label\":\"Total power\"\n\"description\":\"Aggregate instantaneous or average power draw.\"\n\"domain\":\"energy\"\n\"category\":\"energy\"\n\"subcategory\":\"power\"\n\"quantity_kind_id\":1\n\"canonical_unit_id\":1\n\"metric_type\":\"observed\"\n\"tags\":[\n0:\"energy\"\n1:\"energy\"\n2:\"power\"\n]\n\"sources\":[]\n\"status\":\"approved\"\n\"review_status\":\"approved\"\n\"confidence_score\":1\n\"version\":1\n\"created_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"updated_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"created_by\":\"milestone3_seed\"\n\"notes\":\"Facility- or scope-level total power.\"\n\"quantit",
+      "screenshot": "docs/demo/screenshots/ms16b/32_registry_lifecycle.png"
+    },
+    {
+      "registry": "rule",
+      "ok": true,
+      "snip": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nRegistry browser\n\nRead-only view of cim_* catalogues. Mutations go through Candidate review.\n\nRegistry\n\nmetric\n\nStatus filter\n\nReview status filter\n\nSearch\n\n35 / 35 entries\n\nDetails for id\n\n1\n{\n\"id\":1\n\"namespace\":\"cim:energy.power.total\"\n\"label\":\"Total power\"\n\"description\":\"Aggregate instantaneous or average power draw.\"\n\"domain\":\"energy\"\n\"category\":\"energy\"\n\"subcategory\":\"power\"\n\"quantity_kind_id\":1\n\"canonical_unit_id\":1\n\"metric_type\":\"observed\"\n\"tags\":[\n0:\"energy\"\n1:\"energy\"\n2:\"power\"\n]\n\"sources\":[]\n\"status\":\"approved\"\n\"review_status\":\"approved\"\n\"confidence_score\":1\n\"version\":1\n\"created_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"updated_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"created_by\":\"milestone3_seed\"\n\"notes\":\"Facility- or scope-level total power.\"\n\"quantit",
+      "screenshot": "docs/demo/screenshots/ms16b/32_registry_rule.png"
+    },
+    {
+      "registry": "evidence",
+      "ok": true,
+      "snip": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nRegistry browser\n\nRead-only view of cim_* catalogues. Mutations go through Candidate review.\n\nRegistry\n\nmetric\n\nStatus filter\n\nReview status filter\n\nSearch\n\n35 / 35 entries\n\nDetails for id\n\n1\n{\n\"id\":1\n\"namespace\":\"cim:energy.power.total\"\n\"label\":\"Total power\"\n\"description\":\"Aggregate instantaneous or average power draw.\"\n\"domain\":\"energy\"\n\"category\":\"energy\"\n\"subcategory\":\"power\"\n\"quantity_kind_id\":1\n\"canonical_unit_id\":1\n\"metric_type\":\"observed\"\n\"tags\":[\n0:\"energy\"\n1:\"energy\"\n2:\"power\"\n]\n\"sources\":[]\n\"status\":\"approved\"\n\"review_status\":\"approved\"\n\"confidence_score\":1\n\"version\":1\n\"created_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"updated_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"created_by\":\"milestone3_seed\"\n\"notes\":\"Facility- or scope-level total power.\"\n\"quantit",
+      "screenshot": "docs/demo/screenshots/ms16b/32_registry_evidence.png"
+    },
+    {
+      "registry": "provenance",
+      "ok": true,
+      "snip": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nRegistry browser\n\nRead-only view of cim_* catalogues. Mutations go through Candidate review.\n\nRegistry\n\nmetric\n\nStatus filter\n\nReview status filter\n\nSearch\n\n35 / 35 entries\n\nDetails for id\n\n1\n{\n\"id\":1\n\"namespace\":\"cim:energy.power.total\"\n\"label\":\"Total power\"\n\"description\":\"Aggregate instantaneous or average power draw.\"\n\"domain\":\"energy\"\n\"category\":\"energy\"\n\"subcategory\":\"power\"\n\"quantity_kind_id\":1\n\"canonical_unit_id\":1\n\"metric_type\":\"observed\"\n\"tags\":[\n0:\"energy\"\n1:\"energy\"\n2:\"power\"\n]\n\"sources\":[]\n\"status\":\"approved\"\n\"review_status\":\"approved\"\n\"confidence_score\":1\n\"version\":1\n\"created_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"updated_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"created_by\":\"milestone3_seed\"\n\"notes\":\"Facility- or scope-level total power.\"\n\"quantit",
+      "screenshot": "docs/demo/screenshots/ms16b/32_registry_provenance.png"
+    },
+    {
+      "registry": "extension",
+      "ok": true,
+      "snip": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nRegistry browser\n\nRead-only view of cim_* catalogues. Mutations go through Candidate review.\n\nRegistry\n\nmetric\n\nStatus filter\n\nReview status filter\n\nSearch\n\n35 / 35 entries\n\nDetails for id\n\n1\n{\n\"id\":1\n\"namespace\":\"cim:energy.power.total\"\n\"label\":\"Total power\"\n\"description\":\"Aggregate instantaneous or average power draw.\"\n\"domain\":\"energy\"\n\"category\":\"energy\"\n\"subcategory\":\"power\"\n\"quantity_kind_id\":1\n\"canonical_unit_id\":1\n\"metric_type\":\"observed\"\n\"tags\":[\n0:\"energy\"\n1:\"energy\"\n2:\"power\"\n]\n\"sources\":[]\n\"status\":\"approved\"\n\"review_status\":\"approved\"\n\"confidence_score\":1\n\"version\":1\n\"created_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"updated_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"created_by\":\"milestone3_seed\"\n\"notes\":\"Facility- or scope-level total power.\"\n\"quantit",
+      "screenshot": "docs/demo/screenshots/ms16b/32_registry_extension.png"
+    }
+  ],
+  "candidate_review": {
+    "queue_shot": "docs/demo/screenshots/ms16b/46_candidate_queue_pass2.png",
+    "approve": {
+      "ok": false,
+      "error": "approve_power not selectable"
+    },
+    "reject": {
+      "ok": false,
+      "error": "reject_wue not selectable"
+    },
+    "merge": {
+      "ok": false,
+      "error": "merge_cpu not selectable"
+    },
+    "promote": {
+      "ok": false,
+      "note": "approved mapping may have left queue; see service companion result"
+    }
+  },
+  "extension_review": {
+    "queue_shot": "docs/demo/screenshots/ms16b/53_extension_queue_pass2.png",
+    "incomplete_block": {
+      "ok": false,
+      "error": "incomplete not found"
+    },
+    "complete_approve": {
+      "ok": true,
+      "note": "UI only posts justification; unit/qk gates may still block \u2014 documented",
+      "text": "Section\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\neu-central-1-cloud-site\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nCandidate review queue\n\nAll actions call AdminReviewService. The UI does not write cim_* rows directly.\n\nEntity type\n\n(all)\n\nSelect entry\n\nmetric:34 cim:extension.ms16b_demo_complete_extension\n{\n\"entity_type\":\"metric\"\n\"entity_id\":34\n\"status\":\"candidate\"\n\"review_status\":\"under_review\"\n\"label\":\"ms16b.demo.complete_extension\"\n\"namespace_or_key\":\"cim:extension.ms16b_demo_complete_extension\"\n\"origin\":NULL\n\"relation_type\":NULL\n\"justification\":NULL\n\"notes\":\"raw_metric_name=ms16b.demo.complete_extension\"\n\"created_by\":\"registry_orchestrator\"\n\"confidence_score\":NULL\n\"details\":{\n\"domain\":\"extension\"\n\"metric_type\":\"extension\"\n\"quantity_kind_id\":NULL\n\"canonical_unit_id\":NULL\n}\n}\n\nReview notes\n\nEdit justification (optional, applied with Edit/Approve)\n\nMerge target CIM namespace\n\nAllow exactMatch on standards mapping approve\n\nMark Under Review\n\nEdit\n\nDeprecate\n\nApprove\n\nMerge\n\nRequest Changes\n\nReject\n\nPromote To Seed\n\nReopen\n\nmetric approval requires quantity_kind_id\n\n{\n\"ok\":false\n\"action\":\"approve\"\n\"entity_type\":\"metric\"\n\"entity_id\":34\n\"previous_status\":\"candidate\"\n\"previous_review_status\":\"under_review\"\n\"new_status\":NULL\n\"new_review_status\":NULL\n\"reviewer\":\"ms16b_admin\"\n\"notes\":\"MS16B complete extension approve attempt\"\n\"message\":\"metric approval requires quantity_kind_id\"\n\"errors\":[\n0:\"metric approval requires quantity_kind_id\"\n]\n\"provenance_record_id\":NULL\n\"seed_proposal_path\":NULL\n\"entry\":NULL\n\"extras\":{}\n}",
+      "screenshot": "docs/demo/screenshots/ms16b/55_extension_complete_approve.png"
+    },
+    "reject": {
+      "ok": true,
+      "text": "Section\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\neu-central-1-cloud-site\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nCandidate review queue\n\nAll actions call AdminReviewService. The UI does not write cim_* rows directly.\n\nEntity type\n\n(all)\n\nSelect entry\n\nmetric:35 cim:extension.ms16b_demo_reject_extension\n{\n\"entity_type\":\"metric\"\n\"entity_id\":35\n\"status\":\"candidate\"\n\"review_status\":\"under_review\"\n\"label\":\"ms16b.demo.reject_extension\"\n\"namespace_or_key\":\"cim:extension.ms16b_demo_reject_extension\"\n\"origin\":NULL\n\"relation_type\":NULL\n\"justification\":NULL\n\"notes\":\"raw_metric_name=ms16b.demo.reject_extension\"\n\"created_by\":\"registry_orchestrator\"\n\"confidence_score\":NULL\n\"details\":{\n\"domain\":\"extension\"\n\"metric_type\":\"extension\"\n\"quantity_kind_id\":NULL\n\"canonical_unit_id\":NULL\n}\n}\n\nReview notes\n\nEdit justification (optional, applied with Edit/Approve)\n\nMerge target CIM namespace\n\nAllow exactMatch on standards mapping approve\n\nMark Under Review\n\nEdit\n\nDeprecate\n\nApprove\n\nMerge\n\nRequest Changes\n\nReject\n\nPromote To Seed\n\nReopen\n\nreject: candidate \u2192 rejected (provenance 316)\n\n{\n\"ok\":true\n\"action\":\"reject\"\n\"entity_type\":\"metric\"\n\"entity_id\":35\n\"previous_status\":\"candidate\"\n\"previous_review_status\":\"under_review\"\n\"new_status\":\"rejected\"\n\"new_review_status\":\"rejected\"\n\"reviewer\":\"ms16b_admin\"\n\"notes\":\"MS16B reject extension\"\n\"message\":\"reject applied \u2192 rejected\"\n\"errors\":[]\n\"provenance_record_id\":316\n\"seed_proposal_path\":NULL\n\"entry\":{\n\"entity_type\":\"metric\"\n\"entity_id\":35\n\"status\":\"rejected\"\n\"review_status\":\"rejected\"\n\"label\":\"ms16b.demo.reject_extension\"\n\"namespace_or_key\":\"cim:extension.ms16b_demo_reject_extension\"\n\"origin\":NULL\n\"relation_type\":NULL\n\"justification\":NULL\n\"notes\":\"raw_metric_name=ms16b.demo.reject_extension\nMS16B reject extension [ms16b_admin]\"\n\"created_by\":\"registry_orchestrator\"\n\"confidence_score\":NULL\n\"deta",
+      "screenshot": "docs/demo/screenshots/ms16b/56_extension_reject.png"
+    }
+  },
+  "kpi_wue_cue": {
+    "wue": {
+      "ok": false,
+      "screenshot": "docs/demo/screenshots/ms16b/76_kpi_wue_form.png"
+    },
+    "cue": {
+      "ok": false,
+      "screenshot": "docs/demo/screenshots/ms16b/77_kpi_cue_form.png"
+    }
+  },
+  "ended_at": "2026-08-13T16:42:43.346700+00:00",
+  "provenance_after_review": {
+    "text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\neu-central-1-cloud-site\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nProvenance timeline\n\nOrchestration, review, and KPI calculation records from cim_provenance_records. Review actions use entity_type cim_<kind> (e.g. cim_mapping).\n\nEntity type (optional)\n\nEntity id (optional)\n\nRecord detail\n\n217\n{\n\"id\":217\n\"entity_type\":\"orchestrator_result\"\n\"entity_id\":31\n\"activity\":\"orchestration\"\n\"agent\":\"registry_orchestrator\"\n\"method\":\"RegistryOrchestratorService.process\"\n\"started_at\":\"datetime.datetime(2026, 8, 13, 17, 50, 32, 619880, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"inputs\":{\n\"raw_metric_name\":\"job_finished\"\n\"unit\":NULL\n\"source\":\"file_upload\"\n}\n\"outputs\":{\n\"cim_namespace\":\"cim:custom.unknown.jobfinished\"\n\"resolved\":true\n\"resolution_path\":\"legacy_fallback\"\n\"mapping_status\":\"candidate\"\n\"fallback_used\":true\n\"extension_candidate_id\":NULL\n}\n\"notes\":\"registry orchestrator decision\"\n}",
+    "screenshot": "docs/demo/screenshots/ms16b/82_provenance_cim_mapping.png",
+    "has_review": false
+  }
+}

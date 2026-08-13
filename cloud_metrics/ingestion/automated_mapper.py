@@ -248,6 +248,7 @@ def process_metric_sample(
         use_registry_orchestrator: bool = False,
         observed_unit: Optional[str] = None,
         registry_session=None,
+        orchestrator_results: Optional[list] = None,
 ) -> str:
     """
     Ingest a single metric (raw_key + value) from a given origin (filename/datacenter).
@@ -260,7 +261,9 @@ def process_metric_sample(
 
     Milestone 7: ``use_registry_orchestrator`` is opt-in (default False) so
     existing callers keep the legacy classifier path. Unified file ingestion
-    enables it.
+    and the Streamlit workload uploader enable it.
+    If ``orchestrator_results`` is a list, each ``OrchestratorResult.to_metadata()``
+    dict is appended (no return-type change for existing callers).
     """
     raw_key_norm = (raw_key or "").strip()
     origin_label = (origin or "unknown").strip()
@@ -315,6 +318,8 @@ def process_metric_sample(
         )
         if orch_result is not None:
             orch_meta = {"registry_orchestrator": orch_result.to_metadata()}
+            if orchestrator_results is not None:
+                orchestrator_results.append(orch_result.to_metadata())
             if orch_result.resolved and orch_result.storage_unified_key:
                 used_orchestrator = True
                 unified_key = orch_result.storage_unified_key
@@ -346,6 +351,15 @@ def process_metric_sample(
                     orch_result.resolution_path,
                     orch_result.fallback_used,
                 )
+        elif orchestrator_results is not None:
+            orchestrator_results.append(
+                {
+                    "raw_metric_name": raw_key_norm,
+                    "resolved": False,
+                    "resolution_path": "legacy_classifier",
+                    "message": "registry orchestrator unavailable; legacy classifier used",
+                }
+            )
 
     if not used_orchestrator:
         # 2b) Classify with Ensemble (which checks Mapping Registry first)

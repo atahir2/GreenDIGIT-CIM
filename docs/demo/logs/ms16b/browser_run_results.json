@@ -1,0 +1,295 @@
+{
+  "started_at": "2026-08-13T16:26:26.710175+00:00",
+  "urls": {
+    "admin": "http://127.0.0.1:8502",
+    "api_health": "http://127.0.0.1:8000/health",
+    "api_docs": "http://127.0.0.1:8000/docs"
+  },
+  "health": {
+    "body": "{\"status\":\"ok\"}",
+    "screenshot": "docs/demo/screenshots/ms16b/00_api_health.png",
+    "docs_screenshot": "docs/demo/screenshots/ms16b/01_api_docs.png"
+  },
+  "sections": [
+    {
+      "section": "landing",
+      "ok": true,
+      "text": "Section\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nStop\nDeploy\nCIM Admin Portal\nUnknown metrics review (legacy)\n\nShowing 8 unknown raw keys since 2026-08-06 16:26 UTC\n\nkeyboard_arrow_right\n\ndoc0.ExecUnitFinished \u2022 5 hits \u2022 last seen 2026-08-13 15:36:13 \u2022 example dc: ifca\n\nkeyboard_arrow_right\n\nlambda.wush \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nkeyboard_arrow_right\n\nlambda.cfp \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nkeyboard_arrow_right\n\nlambda.wue \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nkeyboard_arrow_right\n\nlambda.pue \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A",
+      "screenshot": "docs/demo/screenshots/ms16b/10_admin_landing.png"
+    },
+    {
+      "section": "Unknown metrics (legacy)",
+      "error": null,
+      "text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nUnknown metrics review (legacy)\n\nShowing 8 unknown raw keys since 2026-08-06 16:26 UTC\n\nkeyboard_arrow_right\n\ndoc0.ExecUnitFinished \u2022 5 hits \u2022 last seen 2026-08-13 15:36:13 \u2022 example dc: ifca\n\nkeyboard_arrow_right\n\nlambda.wush \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nkeyboard_arrow_right\n\nlambda.cfp \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nkeyboard_arrow_right\n\nlambda.wue \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nkeyboard_arrow_right\n\nlambda.pue \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nkeyboard_arrow_right\n\nalpha.net.out \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nkeyboard_arrow_right\n\nalpha.net.in \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nkeyboard_arrow_right\n\nalpha.energy.renewable \u2022 3 hits \u2022 last seen 2026-08-13 13:13:22 \u2022 example dc: datacenter_A\n\nMaintenance\n\nRebuild mapping JSON file\n\nClear classifier cache",
+      "screenshot": "docs/demo/screenshots/ms16b/20_unknown_metrics_legacy.png",
+      "ok": true
+    },
+    {
+      "section": "Registry browser",
+      "error": null,
+      "text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nRegistry browser\n\nRead-only view of cim_* catalogues. Mutations go through Candidate review.\n\nRegistry\n\nmetric\n\nStatus filter\n\nReview status filter\n\nSearch\n\n35 / 35 entries\n\nDetails for id\n\n1\n{\n\"id\":1\n\"namespace\":\"cim:energy.power.total\"\n\"label\":\"Total power\"\n\"description\":\"Aggregate instantaneous or average power draw.\"\n\"domain\":\"energy\"\n\"category\":\"energy\"\n\"subcategory\":\"power\"\n\"quantity_kind_id\":1\n\"canonical_unit_id\":1\n\"metric_type\":\"observed\"\n\"tags\":[\n0:\"energy\"\n1:\"energy\"\n2:\"power\"\n]\n\"sources\":[]\n\"status\":\"approved\"\n\"review_status\":\"approved\"\n\"confidence_score\":1\n\"version\":1\n\"created_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"updated_at\":\"datetime.datetime(2026, 8, 13, 14, 58, 1, 864311, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"created_by\":\"milestone3_seed\"\n\"notes\":\"Facility- or scope-level total power.\"\n\"quantity_kind\":\"Power\"\n\"canonical_unit\":\"W\"\n}",
+      "screenshot": "docs/demo/screenshots/ms16b/20_registry_browser.png",
+      "ok": true
+    },
+    {
+      "section": "Candidate review",
+      "error": null,
+      "text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nCandidate review queue\n\nAll actions call AdminReviewService. The UI does not write cim_* rows directly.\n\nEntity type\n\n(all)\n\nSelect entry\n\nmapping:81 beta.disk.readIO\n{\n\"entity_type\":\"mapping\"\n\"entity_id\":81\n\"status\":\"candidate\"\n\"review_status\":\"under_review\"\n\"label\":\"read_io\"\n\"namespace_or_key\":\"beta.disk.readIO\"\n\"origin\":\"legacy_fallback\"\n\"relation_type\":\"underReview\"\n\"justification\":NULL\n\"notes\":NULL\n\"created_by\":\"mapping_registry_service\"\n\"confidence_score\":1\n\"details\":{\n\"cim_namespace\":\"cim:storage.disk.read_io\"\n\"metric_id\":23\n\"standard_id\":NULL\n\"approved_by\":NULL\n}\n}\n\nReview notes\n\nEdit justification (optional, applied with Edit/Approve)\n\nMerge target CIM namespace\n\nAllow exactMatch on standards mapping approve\n\nMark Under Review\n\nEdit\n\nDeprecate\n\nApprove\n\nMerge\n\nRequest Changes\n\nReject\n\nPromote To Seed\n\nReopen",
+      "screenshot": "docs/demo/screenshots/ms16b/20_candidate_review.png",
+      "ok": true
+    },
+    {
+      "section": "Evidence readiness",
+      "error": null,
+      "text": "Section\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nEvidence readiness\n\nDeclared ISO/PROV evidence for reportable KPIs. Fulfillment artifacts are not stored \u2014 mandatory items appear as missing fulfillment.\n\nDetails\n\ncim:energy.efficiency.pue\n\nMandatory / required\n\n[\n0:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"calculation\"\n\"requirement_level\":\"mandatory\"\n\"boundary\":\"facility\"\n\"reporting_period\":\"monthly_or_annual\"\n\"description\":\"PUE requires total facility energy, IT equipment energy, aggregation period, calculation boundary, and metering source.\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"measurement\"\n\"requirement_level\":\"mandatory\"\n\"boundary\":\"facility_and_it\"\n\"reporting_period\":\"continuous_or_interval\"\n\"description\":\"Metered facility and IT energy inputs for PUE.\"\n}\n]\n\nMissing fulfillment\n\n[\n0:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"calculation\"\n\"description\":\"PUE requires total facility energy, IT equipment energy, aggregation period, calculation boundary, and metering source.\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"measurement\"\n\"description\":\"Metered facility and IT energy inputs for PUE.\"\n}\n]\n\nOptional / recommended\n\n[]\n\nStandards mappings\n\n[\n0:{\n\"standard_code\":\"EN-50600\"\n\"relation_type\":\"exactMatch\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"relation_type\":\"exactMatch\"\n}\n]\n\nLifecycle stages\n\n[\n0:\"operation\"\n1:\"reporting\"\n2:\"continuous_improvement\"\n]",
+      "screenshot": "docs/demo/screenshots/ms16b/20_evidence_readiness.png",
+      "ok": true
+    },
+    {
+      "section": "KPI calculation",
+      "error": null,
+      "text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nKPI calculation (PUE / WUE / CUE)\n\nCalls KpiCalculationService. Blocked / missing_input is shown as-is \u2014 no fake values.\n\nKPI\n\npue\n\nAggregation period\n\nBoundary\n\nIT equipment energy\n\nIT energy unit\n\nAllow candidate inputs (review override)\n\nTotal facility energy\n\nFacility energy unit\n\nCalculate",
+      "screenshot": "docs/demo/screenshots/ms16b/20_kpi_calculation.png",
+      "ok": true
+    },
+    {
+      "section": "Provenance timeline",
+      "error": null,
+      "text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nProvenance timeline\n\nOrchestration, review, and KPI calculation records from cim_provenance_records. Review actions use entity_type cim_<kind> (e.g. cim_mapping).\n\nEntity type (optional)\n\nEntity id (optional)\n\nRecord detail\n\n210\n{\n\"id\":210\n\"entity_type\":\"orchestrator_result\"\n\"entity_id\":30\n\"activity\":\"orchestration\"\n\"agent\":\"registry_orchestrator\"\n\"method\":\"RegistryOrchestratorService.process\"\n\"started_at\":\"datetime.datetime(2026, 8, 13, 17, 36, 13, 564283, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"inputs\":{\n\"raw_metric_name\":\"doc0.Efficiency\"\n\"unit\":NULL\n\"source\":\"file_upload\"\n}\n\"outputs\":{\n\"cim_namespace\":\"cim:performance.efficiency.compute\"\n\"resolved\":true\n\"resolution_path\":\"legacy_fallback\"\n\"mapping_status\":\"candidate\"\n\"fallback_used\":true\n\"extension_candidate_id\":NULL\n}\n\"notes\":\"registry orchestrator decision\"\n}",
+      "screenshot": "docs/demo/screenshots/ms16b/20_provenance_timeline.png",
+      "ok": true
+    }
+  ],
+  "registry_browser": [
+    {
+      "registry": "metric",
+      "ok": false,
+      "error": "TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"option\", name=\"metric\", exact=True)\n",
+      "screenshot": "docs/demo/screenshots/ms16b/31_registry_metric_error.png"
+    },
+    {
+      "registry": "mapping",
+      "ok": false,
+      "error": "TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"option\", name=\"mapping\", exact=True)\n",
+      "screenshot": "docs/demo/screenshots/ms16b/31_registry_mapping_error.png"
+    },
+    {
+      "registry": "unit",
+      "ok": false,
+      "error": "TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"option\", name=\"unit\", exact=True)\n",
+      "screenshot": "docs/demo/screenshots/ms16b/31_registry_unit_error.png"
+    },
+    {
+      "registry": "source",
+      "ok": false,
+      "error": "TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"option\", name=\"source\", exact=True)\n",
+      "screenshot": "docs/demo/screenshots/ms16b/31_registry_source_error.png"
+    },
+    {
+      "registry": "asset",
+      "ok": false,
+      "error": "TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"option\", name=\"asset\", exact=True)\n",
+      "screenshot": "docs/demo/screenshots/ms16b/31_registry_asset_error.png"
+    },
+    {
+      "registry": "standards",
+      "ok": false,
+      "error": "TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"option\", name=\"standards\", exact=True)\n",
+      "screenshot": "docs/demo/screenshots/ms16b/31_registry_standards_error.png"
+    },
+    {
+      "registry": "lifecycle",
+      "ok": false,
+      "error": "TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"option\", name=\"lifecycle\", exact=True)\n",
+      "screenshot": "docs/demo/screenshots/ms16b/31_registry_lifecycle_error.png"
+    },
+    {
+      "registry": "rule",
+      "ok": false,
+      "error": "TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"option\", name=\"rule\", exact=True)\n",
+      "screenshot": "docs/demo/screenshots/ms16b/31_registry_rule_error.png"
+    },
+    {
+      "registry": "evidence",
+      "ok": false,
+      "error": "TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"option\", name=\"evidence\", exact=True)\n",
+      "screenshot": "docs/demo/screenshots/ms16b/31_registry_evidence_error.png"
+    },
+    {
+      "registry": "provenance",
+      "ok": false,
+      "error": "TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"option\", name=\"provenance\", exact=True)\n",
+      "screenshot": "docs/demo/screenshots/ms16b/31_registry_provenance_error.png"
+    },
+    {
+      "registry": "extension",
+      "ok": false,
+      "error": "TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"option\", name=\"extension\", exact=True)\n",
+      "screenshot": "docs/demo/screenshots/ms16b/31_registry_extension_error.png"
+    }
+  ],
+  "candidate_review": {
+    "approve": {
+      "ok": false,
+      "error": "could not select approve_power candidate"
+    },
+    "reject": {
+      "ok": false,
+      "error": "could not select reject_wue"
+    },
+    "merge": {
+      "ok": false,
+      "error": "could not select merge_cpu"
+    },
+    "promote": {},
+    "request_changes": {},
+    "queue_visible": true,
+    "landing_screenshot": "docs/demo/screenshots/ms16b/40_candidate_queue.png",
+    "landing_text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nCandidate review queue\n\nAll actions call AdminReviewService. The UI does not write cim_* rows directly.\n\nEntity type\n\n(all)\n\nSelect entry\n\nmapping:81 beta.disk.readIO\n{\n\"entity_type\":\"mapping\"\n\"entity_id\":81\n\"status\":\"candidate\"\n\"review_status\":\"under_review\"\n\"label\":\"read_io\"\n\"namespace_or_key\":\"beta.disk.readIO\"\n\"origin\":\"legacy_fallback\"\n\"relation_type\":\"underReview\"\n\"justification\":NULL\n\"notes\":NULL\n\"created_by\":\"mapping_registry_service\"\n\"confidence_score\":1\n\"details\":{\n\"cim_namespace\":\"cim:storage.disk.read_io\"\n\"metric_id\":23\n\"standard_id\":NULL\n\"approved_by\":NULL\n}\n}\n\nReview notes\n\nEdit justification (optional, applied with Edit/Approve)\n\nMerge target CIM namespace\n\nAllow exactMatch on standards mapping approve\n\nMark Under Review\n\nEdit\n\nDeprecate\n\nApprove\n\nMerge\n\nRequest Changes\n\nReject\n\nPromote To Seed\n\nReopen",
+    "extension_filter_error": "Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"option\", name=\"extension\", exact=True)\n",
+    "extension_queue_text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nCandidate review queue\n\nAll actions call AdminReviewService. The UI does not write cim_* rows directly.\n\nEntity type\n\n(all)\n\nSelect entry\n\nmapping:81 beta.disk.readIO\n{\n\"entity_type\":\"mapping\"\n\"entity_id\":81\n\"status\":\"candidate\"\n\"review_status\":\"under_review\"\n\"label\":\"read_io\"\n\"namespace_or_key\":\"beta.disk.readIO\"\n\"origin\":\"legacy_fallback\"\n\"relation_type\":\"underReview\"\n\"justification\":NULL\n\"notes\":NULL\n\"created_by\":\"mapping_registry_service\"\n\"confidence_score\":1\n\"details\":{\n\"cim_namespace\":\"cim:storage.disk.read_io\"\n\"metric_id\":23\n\"standard_id\":NULL\n\"approved_by\":NULL\n}\n}\n\nReview notes\n\nEdit justification (optional, applied with Edit/Approve)\n\nMerge target CIM namespace\n\nAllow exactMatch on standards mapping approve\n\nMark Under Review\n\nEdit\n\nDeprecate\n\nApprove\n\nMerge\n\nRequest Changes\n\nReject\n\nPromote To Seed\n\nReopen\n\n(all)\n1\n1-grid-site\n123\n30\na\nabc\nabcdef\nalpha_ams\nand",
+    "extension_queue_screenshot": "docs/demo/screenshots/ms16b/45_extension_queue.png"
+  },
+  "extension_review": {
+    "incomplete_approve_fail": {
+      "ok": false,
+      "error": "incomplete extension not found"
+    },
+    "complete_approve": {
+      "ok": false,
+      "error": "complete extension not found"
+    },
+    "reject_extension": {
+      "ok": false,
+      "error": "reject_extension not found"
+    }
+  },
+  "evidence": {
+    "screenshot": "docs/demo/screenshots/ms16b/60_evidence_readiness.png",
+    "has_pue": true,
+    "has_wue": false,
+    "has_cue": false,
+    "has_missing": true,
+    "has_readiness": true,
+    "pue_detail_text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nEvidence readiness\n\nDeclared ISO/PROV evidence for reportable KPIs. Fulfillment artifacts are not stored \u2014 mandatory items appear as missing fulfillment.\n\nDetails\n\ncim:energy.efficiency.pue\n\nMandatory / required\n\n[\n0:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"calculation\"\n\"requirement_level\":\"mandatory\"\n\"boundary\":\"facility\"\n\"reporting_period\":\"monthly_or_annual\"\n\"description\":\"PUE requires total facility energy, IT equipment energy, aggregation period, calculation boundary, and metering source.\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"measurement\"\n\"requirement_level\":\"mandatory\"\n\"boundary\":\"facility_and_it\"\n\"reporting_period\":\"continuous_or_interval\"\n\"description\":\"Metered facility and IT energy inputs for PUE.\"\n}\n]\n\nMissing fulfillment\n\n[\n0:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"calculation\"\n\"description\":\"PUE requires total facility energy, IT equipment energy, aggregation period, calculation boundary, and metering source.\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"measurement\"\n\"description\":\"Metered facility and IT energy inputs for PUE.\"\n}\n]\n\nOptional / recommended\n\n[]\n\nStandards mappings\n\n[\n0:{\n\"standard_code\":\"EN-50600\"\n\"relation_type\":\"exactMatch\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"relation_type\":\"exactMatch\"\n}\n]\n\nLifecycle stages\n\n[\n0:\"operation\"\n1:\"reporting\"\n2:\"continuous_improvement\"\n]\n(all)\n1\n1-grid-site\n123\n30\na\nabc\nabcdef\nalpha_ams\nand",
+    "pue_has_boundary": true,
+    "pue_has_period": true,
+    "pue_detail_screenshot": "docs/demo/screenshots/ms16b/61_evidence_pue_detail.png",
+    "ok": true,
+    "text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nEvidence readiness\n\nDeclared ISO/PROV evidence for reportable KPIs. Fulfillment artifacts are not stored \u2014 mandatory items appear as missing fulfillment.\n\nDetails\n\ncim:energy.efficiency.pue\n\nMandatory / required\n\n[\n0:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"calculation\"\n\"requirement_level\":\"mandatory\"\n\"boundary\":\"facility\"\n\"reporting_period\":\"monthly_or_annual\"\n\"description\":\"PUE requires total facility energy, IT equipment energy, aggregation period, calculation boundary, and metering source.\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"measurement\"\n\"requirement_level\":\"mandatory\"\n\"boundary\":\"facility_and_it\"\n\"reporting_period\":\"continuous_or_interval\"\n\"description\":\"Metered facility and IT energy inputs for PUE.\"\n}\n]\n\nMissing fulfillment\n\n[\n0:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"calculation\"\n\"description\":\"PUE requires total facility energy, IT equipment energy, aggregation period, calculation boundary, and metering source.\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"measurement\"\n\"description\":\"Metered facility and IT energy inputs for PUE.\"\n}\n]\n\nOptional / recommended\n\n[]\n\nStandards mappings\n\n[\n0:{\n\"standard_code\":\"EN-50600\"\n\"relation_type\":\"exactMatch\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"relation_type\":\"exactMatch\"\n}\n]\n\nLifecycle stages\n\n[\n0:\"operation\"\n1:\"reporting\"\n2:\"continuous_improvement\"\n]"
+  },
+  "kpi": {
+    "pue_ok": {
+      "ok": true,
+      "text": "Section\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nKPI calculation (PUE / WUE / CUE)\n\nCalls KpiCalculationService. Blocked / missing_input is shown as-is \u2014 no fake values.\n\nKPI\n\npue\n\nAggregation period\n\nBoundary\n\nIT equipment energy\n\nIT energy unit\n\nAllow candidate inputs (review override)\n\nTotal facility energy\n\nFacility energy unit\n\nCalculate\n\ncim:energy.efficiency.pue = 1.5 ratio\n\nProvenance record: 307\n\n{\n\"kpi_namespace\":\"cim:energy.efficiency.pue\"\n\"value\":1.5\n\"unit\":\"ratio\"\n\"input_metrics\":[\n0:\"total_facility_energy\"\n1:\"it_equipment_energy\"\n]\n\"input_values\":{\n\"total_facility_energy\":1200\n\"it_equipment_energy\":800\n}\n\"normalized_inputs\":[\n0:{\n\"name\":\"total_facility_energy\"\n\"original_value\":1200\n\"original_unit\":\"kWh\"\n\"normalized_value\":1200\n\"normalized_unit\":\"kWh\"\n\"quantity_kind\":\"Energy\"\n\"unit_validation_status\":\"valid\"\n\"namespace\":\"cim:facility.energy.consumption.total\"\n\"message\":\"Unit 'kWh' matches quantity kind Energy\"\n}\n1:{\n\"name\":\"it_equipment_energy\"\n\"original_value\":800\n\"original_unit\":\"kWh\"\n\"normalized_value\":800\n\"normalized_unit\":\"kWh\"\n\"quantity_kind\":\"Energy\"\n\"unit_validation_status\":\"valid\"\n\"namespace\":\"cim:facility.it.energy.consumption\"\n\"message\":\"Unit 'kWh' matches quantity kind Energy\"\n}\n]\n\"aggregation_period\":\"monthly\"\n\"boundary\":\"facility\"\n\"validation_status\":\"valid\"\n\"evidence_requirements\":[\n0:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"calculation\"\n\"requirement_level\":\"mandatory\"\n\"description\":\"PUE requires total facility energy, IT equipment energy, aggregation period, calculation boundary, and metering source.\"\n\"boundary\":\"facility\"\n\"reporting_period\":\"monthly_or_annual\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"measurement\"\n\"requirement_level\":\"mandatory\"\n\"description\":\"Metered facility and IT energy inputs for PUE.\"\n\"boundary\":\"facility_and_it\"\n\"reporting_period\":\"continuous_or_interval\"\n}\n]\n\"standards_mappings\":[\n0:{\n\"standard_code\":\"EN-50600\"\n\"relation_type\":\"exactMatch\"\n\"review_status\":\"approved\"\n\"notes\":\"EN 50600 aligns with data-centre PUE reporting practices.\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"relation_type\":\"exactMatch\"\n\"review_status\":\"approved\"\n\"notes\":\"PUE is defined in ISO/IEC 30134-2.\"\n}\n]\n\"provenance_record_id\":307\n\"warnings\":[]\n\"errors\":[]\n\"calculation_status\":\"calculated\"\n\"reportable_approve",
+      "screenshot": "docs/demo/screenshots/ms16b/71_kpi_pue_ok.png"
+    },
+    "pue_bad_unit": {
+      "ok": true,
+      "text": "Section\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nKPI calculation (PUE / WUE / CUE)\n\nCalls KpiCalculationService. Blocked / missing_input is shown as-is \u2014 no fake values.\n\nKPI\n\npue\n\nAggregation period\n\nBoundary\n\nIT equipment energy\n\nIT energy unit\n\nAllow candidate inputs (review override)\n\nTotal facility energy\n\nFacility energy unit\n\nCalculate\n\nStatus: invalid_unit (approved=False)\n\nNo calculated value (blocked or invalid).\n\n[\"Unit 'W' is Power, expected Energy\"]\n\nProvenance record: 308\n\n{\n\"kpi_namespace\":\"cim:energy.efficiency.pue\"\n\"value\":NULL\n\"unit\":\"ratio\"\n\"input_metrics\":[\n0:\"total_facility_energy\"\n1:\"it_equipment_energy\"\n]\n\"input_values\":{\n\"total_facility_energy\":1200\n\"it_equipment_energy\":800\n}\n\"normalized_inputs\":[\n0:{\n\"name\":\"total_facility_energy\"\n\"original_value\":1200\n\"original_unit\":\"W\"\n\"normalized_value\":NULL\n\"normalized_unit\":\"kWh\"\n\"quantity_kind\":\"Energy\"\n\"unit_validation_status\":\"incompatible\"\n\"namespace\":\"cim:facility.energy.consumption.total\"\n\"message\":\"Unit 'W' is Power, expected Energy\"\n}\n1:{\n\"name\":\"it_equipment_energy\"\n\"original_value\":800\n\"original_unit\":\"kWh\"\n\"normalized_value\":800\n\"normalized_unit\":\"kWh\"\n\"quantity_kind\":\"Energy\"\n\"unit_validation_status\":\"valid\"\n\"namespace\":\"cim:facility.it.energy.consumption\"\n\"message\":\"Unit 'kWh' matches quantity kind Energy\"\n}\n]\n\"aggregation_period\":\"monthly\"\n\"boundary\":\"facility\"\n\"validation_status\":\"invalid_unit\"\n\"evidence_requirements\":[\n0:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"calculation\"\n\"requirement_level\":\"mandatory\"\n\"description\":\"PUE requires total facility energy, IT equipment energy, aggregation period, calculation boundary, and metering source.\"\n\"boundary\":\"facility\"\n\"reporting_period\":\"monthly_or_annual\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"measurement\"\n\"requirement_level\":\"mandatory\"\n\"description\":\"Metered facility and IT energy inputs for PUE.\"\n\"boundary\":\"facility_and_it\"\n\"reporting_period\":\"continuous_or_interval\"\n}\n]\n\"standards_mappings\":[\n0:{\n\"standard_code\":\"EN-50600\"\n\"relation_type\":\"exactMatch\"\n\"review_status\":\"approved\"\n\"notes\":\"EN 50600 aligns with data-centre PUE reporting practices.\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"relation_type\":\"exactMatch\"\n\"review_status\":\"approved\"\n\"notes\":\"PUE is defined in ISO/IEC 30134-2.\"\n}\n]\n\"provenance_rec",
+      "screenshot": "docs/demo/screenshots/ms16b/72_kpi_pue_invalid_unit.png"
+    },
+    "pue_missing_period": {
+      "ok": true,
+      "text": "Section\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nKPI calculation (PUE / WUE / CUE)\n\nCalls KpiCalculationService. Blocked / missing_input is shown as-is \u2014 no fake values.\n\nKPI\n\npue\n\nAggregation period\n\nBoundary\n\nIT equipment energy\n\nIT energy unit\n\nAllow candidate inputs (review override)\n\nTotal facility energy\n\nFacility energy unit\n\nCalculate\n\nStatus: blocked (approved=False)\n\nNo calculated value (blocked or invalid).\n\n['Aggregation period is required for a reportable KPI']\n\nProvenance record: 309\n\n{\n\"kpi_namespace\":\"cim:energy.efficiency.pue\"\n\"value\":NULL\n\"unit\":\"ratio\"\n\"input_metrics\":[\n0:\"total_facility_energy\"\n1:\"it_equipment_energy\"\n]\n\"input_values\":{\n\"total_facility_energy\":1200\n\"it_equipment_energy\":800\n}\n\"normalized_inputs\":[\n0:{\n\"name\":\"total_facility_energy\"\n\"original_value\":1200\n\"original_unit\":\"kWh\"\n\"normalized_value\":1200\n\"normalized_unit\":\"kWh\"\n\"quantity_kind\":\"Energy\"\n\"unit_validation_status\":\"valid\"\n\"namespace\":\"cim:facility.energy.consumption.total\"\n\"message\":\"Unit 'kWh' matches quantity kind Energy\"\n}\n1:{\n\"name\":\"it_equipment_energy\"\n\"original_value\":800\n\"original_unit\":\"kWh\"\n\"normalized_value\":800\n\"normalized_unit\":\"kWh\"\n\"quantity_kind\":\"Energy\"\n\"unit_validation_status\":\"valid\"\n\"namespace\":\"cim:facility.it.energy.consumption\"\n\"message\":\"Unit 'kWh' matches quantity kind Energy\"\n}\n]\n\"aggregation_period\":NULL\n\"boundary\":\"facility\"\n\"validation_status\":\"blocked\"\n\"evidence_requirements\":[\n0:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"calculation\"\n\"requirement_level\":\"mandatory\"\n\"description\":\"PUE requires total facility energy, IT equipment energy, aggregation period, calculation boundary, and metering source.\"\n\"boundary\":\"facility\"\n\"reporting_period\":\"monthly_or_annual\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"evidence_type\":\"measurement\"\n\"requirement_level\":\"mandatory\"\n\"description\":\"Metered facility and IT energy inputs for PUE.\"\n\"boundary\":\"facility_and_it\"\n\"reporting_period\":\"continuous_or_interval\"\n}\n]\n\"standards_mappings\":[\n0:{\n\"standard_code\":\"EN-50600\"\n\"relation_type\":\"exactMatch\"\n\"review_status\":\"approved\"\n\"notes\":\"EN 50600 aligns with data-centre PUE reporting practices.\"\n}\n1:{\n\"standard_code\":\"ISO-IEC-30134\"\n\"relation_type\":\"exactMatch\"\n\"review_status\":\"approved\"\n\"notes\":\"PUE is defined in ISO/IEC 30134-2.\"\n}\n]\n\"provenance_r",
+      "screenshot": "docs/demo/screenshots/ms16b/73_kpi_pue_missing_period.png"
+    },
+    "wue": {},
+    "cue": {},
+    "form_screenshot": "docs/demo/screenshots/ms16b/70_kpi_form.png",
+    "wue_cue_error": "Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"option\", name=\"wue\", exact=True)\n"
+  },
+  "provenance": {
+    "screenshot": "docs/demo/screenshots/ms16b/80_provenance_timeline.png",
+    "found_activities": [
+      "review_action",
+      "kpi_calculation",
+      "orchestration",
+      "evidence"
+    ],
+    "has_review": false,
+    "has_kpi": false,
+    "has_rows": true,
+    "detail_screenshot": "docs/demo/screenshots/ms16b/81_provenance_detail.png",
+    "detail_text": "Section\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nProvenance timeline\n\nOrchestration, review, and KPI calculation records from cim_provenance_records. Review actions use entity_type cim_<kind> (e.g. cim_mapping).\n\nEntity type (optional)\n\nEntity id (optional)\n\nRecord detail\n\n210\n{\n\"id\":210\n\"entity_type\":\"orchestrator_result\"\n\"entity_id\":30\n\"activity\":\"orchestration\"\n\"agent\":\"registry_orchestrator\"\n\"method\":\"RegistryOrchestratorService.process\"\n\"started_at\":\"datetime.datetime(2026, 8, 13, 17, 36, 13, 564283, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"inputs\":{\n\"raw_metric_name\":\"doc0.Efficiency\"\n\"unit\":NULL\n\"source\":\"file_upload\"\n}\n\"outputs\":{\n\"cim_namespace\":\"cim:performance.efficiency.compute\"\n\"resolved\":true\n\"resolution_path\":\"legacy_fallback\"\n\"mapping_status\":\"candidate\"\n\"fallback_used\":true\n\"extension_candidate_id\":NULL\n}\n\"notes\":\"registry orchestrator decision\"\n}",
+    "ok": true,
+    "text": "keyboard_double_arrow_left\n\nSection\n\nUnknown metrics (legacy)\n\nRegistry browser\n\nCandidate review\n\nEvidence readiness\n\nKPI calculation\n\nProvenance timeline\n\nReviewer\n\nLegacy filters\n\nDatacenter\n\n(all)\n\nLook back (days)\n\nSearch raw_key contains\n\nMax rows\n\n100\nDeploy\nCIM Admin Portal\nProvenance timeline\n\nOrchestration, review, and KPI calculation records from cim_provenance_records. Review actions use entity_type cim_<kind> (e.g. cim_mapping).\n\nEntity type (optional)\n\nEntity id (optional)\n\nRecord detail\n\n210\n{\n\"id\":210\n\"entity_type\":\"orchestrator_result\"\n\"entity_id\":30\n\"activity\":\"orchestration\"\n\"agent\":\"registry_orchestrator\"\n\"method\":\"RegistryOrchestratorService.process\"\n\"started_at\":\"datetime.datetime(2026, 8, 13, 17, 36, 13, 564283, tzinfo=datetime.timezone(datetime.timedelta(seconds=7200)))\"\n\"inputs\":{\n\"raw_metric_name\":\"doc0.Efficiency\"\n\"unit\":NULL\n\"source\":\"file_upload\"\n}\n\"outputs\":{\n\"cim_namespace\":\"cim:performance.efficiency.compute\"\n\"resolved\":true\n\"resolution_path\":\"legacy_fallback\"\n\"mapping_status\":\"candidate\"\n\"fallback_used\":true\n\"extension_candidate_id\":NULL\n}\n\"notes\":\"registry orchestrator decision\"\n}"
+  },
+  "console": {
+    "errors": [
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      }
+    ],
+    "warnings": [
+      {
+        "type": "warning",
+        "text": "`preventOverflow` modifier is required by `hide` modifier in order to work, be sure to include it before `hide`!"
+      },
+      {
+        "type": "warning",
+        "text": "`preventOverflow` modifier is required by `hide` modifier in order to work, be sure to include it before `hide`!"
+      },
+      {
+        "type": "warning",
+        "text": "`preventOverflow` modifier is required by `hide` modifier in order to work, be sure to include it before `hide`!"
+      },
+      {
+        "type": "warning",
+        "text": "`preventOverflow` modifier is required by `hide` modifier in order to work, be sure to include it before `hide`!"
+      },
+      {
+        "type": "warning",
+        "text": "`preventOverflow` modifier is required by `hide` modifier in order to work, be sure to include it before `hide`!"
+      },
+      {
+        "type": "warning",
+        "text": "`preventOverflow` modifier is required by `hide` modifier in order to work, be sure to include it before `hide`!"
+      },
+      {
+        "type": "warning",
+        "text": "`preventOverflow` modifier is required by `hide` modifier in order to work, be sure to include it before `hide`!"
+      },
+      {
+        "type": "warning",
+        "text": "`preventOverflow` modifier is required by `hide` modifier in order to work, be sure to include it before `hide`!"
+      },
+      {
+        "type": "warning",
+        "text": "`preventOverflow` modifier is required by `hide` modifier in order to work, be sure to include it before `hide`!"
+      },
+      {
+        "type": "warning",
+        "text": "`preventOverflow` modifier is required by `hide` modifier in order to work, be sure to include it before `hide`!"
+      },
+      {
+        "type": "warning",
+        "text": "`preventOverflow` modifier is required by `hide` modifier in order to work, be sure to include it before `hide`!"
+      },
+      {
+        "type": "warning",
+        "text": "`preventOverflow` modifier is required by `hide` modifier in order to work, be sure to include it before `hide`!"
+      },
+      {
+        "type": "warning",
+        "text": "`preventOverflow` modifier is required by `hide` modifier in order to work, be sure to include it before `hide`!"
+      },
+      {
+        "type": "warning",
+        "text": "`preventOverflow` modifier is required by `hide` modifier in order to work, be sure to include it before `hide`!"
+      },
+      {
+        "type": "warning",
+        "text": "`preventOverflow` modifier is required by `hide` modifier in order to work, be sure to include it before `hide`!"
+      },
+      {
+        "type": "warning",
+        "text": "`preventOverflow` modifier is required by `hide` modifier in order to work, be sure to include it before `hide`!"
+      }
+    ],
+    "error_count": 1,
+    "warning_count": 16
+  },
+  "ended_at": "2026-08-13T16:36:42.256596+00:00"
+}

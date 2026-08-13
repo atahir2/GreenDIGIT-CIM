@@ -1,0 +1,352 @@
+{
+  "actions": [
+    {
+      "action": "approve",
+      "id": 98,
+      "ok": true,
+      "entity_type": "mapping",
+      "entity_id": 98,
+      "previous_status": "candidate",
+      "previous_review_status": "under_review",
+      "new_status": "approved",
+      "new_review_status": "approved",
+      "reviewer": "ms16b_admin",
+      "notes": "MS16B service companion approve",
+      "message": "approved",
+      "errors": [],
+      "provenance_record_id": 310,
+      "seed_proposal_path": null,
+      "entry": {
+        "entity_type": "mapping",
+        "entity_id": 98,
+        "status": "approved",
+        "review_status": "approved",
+        "label": "Compute node power draw",
+        "namespace_or_key": "ms16b.demo.approve_power",
+        "origin": "ms16b_demo",
+        "relation_type": "closeMatch",
+        "justification": null,
+        "notes": "MS16B service companion approve [ms16b_admin]",
+        "created_by": "mapping_registry_service",
+        "confidence_score": 0.85,
+        "details": {
+          "cim_namespace": "cim:compute.node.power.draw",
+          "metric_id": 3,
+          "standard_id": null,
+          "approved_by": "ms16b_admin"
+        }
+      },
+      "extras": {}
+    },
+    {
+      "action": "promote_to_seed",
+      "id": 98,
+      "ok": true,
+      "entity_type": "mapping",
+      "entity_id": 98,
+      "previous_status": "approved",
+      "previous_review_status": "approved",
+      "new_status": "approved",
+      "new_review_status": "approved",
+      "reviewer": "ms16b_admin",
+      "notes": "MS16B promote demo",
+      "message": "seed proposal written (canonical seed not modified)",
+      "errors": [],
+      "provenance_record_id": 311,
+      "seed_proposal_path": "generated\\seed_promotion\\seed_promotion_report.json",
+      "entry": {
+        "entity_type": "mapping",
+        "entity_id": 98,
+        "status": "approved",
+        "review_status": "approved",
+        "label": "Compute node power draw",
+        "namespace_or_key": "ms16b.demo.approve_power",
+        "origin": "ms16b_demo",
+        "relation_type": "closeMatch",
+        "justification": null,
+        "notes": "MS16B service companion approve [ms16b_admin]\npromoted_to_seed_proposal=generated\\seed_promotion\\seed_promotion_report.json by ms16b_admin [ms16b_admin]",
+        "created_by": "mapping_registry_service",
+        "confidence_score": 0.85,
+        "details": {
+          "cim_namespace": "cim:compute.node.power.draw",
+          "metric_id": 3,
+          "standard_id": null,
+          "approved_by": "ms16b_admin"
+        }
+      },
+      "extras": {
+        "report_json": "generated\\seed_promotion\\seed_promotion_report_20260813T163929Z.json",
+        "candidates_json": "generated\\seed_promotion\\generated_seed_candidates_20260813T163929Z.json",
+        "markdown": "generated\\seed_promotion\\SEED_PROMOTION_CANDIDATES_20260813T163929Z.md",
+        "latest_report": "generated\\seed_promotion\\seed_promotion_report.json",
+        "latest_markdown": "generated\\seed_promotion\\SEED_PROMOTION_CANDIDATES.md"
+      }
+    },
+    {
+      "action": "reject",
+      "id": 100,
+      "ok": true,
+      "entity_type": "mapping",
+      "entity_id": 100,
+      "previous_status": "candidate",
+      "previous_review_status": "under_review",
+      "new_status": "rejected",
+      "new_review_status": "rejected",
+      "reviewer": "ms16b_admin",
+      "notes": "MS16B service companion reject",
+      "message": "reject applied \u2192 rejected",
+      "errors": [],
+      "provenance_record_id": 312,
+      "seed_proposal_path": null,
+      "entry": {
+        "entity_type": "mapping",
+        "entity_id": 100,
+        "status": "rejected",
+        "review_status": "rejected",
+        "label": "Water Usage Effectiveness",
+        "namespace_or_key": "ms16b.demo.reject_wue",
+        "origin": "ms16b_demo",
+        "relation_type": "closeMatch",
+        "justification": null,
+        "notes": "MS16B service companion reject [ms16b_admin]",
+        "created_by": "mapping_registry_service",
+        "confidence_score": 0.4,
+        "details": {
+          "cim_namespace": "cim:energy.efficiency.wue",
+          "metric_id": 19,
+          "standard_id": null,
+          "approved_by": null
+        }
+      },
+      "extras": {}
+    },
+    {
+      "action": "merge",
+      "id": 99,
+      "ok": true,
+      "entity_type": "mapping",
+      "entity_id": 99,
+      "previous_status": "candidate",
+      "previous_review_status": "under_review",
+      "new_status": "approved",
+      "new_review_status": "approved",
+      "reviewer": "ms16b_admin",
+      "notes": "MS16B service companion merge",
+      "message": "merged into cim:compute.node.power.draw",
+      "errors": [],
+      "provenance_record_id": 313,
+      "seed_proposal_path": null,
+      "entry": {
+        "entity_type": "mapping",
+        "entity_id": 99,
+        "status": "approved",
+        "review_status": "approved",
+        "label": "CPU utilisation",
+        "namespace_or_key": "ms16b.demo.merge_cpu",
+        "origin": "ms16b_demo",
+        "relation_type": "closeMatch",
+        "justification": null,
+        "notes": "merged_into_namespace=cim:compute.node.power.draw by ms16b_admin\nMS16B service companion merge",
+        "created_by": "mapping_registry_service",
+        "confidence_score": 0.7,
+        "details": {
+          "cim_namespace": "cim:compute.cpu.utilisation",
+          "metric_id": 3,
+          "standard_id": null,
+          "approved_by": "ms16b_admin"
+        }
+      },
+      "extras": {
+        "merge_target_namespace": "cim:compute.node.power.draw"
+      }
+    },
+    {
+      "action": "approve",
+      "id": 1,
+      "ok": false,
+      "entity_type": "extension",
+      "entity_id": 1,
+      "previous_status": "candidate",
+      "previous_review_status": "under_review",
+      "new_status": null,
+      "new_review_status": null,
+      "reviewer": "ms16b_admin",
+      "notes": "should fail",
+      "message": "extension approval requires a real justification (placeholder text is not sufficient)",
+      "errors": [
+        "extension approval requires a real justification (placeholder text is not sufficient)"
+      ],
+      "provenance_record_id": null,
+      "seed_proposal_path": null,
+      "entry": null,
+      "extras": {}
+    },
+    {
+      "action": "approve",
+      "id": 1,
+      "ok": true,
+      "entity_type": "extension",
+      "entity_id": 1,
+      "previous_status": "candidate",
+      "previous_review_status": "under_review",
+      "new_status": "approved",
+      "new_review_status": "approved",
+      "reviewer": "ms16b_admin",
+      "notes": "MS16B complete extension approve",
+      "message": "approved",
+      "errors": [],
+      "provenance_record_id": 314,
+      "seed_proposal_path": null,
+      "entry": {
+        "entity_type": "extension",
+        "entity_id": 1,
+        "status": "approved",
+        "review_status": "approved",
+        "label": "ms16b.demo.incomplete_extension",
+        "namespace_or_key": "cim:extension.ms16b_demo_incomplete_extension",
+        "origin": null,
+        "relation_type": null,
+        "justification": "Research KPI for GreenDIGIT pilot; reviewed by domain owner",
+        "notes": "raw_metric_name=ms16b.demo.incomplete_extension\nsource_context={'tool': 'ms16b_demo'}\nMS16B complete extension approve [ms16b_admin]",
+        "created_by": "registry_orchestrator",
+        "confidence_score": null,
+        "details": {
+          "metric_id": 33,
+          "proposed_standard": null,
+          "proposed_by": "registry_orchestrator"
+        }
+      },
+      "extras": {}
+    },
+    {
+      "action": "reject",
+      "id": 3,
+      "ok": true,
+      "entity_type": "extension",
+      "entity_id": 3,
+      "previous_status": "candidate",
+      "previous_review_status": "under_review",
+      "new_status": "rejected",
+      "new_review_status": "rejected",
+      "reviewer": "ms16b_admin",
+      "notes": "MS16B reject extension",
+      "message": "reject applied \u2192 rejected",
+      "errors": [],
+      "provenance_record_id": 315,
+      "seed_proposal_path": null,
+      "entry": {
+        "entity_type": "extension",
+        "entity_id": 3,
+        "status": "rejected",
+        "review_status": "rejected",
+        "label": "ms16b.demo.reject_extension",
+        "namespace_or_key": "cim:extension.ms16b_demo_reject_extension",
+        "origin": null,
+        "relation_type": null,
+        "justification": "MS16B demo extension for reject",
+        "notes": "raw_metric_name=ms16b.demo.reject_extension\nMS16B reject extension [ms16b_admin]",
+        "created_by": "registry_orchestrator",
+        "confidence_score": null,
+        "details": {
+          "metric_id": 35,
+          "proposed_standard": null,
+          "proposed_by": "registry_orchestrator"
+        }
+      },
+      "extras": {}
+    }
+  ],
+  "recent_review_provenance": [
+    {
+      "id": 315,
+      "entity_type": "cim_extension",
+      "entity_id": 3,
+      "agent": "ms16b_admin",
+      "notes": "MS16B reject extension"
+    },
+    {
+      "id": 314,
+      "entity_type": "cim_extension",
+      "entity_id": 1,
+      "agent": "ms16b_admin",
+      "notes": "MS16B complete extension approve"
+    },
+    {
+      "id": 313,
+      "entity_type": "cim_mapping",
+      "entity_id": 99,
+      "agent": "ms16b_admin",
+      "notes": "MS16B service companion merge"
+    },
+    {
+      "id": 312,
+      "entity_type": "cim_mapping",
+      "entity_id": 100,
+      "agent": "ms16b_admin",
+      "notes": "MS16B service companion reject"
+    },
+    {
+      "id": 311,
+      "entity_type": "cim_mapping",
+      "entity_id": 98,
+      "agent": "ms16b_admin",
+      "notes": "MS16B promote demo"
+    },
+    {
+      "id": 310,
+      "entity_type": "cim_mapping",
+      "entity_id": 98,
+      "agent": "ms16b_admin",
+      "notes": "MS16B service companion approve"
+    },
+    {
+      "id": 306,
+      "entity_type": "cim_mapping",
+      "entity_id": 80,
+      "agent": "admin",
+      "notes": "mark_under_review applied \u2192 under_review"
+    },
+    {
+      "id": 305,
+      "entity_type": "cim_mapping",
+      "entity_id": 79,
+      "agent": "admin",
+      "notes": "reject applied \u2192 rejected"
+    },
+    {
+      "id": 304,
+      "entity_type": "cim_mapping",
+      "entity_id": 79,
+      "agent": "admin",
+      "notes": "metadata updated"
+    },
+    {
+      "id": 303,
+      "entity_type": "cim_mapping",
+      "entity_id": 79,
+      "agent": "admin",
+      "notes": "metadata updated"
+    },
+    {
+      "id": 302,
+      "entity_type": "cim_mapping",
+      "entity_id": 79,
+      "agent": "admin",
+      "notes": "metadata updated"
+    },
+    {
+      "id": 301,
+      "entity_type": "cim_mapping",
+      "entity_id": 79,
+      "agent": "admin",
+      "notes": "metadata updated"
+    },
+    {
+      "id": 300,
+      "entity_type": "cim_mapping",
+      "entity_id": 78,
+      "agent": "admin",
+      "notes": "mark_under_review applied \u2192 under_review"
+    }
+  ]
+}

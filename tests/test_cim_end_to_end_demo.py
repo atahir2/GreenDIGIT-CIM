@@ -370,3 +370,24 @@ def test_process_sample_direct(cim_session):
     sample = load_sample("known_metrics_sample.json")
     results = process_sample(cim_session, sample)
     assert len(results) == len(sample["metrics"])
+
+
+def test_ensure_workload_mappings_alias_partner_pue(cim_session):
+    from cloud_metrics.demo.cim_demonstrator import ensure_workload_mappings
+    from cloud_metrics.models.cim_registry import CimMetricMapping
+    from cloud_metrics.registry.orchestrator import RawMetricContext, get_registry_orchestrator
+
+    ensure_workload_mappings(cim_session)
+    row = (
+        cim_session.query(CimMetricMapping)
+        .filter_by(source_key="lambda.pue", origin="workload_sample")
+        .one()
+    )
+    assert row.status == "approved"
+    orch = get_registry_orchestrator(cim_session)
+    result = orch.process(
+        RawMetricContext(raw_metric_name="lambda.pue", value=1.38, unit=None),
+        use_fallback=True,
+    )
+    assert result.cim_namespace == "cim:energy.efficiency.pue"
+    assert result.resolved is True
