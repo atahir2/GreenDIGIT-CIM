@@ -86,6 +86,14 @@ from cloud_metrics.registry.orchestrator import (
     RegistryOrchestratorService,
     get_registry_orchestrator,
 )
+from cloud_metrics.registry.kpi import (
+    CimKpiCalculationService,
+    KpiCalculationResult,
+    KpiCalculationService,
+    KpiInput,
+    SustainabilityKpiService,
+    get_kpi_calculation_service,
+)
 from cloud_metrics.registry.review import (
     AdminReviewService,
     CandidateReviewService,
@@ -205,4 +213,10 @@ __all__ = [
     "ReviewEntityType",
     "ReviewError",
     "ReviewableEntry",
+    "KpiInput",
+    "KpiCalculationResult",
+    "KpiCalculationService",
+    "CimKpiCalculationService",
+    "SustainabilityKpiService",
+    "get_kpi_calculation_service",
 ]

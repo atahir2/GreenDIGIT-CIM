@@ -15,6 +15,7 @@ A registry-driven Common Information Model layer that can:
 7. Record Provenance for orchestration decisions.
 8. Create Extension candidates for unknowns.
 9. Demonstrate the full path with realistic samples and automated e2e tests.
+10. Calculate reportable PUE / WUE / CUE with hard-block validation and provenance (Milestone 13).
 
 ## Registries (all operational)
 

@@ -1,8 +1,8 @@
 # Development Status and Remaining Work
 
-> Updated: Milestone 12 (admin review workflow)
+> Updated: Milestone 13 (KPI calculation service)
 
-## Completed (Milestones 1–11)
+## Completed (Milestones 1–13)
 
 | Milestone | Focus | Status |
 |-----------|-------|--------|
@@ -17,7 +17,8 @@
 | 9 | Rule / Evidence / Provenance / Extension | Approved |
 | 10 | End-to-end demonstrator + fixtures + docs | Approved |
 | 11 | CI/CD, migration runbook, deployment readiness | Approved |
-| 12 | Admin review workflow for candidates / extensions | Complete (this milestone) |
+| 12 | Admin review workflow for candidates / extensions | Approved |
+| 13 | KPI calculation (PUE / WUE / CUE) with provenance | Complete (this milestone) |
 
 ## What remains manual
 
@@ -37,8 +38,8 @@
 
 ## Known limitations
 
-- Soft validation only — incompatible units warn but do not hard-block ingestion
-- No KPI calculation engine (PUE/WUE/CUE computed values not derived in-pipeline)
+- Soft validation only on **ingestion** — incompatible units warn but do not hard-block samples
+- Reportable KPI calculation **does** hard-block (Milestone 13); not yet wired into the facility demo runner
 - Unstructured text is parsed by legacy regex parser; not fully orchestrated
 - Demo mappings are session helpers (`origin=demo`), not core seed data
 - Some seeded metrics lack lifecycle/evidence links by design (avoid speculative claims)
@@ -46,10 +47,10 @@
 ## Recommended next development phase
 
 1. **Admin UI** over `/api/v1/cim-review` (Streamlit or web) for extension + mapping queues.
-2. **Hardening policy toggle** — optional hard-block on incompatible units for reportable KPIs.
-3. **KPI calculation service** — PUE/WUE/CUE from prepared facility inputs with provenance.
+2. **Wire KPI service into the facility demo** (Scenario D) without changing operational ingestion.
+3. **Evidence fulfillment tracking** — mark mandatory PUE/WUE/CUE evidence complete.
 4. **Promote stable demo mappings** into seed after explicit review + `promote_to_seed`.
-5. **Registry browser** — evidence readiness, provenance timeline.
+5. **Registry browser** — evidence readiness, provenance timeline, calculated KPIs.
 6. **Deprecate duplicate legacy paths** only after dual-run observability period.
 
-See also: [ADMIN_REVIEW_WORKFLOW.md](ADMIN_REVIEW_WORKFLOW.md), [MS1_TO_MS10_IMPLEMENTATION_HEALTH_REPORT.md](MS1_TO_MS10_IMPLEMENTATION_HEALTH_REPORT.md).
+See also: [KPI_CALCULATION_SERVICE.md](KPI_CALCULATION_SERVICE.md), [ADMIN_REVIEW_WORKFLOW.md](ADMIN_REVIEW_WORKFLOW.md).

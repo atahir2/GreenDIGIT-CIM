@@ -29,6 +29,8 @@ The refactoring process follows a 14-stage incremental sequence defined in [IMPL
 
 **Milestone 12 (Admin Review):** `AdminReviewService` + CLI/API for candidate/extension/mapping review with provenance and seed-proposal export — ingestion/orchestrator unchanged.
 
+**Milestone 13 (KPI Calculation):** `KpiCalculationService` for PUE/WUE/CUE with reportable hard-block policy and provenance — ingestion/orchestrator unchanged.
+
 ---
 
 ## 2. Milestone Entry & Exit Criteria
