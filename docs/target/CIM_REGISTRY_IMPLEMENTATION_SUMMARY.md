@@ -16,6 +16,7 @@ A registry-driven Common Information Model layer that can:
 8. Create Extension candidates for unknowns.
 9. Demonstrate the full path with realistic samples and automated e2e tests.
 10. Calculate reportable PUE / WUE / CUE with hard-block validation and provenance (Milestone 13).
+11. Export registry data as JSON/CSV and partial JSON-LD / RO-Crate-style / DCAT-style packages (Milestone 15).
 
 ## Registries (all operational)
 

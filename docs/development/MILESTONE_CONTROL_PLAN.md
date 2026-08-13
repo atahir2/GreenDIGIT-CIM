@@ -33,6 +33,8 @@ The refactoring process follows a 14-stage incremental sequence defined in [IMPL
 
 **Milestone 14 (Admin Portal UI):** Streamlit sections for registry browse, candidate review, evidence readiness, KPI calculation, and provenance — legacy unknown-metrics page preserved.
 
+**Milestone 15 (Export):** `ExportService` + CLI/API for JSON, CSV, partial JSON-LD, RO-Crate-style, DCAT-style, standards crosswalk, evidence readiness, and provenance — ingestion/orchestrator unchanged; semantic formats labelled partial.
+
 ---
 
 ## 2. Milestone Entry & Exit Criteria

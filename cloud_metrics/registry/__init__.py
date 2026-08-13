@@ -107,6 +107,14 @@ from cloud_metrics.registry.review import (
     get_candidate_review_service,
     get_registry_review_service,
 )
+from cloud_metrics.registry.export import (
+    CimExportService,
+    DcatExportRequest,
+    ExportService,
+    InteroperabilityExportService,
+    WorkflowRunExportRequest,
+    get_export_service,
+)
 
 # All 11 registry names for discovery / smoke tests.
 REGISTRY_MODULES = (
@@ -219,4 +227,10 @@ __all__ = [
     "CimKpiCalculationService",
     "SustainabilityKpiService",
     "get_kpi_calculation_service",
+    "ExportService",
+    "CimExportService",
+    "InteroperabilityExportService",
+    "get_export_service",
+    "WorkflowRunExportRequest",
+    "DcatExportRequest",
 ]

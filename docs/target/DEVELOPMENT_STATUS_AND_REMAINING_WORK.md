@@ -1,8 +1,8 @@
 # Development Status and Remaining Work
 
-> Updated: Milestone 14 (admin portal UI)
+> Updated: Milestone 15 (export / interoperability)
 
-## Completed (Milestones 1–14)
+## Completed (Milestones 1–15)
 
 | Milestone | Focus | Status |
 |-----------|-------|--------|
@@ -19,15 +19,17 @@
 | 11 | CI/CD, migration runbook, deployment readiness | Approved |
 | 12 | Admin review workflow for candidates / extensions | Approved |
 | 13 | KPI calculation (PUE / WUE / CUE) with provenance | Approved |
-| 14 | Admin portal UI (registry / review / evidence / KPI / provenance) | Complete (this milestone) |
+| 14 | Admin portal UI (registry / review / evidence / KPI / provenance) | Approved |
+| 15 | Export / interoperability (JSON, CSV, JSON-LD, RO-Crate-style, DCAT-style) | Complete (this milestone) |
 
 ## What remains manual
 
 - Human review / approval of extension candidates and mapping candidates
 - Promoting demo raw→CIM mappings into permanent seed catalogues (if desired)
 - **Production** application of `cim_*` migrations (staging/prod runbook is documented — see `docs/deployment/POSTGRES_MIGRATION_RUNBOOK.md`)
-- Evidence *fulfillment* tracking (requirements are returned; fulfillment UI not built)
-- Streamlit / admin UI surfaces for registry review queues
+- Evidence *fulfillment* tracking (requirements are exported; fulfillment is not persisted unless supplied at export time)
+- Full RO-Crate 1.1 crate directories, DCAT-AP validation, RDF/Turtle
+- Admin portal download tab for exports (CLI/API exist)
 - Signing the [DEPLOYMENT_READINESS_CHECKLIST.md](../deployment/DEPLOYMENT_READINESS_CHECKLIST.md) for each environment promotion
 
 ## What remains candidate / under_review
@@ -48,10 +50,10 @@
 ## Recommended next development phase
 
 1. **Evidence fulfillment store** and mark-complete UI for mandatory PUE/WUE/CUE evidence.
-2. **Wire KPI service into the facility demo** (Scenario D) without changing operational ingestion.
-3. **Evidence fulfillment tracking** — mark mandatory PUE/WUE/CUE evidence complete.
-4. **Promote stable demo mappings** into seed after explicit review + `promote_to_seed`.
-5. **Registry browser** — evidence readiness, provenance timeline, calculated KPIs.
+2. **Validated RO-Crate 1.1 directory writer** and optional Process Run Crate profile.
+3. **DCAT-AP validation** plus real distribution URLs; RDF/Turtle with a published CIM IRI.
+4. **Wire KPI service into the facility demo** (Scenario D) without changing operational ingestion.
+5. **Promote stable demo mappings** into seed after explicit review + `promote_to_seed`.
 6. **Deprecate duplicate legacy paths** only after dual-run observability period.
 
-See also: [KPI_CALCULATION_SERVICE.md](KPI_CALCULATION_SERVICE.md), [ADMIN_REVIEW_WORKFLOW.md](ADMIN_REVIEW_WORKFLOW.md).
+See also: [EXPORT_LAYER.md](EXPORT_LAYER.md), [KPI_CALCULATION_SERVICE.md](KPI_CALCULATION_SERVICE.md), [ADMIN_REVIEW_WORKFLOW.md](ADMIN_REVIEW_WORKFLOW.md).

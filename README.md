@@ -252,6 +252,8 @@ poetry run uvicorn cloud_metrics.main:app --reload
 ```
 Once started, the interactive OpenAPI documentation is available at [http://localhost:8000/docs](http://localhost:8000/docs).
 
+Registry interoperability exports (Milestone 15) are available under `/api/v1/cim-export/` (JSON, CSV, JSON-LD, RO-Crate-style, DCAT-style). CLI: `python -m cloud_metrics.scripts.export_cim`. See [docs/target/EXPORT_LAYER.md](docs/target/EXPORT_LAYER.md) and [docs/demo/EXPORT_DEMO_GUIDE.md](docs/demo/EXPORT_DEMO_GUIDE.md). JSON-LD / RO-Crate / DCAT outputs are **partial** style packages, not certified compliance.
+
 ### 6.2 Streamlit Admin Dashboard
 To run the dashboard for editing mapping proposals, reviewing metadata, and browsing assets:
 ```bash
