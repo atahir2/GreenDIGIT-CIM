@@ -31,6 +31,8 @@ The refactoring process follows a 14-stage incremental sequence defined in [IMPL
 
 **Milestone 13 (KPI Calculation):** `KpiCalculationService` for PUE/WUE/CUE with reportable hard-block policy and provenance — ingestion/orchestrator unchanged.
 
+**Milestone 14 (Admin Portal UI):** Streamlit sections for registry browse, candidate review, evidence readiness, KPI calculation, and provenance — legacy unknown-metrics page preserved.
+
 ---
 
 ## 2. Milestone Entry & Exit Criteria

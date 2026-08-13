@@ -26,11 +26,23 @@ from cloud_metrics.utils.unified_key import to_gd
 from cloud_metrics.utils.mapping_sync import sync_metric_mapping
 
 st.set_page_config(page_title="CIM – Admin Panel", layout="wide")
-st.title("CIM Admin Portal for Unknown Metrics Review")
+st.title("CIM Admin Portal")
 
-#  Filters
+#  Navigation (Milestone 14) — legacy unknown-metrics page is preserved
+PAGES = (
+    "Unknown metrics (legacy)",
+    "Registry browser",
+    "Candidate review",
+    "Evidence readiness",
+    "KPI calculation",
+    "Provenance timeline",
+)
+
 with st.sidebar:
-    st.header("Filters")
+    page = st.radio("Section", PAGES, index=0)
+    reviewer = st.text_input("Reviewer", value="admin", help="Used by Candidate review actions")
+    st.divider()
+    st.header("Legacy filters")
     with SessionLocal() as s:
         dcs = s.query(Asset).filter_by(type="datacenter").order_by(Asset.name.asc()).all()
     dc_options = ["(all)"] + [d.name for d in dcs]
@@ -42,6 +54,30 @@ with st.sidebar:
     search = st.text_input("Search raw_key contains", "")
 
     limit = st.slider("Max rows", min_value=10, max_value=500, value=100, step=10)
+
+if page != "Unknown metrics (legacy)":
+    from cloud_metrics.ui.cim_portal import (
+        render_candidate_review,
+        render_evidence_readiness,
+        render_kpi_calculator,
+        render_provenance_timeline,
+        render_registry_browser,
+    )
+
+    with SessionLocal() as s:
+        if page == "Registry browser":
+            render_registry_browser(st, s)
+        elif page == "Candidate review":
+            render_candidate_review(st, s, reviewer)
+        elif page == "Evidence readiness":
+            render_evidence_readiness(st, s)
+        elif page == "KPI calculation":
+            render_kpi_calculator(st, s)
+        elif page == "Provenance timeline":
+            render_provenance_timeline(st, s)
+    st.stop()
+
+st.subheader("Unknown metrics review (legacy)")
 
 #  helpers
 def load_unknowns(s):

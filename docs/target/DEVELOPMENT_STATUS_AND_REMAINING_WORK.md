@@ -1,8 +1,8 @@
 # Development Status and Remaining Work
 
-> Updated: Milestone 13 (KPI calculation service)
+> Updated: Milestone 14 (admin portal UI)
 
-## Completed (Milestones 1–13)
+## Completed (Milestones 1–14)
 
 | Milestone | Focus | Status |
 |-----------|-------|--------|
@@ -18,7 +18,8 @@
 | 10 | End-to-end demonstrator + fixtures + docs | Approved |
 | 11 | CI/CD, migration runbook, deployment readiness | Approved |
 | 12 | Admin review workflow for candidates / extensions | Approved |
-| 13 | KPI calculation (PUE / WUE / CUE) with provenance | Complete (this milestone) |
+| 13 | KPI calculation (PUE / WUE / CUE) with provenance | Approved |
+| 14 | Admin portal UI (registry / review / evidence / KPI / provenance) | Complete (this milestone) |
 
 ## What remains manual
 
@@ -46,7 +47,7 @@
 
 ## Recommended next development phase
 
-1. **Admin UI** over `/api/v1/cim-review` (Streamlit or web) for extension + mapping queues.
+1. **Evidence fulfillment store** and mark-complete UI for mandatory PUE/WUE/CUE evidence.
 2. **Wire KPI service into the facility demo** (Scenario D) without changing operational ingestion.
 3. **Evidence fulfillment tracking** — mark mandatory PUE/WUE/CUE evidence complete.
 4. **Promote stable demo mappings** into seed after explicit review + `promote_to_seed`.
