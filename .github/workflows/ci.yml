@@ -25,6 +25,9 @@ jobs:
       # Registry/migration tests use isolated in-memory SQLite sessions.
       DATABASE_URL: sqlite:///./ci_pytest.db
       CORS_ORIGINS: '["http://localhost:3000"]'
+      # Make the repo-root package importable (pytest.ini pythonpath=. is the
+      # primary fix; PYTHONPATH covers scripts and non-pytest steps).
+      PYTHONPATH: ${{ github.workspace }}
       # Avoid accidental model downloads if embedding classifier is imported.
       TRANSFORMERS_OFFLINE: "1"
       HF_HUB_OFFLINE: "1"

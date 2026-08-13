@@ -14,7 +14,7 @@
 
 ## What runs automatically
 
-1. **Install** — `pip install -r requirements-ci.txt`
+1. **Install** — `pip install -r requirements-ci.txt`. `pytest.ini` sets `pythonpath = .` and the workflow sets `PYTHONPATH` so `cloud_metrics` is importable without an editable install (`pyproject.toml` is not PEP 621-installable).
 2. **Full pytest** — `pytest --maxfail=1 --disable-warnings -q`  
    Covers registry, migration, orchestrator, governance, demo, and legacy tests under `tests/`.
 3. **Migration smoke** — `tests/test_cim_registry_migration.py`  
