@@ -13,6 +13,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
+from cloud_metrics.api.cim_ingest_api import get_db as ingest_get_db
+from cloud_metrics.api.cim_kpi_api import get_db as kpi_get_db
 from cloud_metrics.demo.cim_demonstrator import ensure_demo_mappings
 from cloud_metrics.main import app
 from cloud_metrics.registry.seed import seed_all
@@ -61,22 +63,26 @@ def cim_session():
 
 
 @pytest.fixture()
-def client(cim_session, monkeypatch):
-    def _get_db():
+def client(cim_session):
+    """Override FastAPI DB deps with the migrated/seeded in-memory session.
+
+    Monkeypatching ``module.get_db`` is not enough: ``Depends(get_db)`` binds
+    the original callable at route registration, so HTTP tests would still use
+    ``SessionLocal`` (CI file SQLite without ``cim_*`` tables).
+    """
+
+    def _override_db():
         try:
             yield cim_session
         finally:
             pass
 
-    monkeypatch.setattr(
-        "cloud_metrics.api.cim_ingest_api.get_db",
-        _get_db,
-    )
-    monkeypatch.setattr(
-        "cloud_metrics.api.cim_kpi_api.get_db",
-        _get_db,
-    )
-    return TestClient(app)
+    app.dependency_overrides[ingest_get_db] = _override_db
+    app.dependency_overrides[kpi_get_db] = _override_db
+    with TestClient(app) as test_client:
+        yield test_client
+    app.dependency_overrides.pop(ingest_get_db, None)
+    app.dependency_overrides.pop(kpi_get_db, None)
 
 
 def _by_name(resp: dict) -> dict:
