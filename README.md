@@ -1,4 +1,6 @@
-# GreenDIGIT Standard- and Lifecycle-aware Registry-Driven Common Information Model (CIM)
+# GreenDIGIT CIM Project
+
+**Registry-driven, Standard- and Lifecycle-aware Common Information Model (CIM)**
 
 This project implements the Common Information Model (CIM) for research infrastructure environmental sustainability metrics through robust, modular, standard- and lifecycle-aware, and registry-driven capaabilities. This project transitions fragmented, file-based mapping configuration logic into a centralized, database-backed registry service that governs metric naming, unit validation, source protocols, infrastructure assets, and compliance standards.
 
@@ -14,8 +16,8 @@ Related repositories:
 ![EU Logo](auth_metrics_server/static/EN-Funded-by-the-EU-POS-2.png) -->
 
 <div style="display:flex;align-items:center;width:100%;">
-  <img src="static/EN-Funded-by-the-EU-POS-2.png" alt="EU Logo" width="250px">
-  <img src="static/cropped-GD_logo.png" alt="GreenDIGIT Logo" width="110px" style="margin-right:100px">
+  <img src="logo/EN-Funded-by-the-EU-POS-2.png" alt="EU Logo" width="250px">
+  <img src="logo/cropped-GD_logo.png" alt="GreenDIGIT Logo" width="110px" style="margin-right:100px">
 </div>
 
 ---
