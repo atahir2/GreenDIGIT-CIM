@@ -1,12 +1,28 @@
 # GreenDIGIT Standard- and Lifecycle-aware Registry-Driven Common Information Model (CIM)
 
-A robust, modular, registry-driven Common Information Model (CIM) for cloud metrics. This project transitions fragmented, file-based mapping configuration logic into a centralized, database-backed registry service that governs metric naming, unit validation, source protocols, infrastructure assets, and compliance standards.
+This project implements the Common Information Model (CIM) for research infrastructure environmental sustainability metrics through robust, modular, standard- and lifecycle-aware, and registry-driven capaabilities. This project transitions fragmented, file-based mapping configuration logic into a centralized, database-backed registry service that governs metric naming, unit validation, source protocols, infrastructure assets, and compliance standards.
+
+Related repositories:
+- [GreenDIGIT-project](https://github.com/GreenDIGIT-project)
+- [GreenDIGIT-AuthServer](https://github.com/g-uva/GreenDIGIT-AuthServer)
+- [GreenDIGIT-SQLAdapter](https://github.com/g-uva/GreenDIGIT-SQLAdapter)
+- [GreenDIGIT-KPIService](https://github.com/g-uva/GreenDIGIT-WP6-KPI-Service)
+
+*This work is funded from the European Union’s Horizon Europe research and innovation programme through the [GreenDIGIT project](https://greendigit-project.eu/), under the grant agreement No. [101131207](https://cordis.europa.eu/project/id/101131207)*.
+
+<!-- ![GreenDIGIT Logo](auth_metrics_server/static/cropped-GD_logo.png)
+![EU Logo](auth_metrics_server/static/EN-Funded-by-the-EU-POS-2.png) -->
+
+<div style="display:flex;align-items:center;width:100%;">
+  <img src="static/EN-Funded-by-the-EU-POS-2.png" alt="EU Logo" width="250px">
+  <img src="static/cropped-GD_logo.png" alt="GreenDIGIT Logo" width="110px" style="margin-right:100px">
+</div>
 
 ---
 
 ## 1. Architecture Overview
 
-The target CIM is designed around **11 core registries** to enforce schema governance, validate telemetry data, normalize units, and record audit trails:
+The CIM is designed around **11 core registries** to enforce schema governance, validate telemetry data, harmonize units, and record audit trails:
 
 ```mermaid
 graph TB
