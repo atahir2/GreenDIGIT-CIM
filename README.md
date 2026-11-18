@@ -1,4 +1,4 @@
-# GreenDIGIT Common Information Model (CIM) Registry Service
+# GreenDIGIT Standard- and Lifecycle-aware Registry-Driven Common Information Model (CIM)
 
 A robust, modular, registry-driven Common Information Model (CIM) for cloud metrics. This project transitions fragmented, file-based mapping configuration logic into a centralized, database-backed registry service that governs metric naming, unit validation, source protocols, infrastructure assets, and compliance standards.
 
@@ -283,4 +283,10 @@ engine = create_engine(
 )
 ```
 This is configured to bypass multi-threaded connection locks and ensure migrations execute correctly across different SQL dialects.
+
+## Contact & Questions
+**Contact:**  
+For questions or to request access, please contact the GreenDIGIT UvA CIM team:
+- Adnan Tahir: a.tahir2@uva.nl.
+- Gonçalo Ferreira: goncalo.ferreira@student.uva.nl.
 
